@@ -46,12 +46,20 @@ class DigestView(TemplateView):
         visits = ga_manager.get_weekly_visits(ga_view, '2014-08-01', '2014-08-14')
         context['traffic'] = visits['rows']
 
+
+        #Get Google Analytics conversions for this and previous period
         conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1 ,'2014-08-01', '2014-08-14')
         context['conversions'] = conversions
+        previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1, '2014-07-14', '2014-07-30')
+        context['previous_conversions'] = previous_conversions
+
+        #Get Google Analytics conversion rate for this and previous period
         conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, '2014-08-01', '2014-08-14')
-        previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, '2014-07-14', '2014-07-30')
         context['conversionrate'] = conversion_rate
+        previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, '2014-07-14', '2014-07-30')
         context['previousconversionrate'] = previous_conversion_rate
+
+        #Get number of interested people from niki for this  and previous period
         interestManager = InterestManager()
         account = InterestAccount.objects.get(username='interessetester')
         projectId = '36002'
@@ -59,6 +67,11 @@ class DigestView(TemplateView):
         idlist = interestManager.getIdsByProjectFrom(account, projectId, start)
         context['interest'] = len(idlist)
 
+        startprevious = start - timedelta(360)
+        idlist = interestManager.getIdsByProjectBetween(account, projectId, startprevious, start)
+        context['previousinterest'] = len(idlist)
+
+        #Get project Niki sales stats
         nikimanager = NikiConverter()
         context['availability'] = nikimanager.getAvailability(project.nikiProject)
 
