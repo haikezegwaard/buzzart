@@ -16,7 +16,23 @@ class MailchimpManager:
         self.api = mailchimp.Mailchimp(apikey)
 
     def get_list_growth_data(self, listid):
+        """
+        Retrieve aggregated list growth stats for specific list
+        """
         try:
             result = self.api.lists.growth_history(listid)
         except mailchimp.Error:
             logging.error("Invalid API key")
+        return result
+
+    def get_list_size_data(self, listid):
+        """
+        Get a list of tuples containing (month, list size)
+        """
+        data = self.get_list_growth_data(listid)
+        result = []
+        for item in data:
+            result.append((item.get('month'),int(item.get('existing'))))
+        return sorted(result)
+
+

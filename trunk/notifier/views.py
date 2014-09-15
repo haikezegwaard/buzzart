@@ -70,7 +70,7 @@ class DigestView(TemplateView):
 
         #Get Mailchimp list growth statistics
         mcmanager = MailchimpManager(project.mailchimp_api_token)
-        context['mailchimp'] = mcmanager.get_list_growth_data(project.mailchimp_list_id)
+        context['mailchimp'] = mcmanager.get_list_size_data(project.mailchimp_list_id)
 
         return context
 

@@ -1,8 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head></head>
+<head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1.0', {'packages':['corechart','gauge']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            var traffic_data = new google.visualization.DataTable();
+            traffic_data.addColumn('string','Month');
+            traffic_data.addColumn('number','Size');
+            {% for entry in list_growth %}
+                traffic_data.addRows([
+                    ['{{entry.0}}',{{entry.1}}]
+                ]);
+            {% endfor %}
+            var traffic_chart = new google.visualization.LineChart(document.getElementById('list_plot'));
+            var traffic_options = {'title':'List size','width':800,'height':200};
+
+            //traffic_chart.draw(traffic_data,traffic_options);
+
+            // Wait for the chart to finish drawing before calling the getImageURI() method.
+            chart_div = document.getElementById('list_plot');
+            google.visualization.events.addListener(traffic_chart, 'ready', function () {
+                chart_div.innerHTML = '<img src="' + traffic_chart.getImageURI() + '">';
+                console.log(chart_div.innerHTML);
+            });
+
+            traffic_chart.draw(traffic_data,traffic_options);
+        }
+    </script>
+
+
+</head>
 <body>
-{{ context_instance }}
-list dingen hier
+<div id='list_plot'></div>
 </body>
 </html>
