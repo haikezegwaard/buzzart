@@ -46,6 +46,8 @@ class DigestView(TemplateView):
         visits = ga_manager.get_weekly_visits(ga_view, '2014-08-01', '2014-08-14')
         context['traffic'] = visits['rows']
 
+        context['traffictarget'] = 30
+
 
         #Get Google Analytics conversions for this and previous period
         conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1 ,'2014-08-01', '2014-08-14')

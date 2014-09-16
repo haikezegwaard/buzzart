@@ -5,10 +5,10 @@ from fabric.api import *
 def production():
     env.user = 'hz'
     #env.git_user = 'trnguyen'
-    env.project_path = '/home/hz/'
+    env.project_path = '/opt/'
     env.venv_path = '/opt/virtualenvs/'
     env.project_name = 'buzzart'
-    env.logs_path = '/home/hz/logs/'
+    env.logs_path = '/opt/log/'
     env.hosts = ['django-dev.fam']
     env.repo = 'svn://svn.fam/data/svn/buzzart'
 
