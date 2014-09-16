@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 import requests
 import logging
 import json
-
+from social.apps.django_app.utils import load_strategy
 
 class AnalyticsManager:
 
@@ -82,6 +82,9 @@ class AnalyticsManager:
         user = User.objects.get(username="haike") #this should not be static
         #get the oath2 token for user haike
         social = user.social_auth.get(provider='google-oauth2')
+        strategy = load_strategy(backend='google-oauth2')
+        social.refresh_token(strategy)
+
         url = self.GA_URL + 'ids=ga:{}&start-date={}&end-date={}'.format(viewid, start, end)
         url += '&metrics='
         for metric in metrics:

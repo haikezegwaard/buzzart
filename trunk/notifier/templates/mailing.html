@@ -36,9 +36,9 @@
 
             var traffic_data = new google.visualization.DataTable();
             traffic_data.addColumn('string','Day');
-            traffic_data.addColumn('number','Target sessions');
+            traffic_data.addColumn('number','Target sessies');
             traffic_data.addColumn('number','Target pageviews');
-            traffic_data.addColumn('number','Sessions');
+            traffic_data.addColumn('number','Sessies');
             traffic_data.addColumn('number','Pageviews');
             var targetSessions = {{traffic_target_sessions}};
             var targetPageViews = {{traffic_target_pageviews}};
@@ -48,7 +48,12 @@
         ]);
             {% endfor %}
             var traffic_chart = new google.visualization.LineChart(document.getElementById('traffic_plot'));
-            var traffic_options = {title: 'Page views en sessions','width':520,'height':210, chartArea:{left:25,top:40,'width': '75%'}};
+            var traffic_options = {
+                legend: { position: 'bottom', alignment: 'start' },
+                title: 'Pageviews en sessies','width':520,'height':210,
+                chartArea:{left:25,top:40,'width': '100%'},
+                hAxis: {showTextEvery: 2, format:'MMM - d'}
+            };
 
             traffic_chart.draw(traffic_data,traffic_options);
 
@@ -90,7 +95,9 @@
             var chart = new google.visualization.Gauge(document.getElementById('conversion_plot'));
             chart.draw(data, options);
 
+            //
             //Conversion Gauge
+            //
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
                 [' ', {{conversionrate}}]
@@ -105,9 +112,9 @@
             var conversion_chart = new google.visualization.Gauge(document.getElementById('conversion_ratio'));
             conversion_chart.draw(data, options);
 
-
+            //
             //Plot a pie chart for availability
-
+            //
             var availdata = new google.visualization.DataTable();
             availdata.addColumn('string','Label');
             availdata.addColumn('number','Aantal');
@@ -126,11 +133,16 @@
                     0: { color: '#00acb7' },
                     1: { color: '#eb762d' },
                     2: { color: '#e4004e'}
-                }
+                },
+                legend: {alignment: 'start'},
+                pieSliceText: 'percentage'
             };
             var availchart = new google.visualization.PieChart(document.getElementById('availability_plot'));
             availchart.draw(availdata, availoptions);
 
+            //
+            //Plot Sex/Age spreak for fanpage likes
+            //
             var sexagedata = google.visualization.arrayToDataTable([
                     ['Leeftijd','Mannen','Vrouwen']
                     {% for item in fbagesexspread %}
@@ -141,12 +153,15 @@
             var options = {
                 title: 'Fanpage likes m/v en leeftijd',
                 colors: ['#5C3292', '#1A8763'],
-                width: 520, height: 180, chartArea:{left:20,top:40,width:'75%'}
+                width: 520, height: 180, chartArea:{left:20,top:40,width:'100%'},
+                legend: { position: 'bottom', alignment: 'start' }
             };
             var chart = new google.visualization.ColumnChart(document.getElementById('agesex_plot'));
             chart.draw(sexagedata, options);
 
-
+            //
+            //Plot mailchimp list growth stats
+            //
             var mc_data = new google.visualization.DataTable();
             mc_data.addColumn('string','Month');
             mc_data.addColumn('number','Ingeschrevenen');
@@ -156,7 +171,14 @@
             ]);
             {% endfor %}
             var mc_chart = new google.visualization.ColumnChart(document.getElementById('list_plot'));
-            var mc_options = {'title':'Lijst grootte','width':520,'height':200, chartArea:{left:40,top:40,width:'70%',height:'60%'}};
+            var mc_options = {
+                'title':'Lijst grootte',
+                'width':520,'height':200,
+                chartArea:{left:40,top:40,width:'100%',height:'60%'},
+                legend: { position: 'bottom', alignment: 'start' },
+                hAxis: {showTextEvery: 2}
+
+            };
 
             //mc_chart.draw(mc_data,mc_options);
 
@@ -360,11 +382,12 @@
                                                                 <tr>
                                                                     <td align="left" valign="top" width="350" style="font-family:Tahoma,Geneva, sans-serif;
                                                                                                                             font-size: 15px; line-height: 22px; color: #4c4545; font-weight:normal;">
-                                                                        <span style="color: #eb762d; font-size: 17px;">Geachte meneer de Vries</span><br/><br/>
-                                                                        Cras gravida ipsum nulla, quis condimentum ligula pulvinar at.
-                                                                        Fusce interdum convallis est, vel porta purus vehicula in. Phasellus
-                                                                        mollis nunc pharetra sem gravida pulvinar. Curabitur vel lectus diam.
-                                                                        Fusce feugiat tempus ante porta imperdiet.
+                                                                        <span style="color: #eb762d; font-size: 17px;">Beste {{project.manager}}</span><br/>
+                                                                        <p style="margin-right: 5px;">
+                                                                        Alsjeblieft! Je twee-wekelijkse projectoverzicht. Alle (big) data overzichtelijk op een rijtje en
+                                                                        voorzien van uitleg. Hoe staat mijn project ervoor? Welke acties kan ik ondernemen? Waar moet ik op letten?
+                                                                        Je vindt het allemaal terug in de Buzzart Notifier!
+                                                                        </p>
                                                                     </td>
                                                                     <td align="center" valign="middle" width="170" bgcolor="#e9e9e9">
                                                                         <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/beoordeling.png"
@@ -391,7 +414,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td align="left" valign="top" width="520">
-                                                            <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:0; color: #eb762d;
+                                                            <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:4; color: #eb762d;
                                                             font-family:Tahoma,Geneva, sans-serif;">
                                                                 Verkoopstatus
                                                             </p>
@@ -562,7 +585,14 @@
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                 Traffic
                                                             </p>
-                                                            <div id="traffic_plot" style="width: 520px; height: 200px;"></div>
+                                                            <div id="traffic_plot" style="width: 520px; height: 220px;margin-bottom:10px;"></div>
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 10px; margin-bottom:10px; color: #4c;
+                                                                                                                    font-family:Tahoma,Geneva, sans-serif;">
+                                                                   Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat.
+                                                            </p>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -587,6 +617,13 @@
                                                                 Facebook
                                                             </p>
                                                             <div id="agesex_plot"></div>
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 10px; margin-bottom:10px; color: #4c;
+                                                                                                                    font-family:Tahoma,Geneva, sans-serif;">
+                                                                   Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat.
+                                                            </p>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -616,7 +653,13 @@
                                                                 Mailchimp
                                                             </p>
                                                             <div id="list_plot"></div>
-                                                            <div id="chart_div"></div>
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 10px; margin-bottom:10px; color: #4c;
+                                                                                                                    font-family:Tahoma,Geneva, sans-serif;">
+                                                                   Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat.
+                                                            </p>
                                                         </td>
                                                     </tr>
                                                     <tr>
