@@ -48,7 +48,7 @@
         ]);
             {% endfor %}
             var traffic_chart = new google.visualization.LineChart(document.getElementById('traffic_plot'));
-            var traffic_options = {'width':520,'height':210, chartArea:{left:25,top:20,'width': '75%'}};
+            var traffic_options = {title: 'Page views en sessions','width':520,'height':210, chartArea:{left:25,top:40,'width': '75%'}};
 
             traffic_chart.draw(traffic_data,traffic_options);
 
