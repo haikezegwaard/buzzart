@@ -36,15 +36,19 @@
 
             var traffic_data = new google.visualization.DataTable();
             traffic_data.addColumn('string','Day');
+            traffic_data.addColumn('number','Target sessions');
+            traffic_data.addColumn('number','Target pageviews');
             traffic_data.addColumn('number','Sessions');
             traffic_data.addColumn('number','Pageviews');
+            var targetSessions = {{traffic_target_sessions}};
+            var targetPageViews = {{traffic_target_pageviews}};
             {% for entry in traffic %}
                 traffic_data.addRows([
-                    ['{{entry.0}}',{{entry.1}},{{entry.2}}]
+                    ['{{entry.0}}',targetSessions,targetPageViews,{{entry.1}},{{entry.2}}]
         ]);
             {% endfor %}
             var traffic_chart = new google.visualization.LineChart(document.getElementById('traffic_plot'));
-            var traffic_options = {'width':520,'height':210, chartArea:{left:0,top:20,'width': '80%'}};
+            var traffic_options = {'width':520,'height':210, chartArea:{left:25,top:20,'width': '75%'}};
 
             traffic_chart.draw(traffic_data,traffic_options);
 
@@ -60,90 +64,111 @@
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
                 [' ', {{interest}}]
-        ]);
-        var options = {
-            width: 153, height: 153,
-            redFrom: 0, redTo: 1,
-            yellowFrom:1, yellowTo: 3,
-            greenFrom: 3, greenTo: 6,
-            minorTicks: 5, max: 6
-        };
-        var interest_chart = new google.visualization.Gauge(document.getElementById('interest_plot'));
-        interest_chart.draw(data, options);
+            ]);
+            var options = {
+                width: 153, height: 153,
+                redFrom: 0, redTo: 1,
+                yellowFrom:1, yellowTo: 3,
+                greenFrom: 3, greenTo: 6,
+                minorTicks: 5, max: 6
+            };
+            var interest_chart = new google.visualization.Gauge(document.getElementById('interest_plot'));
+            interest_chart.draw(data, options);
 
-        //Conversion Gauge
-        var data = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            [' ', {{conversions}}]
-        ]);
-        var options = {
-            width: 153, height: 153,
-            redFrom: 0, redTo: 3,
-            yellowFrom:3, yellowTo: 10,
-            greenFrom: 20, greenTo: 30,
-            minorTicks: 5, max: 30
-        };
-        var chart = new google.visualization.Gauge(document.getElementById('conversion_plot'));
-        chart.draw(data, options);
+            //Conversion Gauge
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                [' ', {{conversions}}]
+            ]);
+            var options = {
+                width: 153, height: 153,
+                redFrom: 0, redTo: 3,
+                yellowFrom:3, yellowTo: 10,
+                greenFrom: 20, greenTo: 30,
+                minorTicks: 5, max: 30
+            };
+            var chart = new google.visualization.Gauge(document.getElementById('conversion_plot'));
+            chart.draw(data, options);
 
-        //Conversion Gauge
-        var data = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            [' ', {{conversionrate}}]
-        ]);
-        var options = {
-            width: 153, height: 153,
-            redFrom: 0, redTo: 3,
-            yellowFrom:3, yellowTo: 5,
-            greenFrom: 5, greenTo: 10,
-            minorTicks: 5, max: 10
-        };
-        var conversion_chart = new google.visualization.Gauge(document.getElementById('conversion_ratio'));
-        conversion_chart.draw(data, options);
-
-
-        //Plot a pie chart for availability
-
-        var availdata = new google.visualization.DataTable();
-        availdata.addColumn('string','Label');
-        availdata.addColumn('number','Aantal');
-
-        availdata.addRows([['Te koop',{{availability.0}}]]);
-        availdata.addRows([['Optie',{{availability.1}}]]);
-        availdata.addRows([['Verkocht',{{availability.2}}]]);
+            //Conversion Gauge
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                [' ', {{conversionrate}}]
+            ]);
+            var options = {
+                width: 153, height: 153,
+                redFrom: 0, redTo: 3,
+                yellowFrom:3, yellowTo: 5,
+                greenFrom: 5, greenTo: 10,
+                minorTicks: 5, max: 10
+            };
+            var conversion_chart = new google.visualization.Gauge(document.getElementById('conversion_ratio'));
+            conversion_chart.draw(data, options);
 
 
+            //Plot a pie chart for availability
 
-        var availoptions = {
-            width: 520, height: 250,
-            is3D: true,
-            chartArea:{left:0,top:0,width:'75%',height:'100%'},
-            slices: {
-                0: { color: '#00acb7' },
-                1: { color: '#eb762d' },
-                2: { color: '#e4004e'}
-            }
-        };
-        var availchart = new google.visualization.PieChart(document.getElementById('availability_plot'));
-        availchart.draw(availdata, availoptions);
+            var availdata = new google.visualization.DataTable();
+            availdata.addColumn('string','Label');
+            availdata.addColumn('number','Aantal');
 
-        var sexagedata = google.visualization.arrayToDataTable([
-                ['Leeftijd','Mannen','Vrouwen']
-                {% for item in fbagesexspread %}
-        ,['{{item.0}}',{{item.1.0}},{{item.1.1}}]
-        {% endfor %}
-        ]);
+            availdata.addRows([['Te koop',{{availability.0}}]]);
+            availdata.addRows([['Optie',{{availability.1}}]]);
+            availdata.addRows([['Verkocht',{{availability.2}}]]);
 
-        var options = {
-            title: 'Fanpage likes m/v en leeftijd',
-            colors: ['#5C3292', '#1A8763'],
-            width: 520, height: 180, chartArea:{left:0,top:40,width:'80%'}
-        };
-        var chart = new google.visualization.ColumnChart(document.getElementById('agesex_plot'));
-        chart.draw(sexagedata, options);
+
+
+            var availoptions = {
+                width: 520, height: 250,
+                is3D: true,
+                chartArea:{left:0,top:0,width:'75%',height:'100%'},
+                slices: {
+                    0: { color: '#00acb7' },
+                    1: { color: '#eb762d' },
+                    2: { color: '#e4004e'}
+                }
+            };
+            var availchart = new google.visualization.PieChart(document.getElementById('availability_plot'));
+            availchart.draw(availdata, availoptions);
+
+            var sexagedata = google.visualization.arrayToDataTable([
+                    ['Leeftijd','Mannen','Vrouwen']
+                    {% for item in fbagesexspread %}
+            ,['{{item.0}}',{{item.1.0}},{{item.1.1}}]
+            {% endfor %}
+            ]);
+
+            var options = {
+                title: 'Fanpage likes m/v en leeftijd',
+                colors: ['#5C3292', '#1A8763'],
+                width: 520, height: 180, chartArea:{left:20,top:40,width:'75%'}
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById('agesex_plot'));
+            chart.draw(sexagedata, options);
+
+
+            var mc_data = new google.visualization.DataTable();
+            mc_data.addColumn('string','Month');
+            mc_data.addColumn('number','Ingeschrevenen');
+            {% for entry in mailchimp %}
+                mc_data.addRows([
+                    ['{{entry.0}}',{{entry.1}}]
+            ]);
+            {% endfor %}
+            var mc_chart = new google.visualization.ColumnChart(document.getElementById('list_plot'));
+            var mc_options = {'title':'Lijst grootte','width':520,'height':200, chartArea:{left:40,top:40,width:'70%',height:'60%'}};
+
+            //mc_chart.draw(mc_data,mc_options);
+
+            // Wait for the chart to finish drawing before calling the getImageURI() method.
+            chart_div = document.getElementById('list_plot');
+            google.visualization.events.addListener(mc_chart, 'ready', function () {
+                chart_div.innerHTML = '<img src="' + mc_chart.getImageURI() + '">';
+                console.log(chart_div.innerHTML);
+            });
+
+            mc_chart.draw(mc_data,mc_options);
         }
-
-
 
         window.onload = function()
         {
@@ -171,7 +196,7 @@
 
 
 
-        function drawMyCircels(id, circeColor, difference){
+        function drawMyCircels(id, difference){
             var canvas = document.getElementById(id);
             var context = canvas.getContext('2d');
             var height = 26 * (Math.sqrt(3)/2);
@@ -187,7 +212,13 @@
 
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-            context.fillStyle = circeColor;
+            if(difference > 0){
+                context.fillStyle = '#00acb7';
+            } else if(difference == 0){
+                context.fillStyle = '#af248e';
+            } else {
+                context.fillStyle = '#ed266b';
+            }
             context.fill();
             context.font = '15pt Tahoma';
             context.fillStyle = 'white';
@@ -234,9 +265,9 @@
             context.stroke();
         }
 
-        drawMyCircels('conversieCanvas', '#ad248c', conversionsDiff);
-        drawMyCircels('interesseCanvas', '#ed266b', interestDiff);
-        drawMyCircels('conversieRatioCanvas', '#00acb7', diffConversionRate);
+        drawMyCircels('conversieCanvas', conversionsDiff);
+        drawMyCircels('interesseCanvas', interestDiff);
+        drawMyCircels('conversieRatioCanvas', diffConversionRate);
 
         }
 
@@ -289,10 +320,23 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td align="center" valign="top" width="520" height="2" style="font-family:Tahoma, Geneva, sans-serif;
-                                                                                                                font-size: 20px; line-height: 24px; color: #eb762d; font-weight:bold;">
-                                                            <i>Buzzart</i><br/>
-                                                            <span style="font-size: 30px; line-height: 50px; font-weight: normal;">Project Score</span>
+                                                        <td align="center" valign="top" width="520" height="2">
+                                                            <table cellspacing="0" cellpadding="0" border="0" width="520">
+                                                                <tr>
+                                                                    <td align="center" width="280" valign="top" style="font-family:Tahoma, Geneva, sans-serif;
+                                                                    font-size: 20px; line-height: 24px; color: #eb762d; font-weight:bold;">
+                                                                        <i>Buzzart</i><br/>
+                                                                        <span style="font-size: 30px; line-height: 50px; font-weight: normal;">Project Score</span>
+                                                                    </td>
+                                                                    <td width="240" align="left" valign="top" style="font-family:Tahoma,Geneva, sans-serif;
+                                                                    font-size: 13px; line-height: 18px; color: #4c4545; font-weight:normal;">
+                                                                        Projectnaam: {{projectname}}<br/>
+                                                                        Projecteigenaar: {{project.manager}} <br/>
+                                                                        Website: {{project.url}}<br/>
+                                                                        E-mailadres: {{project.email}}
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -543,6 +587,36 @@
                                                                 Facebook
                                                             </p>
                                                             <div id="agesex_plot"></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" valign="top" width="520" height="25">
+                                                            <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" valign="top" width="520" height="2" bgcolor="#e0dad9">
+                                                            <p style="font-size: 2px; line-height:2px; margin-top: 0; margin-bottom:0;">&#160;</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" valign="top" width="520" height="25">
+                                                            <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" valign="top" width="520" height="25">
+                                                            <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" valign="top" width="520">
+                                                            <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:0; color: #eb762d;
+                                                            font-family:Tahoma,Geneva, sans-serif;">
+                                                                Mailchimp
+                                                            </p>
+                                                            <div id="list_plot"></div>
+                                                            <div id="chart_div"></div>
                                                         </td>
                                                     </tr>
                                                     <tr>
