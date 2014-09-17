@@ -7,6 +7,8 @@ import xml.etree.ElementTree as ET
 
 class InterestManager:
 
+    logger = logging.getLogger(__name__)
+
     def __init__(self):
         #LIVE
         self.client = SoapClient(
@@ -188,7 +190,7 @@ class InterestManager:
 
     #helper lookup function
     def getNikiInterestProjectByProject(self, project):
-        logging.debug('trying to fetch interestaccount by project id: {}'.format(project.id))
+        self.logger.debug('trying to fetch interestaccount by project id: {}'.format(project.id))
         return InterestProject.objects.get(project = project)
 
     #Loop through subscriptions xml, and create a dictionary of

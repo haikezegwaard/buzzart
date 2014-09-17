@@ -9,6 +9,24 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 
+#################
+# DEBUG TOOLBAR #
+#################
+DEBUG_TOOLBAR_PATCH_SETTINGS = False  # explicit setup
+def _show_toolbar(request):
+    #avoid executing in tests (which sets DEBUG to False)
+    if request.is_ajax():
+        return False
+    user_agent = request.META.get('HTTP_USER_AGENT', '')
+    if 'MSIE' in user_agent:
+        return False
+    from django.conf import settings
+    return settings.TEMPLATE_DEBUG
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'monitor.settings._show_toolbar',  # 'debug_toolbar.middleware.show_toolbar'
+        'INTERCEPT_REDIRECTS': False,
+}
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -59,6 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -73,7 +92,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '668855476975-5l8p7sua5hp70o0rbisp941dsfk462ki.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'pPz3fT_pTBgPSyZ2uWKbB_8Y'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Jfc8k03j8ihL_9U_FgdCvTG4'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
 
 ROOT_URLCONF = 'monitor.urls'
@@ -113,8 +132,35 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/opt/buzzart/static'
 
-""" Import settings from local settings file"""
-try:
-    from local_settings import *
-except ImportError as e:
-    pass
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'mysite.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['file'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'buzzart': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    }
+}

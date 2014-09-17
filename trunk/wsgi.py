@@ -11,10 +11,9 @@ import os
 import sys
 
 # put the Django project on sys.path
-PROJECT_ROOT = os.path.normpath(os.path.join(
-                                os.path.dirname(os.path.realpath(__file__)),
-                                '..', '..'))
+PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "monitor.settings")
 

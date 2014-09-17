@@ -12,6 +12,8 @@ class FacebookManager:
     APP_SECRET = '8405354cb36bf27b6a60e0e1af56467e'
     TOKEN = 'CAABZBma2ClcYBAKxAIV3A4xfSkcfRcU6QPSLZCfN9nZCyxNtuLOHdHyFkSHYiCSN6MqYEgT3p0HFGYPAqnVegMkoHpEKluXGksZBHZAOeQnhHd7JpgqCP4OZCeU46Jv2NCPPqLo3M9Xtd7F48UShkLqvpoLHsNspSx3KDApWqzArQlTwaqEbI5PzBre03BEOpG9ZBXNZAtSc6jjcTyZBgWVsd'
 
+    logger = logging.getLogger(__name__)
+
     def get_likes_sex_age(self, page):
         """
         Return sex / age spread for likes of page
@@ -38,7 +40,7 @@ class FacebookManager:
             if testkey not in agesexspread:
                 fullspread[testkey] = 0
             fullspread[k] = v
-        logging.debug(fullspread)
+        self.logger.debug(fullspread)
 
         male = {k[2:]: v for k, v in fullspread.items() if k.startswith('M.')}
         female = {k[2:]: v for k, v in fullspread.items() if k.startswith('F.')}
@@ -55,6 +57,6 @@ class FacebookManager:
         Append access token to url, do request and return json
         """
         url += '?access_token={}'.format(self.TOKEN)
-        logging.debug('requesting url: {}'.format(url))
+        self.logger.debug('requesting url: {}'.format(url))
         r = requests.get(url)
         return r.json()

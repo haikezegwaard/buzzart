@@ -8,6 +8,8 @@ class AnalyticsManager:
 
     GA_URL = 'https://www.googleapis.com/analytics/v3/data/ga?'
 
+    logger = logging.getLogger(__name__)
+
     def get_weekly_visits(self, viewid, start, end):
         """For convenience only"""
         return self.reporting_API_call(viewid, start, end, ['sessions','pageviews'], '&sort=ga:date&dimensions=ga:date&max-results=200')
@@ -91,8 +93,8 @@ class AnalyticsManager:
             url += 'ga:{},'.format(metric)
         url = url[:-1]
         url += extra
-        logging.debug('calling url: '+url)
+        self.logger.debug('calling url: '+url)
         response = requests.get(url,params={'access_token': social.extra_data['access_token']})
 
-        logging.debug('response: '+response.content)
+        self.logger.debug('response: '+response.content)
         return json.loads(response.content)
