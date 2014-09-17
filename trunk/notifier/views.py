@@ -28,6 +28,8 @@ class DirectTemplateView(TemplateView):
 class DigestView(TemplateView):
 
     extra_context = None
+    logger = logging.getLogger(__name__)
+
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         if self.extra_context is not None:
@@ -37,45 +39,53 @@ class DigestView(TemplateView):
                 else:
                     context[key] = value
 
+        #dates for this mailing
+        currentstart = datetime.today() - timedelta(days=15)
+        currentend = datetime.today()
+
+        previousstart = currentstart - timedelta(days = 15)
+        previousend = currentstart
+
+
         #get testproject
-        project = Project.objects.get(name = context['projectname'])
+        projectKey = self.kwargs['pk']
+        project = Project.objects.get(id = projectKey)
+        #project = Project.objects.get(name = context['projectname'])
+
         context['project'] = project
 
         #for testing purpose add content directly to context
         ga_manager = AnalyticsManager()
         ga_view = project.ga_view
-        visits = ga_manager.get_weekly_visits(ga_view, '2014-08-01', '2014-08-14')
+        visits = ga_manager.get_weekly_visits(ga_view, currentstart.date().isoformat(), currentend.date().isoformat())
         context['traffic'] = visits['rows']
 
         context['traffic_target_sessions'] = 90
         context['traffic_target_pageviews'] = 300
 
-
         #Get Google Analytics conversions for this and previous period
-        conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1 ,'2014-08-01', '2014-08-14')
+        conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1 ,currentstart.date().isoformat(), currentend.date().isoformat())
         context['conversions'] = conversions
-        previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1, '2014-07-14', '2014-07-30')
+        previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1, previousstart.date().isoformat(), previousend.date().isoformat())
         context['previous_conversions'] = previous_conversions
 
         #Get Google Analytics conversion rate for this and previous period
-        conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, '2014-08-01', '2014-08-14')
+        self.logger.debug("analytics period: {} - {}".format(currentstart.date().isoformat(), currentend.date().isoformat()))
+        conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, currentstart.date().isoformat(), currentend.date().isoformat())
         context['conversionrate'] = conversion_rate
-        previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, '2014-07-14', '2014-07-30')
+
+        previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, previousstart.date().isoformat(), previousend.date().isoformat())
         context['previousconversionrate'] = previous_conversion_rate
 
         #Get number of interested people from niki for this  and previous period
         interestManager = InterestManager()
         nip = interestManager.getNikiInterestProjectByProject(project)
         account = nip.interestAccount
-        #account = InterestAccount.objects.get(username='interessetester')
-        #projectId = '36002'
 
-        start = datetime.today() - timedelta(days=31)
-        idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, start, datetime.today())
+        idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, currentstart, currentend)
         context['interest'] = len(idlist)
 
-        startprevious = start - timedelta(31)
-        previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, startprevious, start)
+        previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, previousstart, previousend)
         context['previousinterest'] = len(previousidlist)
 
         context['interesttotal'] = len(interestManager.getIdsByProject(account, nip.nikiProjectId))

@@ -202,7 +202,7 @@
         {
             var conversionRate = {{conversionrate}};
             var previousConversionRate = {{previousconversionrate}};
-            var averageConversionRate = (conversionRate + previousConversionRate) / 2;
+            var averageConversionRate = Math.round((conversionRate + previousConversionRate)*100 / 2)/100;
             var diffConversionRate = conversionRate - previousConversionRate;
             diffConversionRate = Math.round(diffConversionRate * 100) / 100;
             document.getElementById("avConversionRate").innerHTML = averageConversionRate;
@@ -359,7 +359,7 @@
                                                                     <td width="240" align="left" valign="top" style="font-family:Tahoma,Geneva, sans-serif;
                                                                     font-size: 13px; line-height: 18px; color: #4c4545; font-weight:normal;">
                                                                         Periode: september 2014<br/>
-                                                                        Projectnaam: {{projectname}}<br/>
+                                                                        Projectnaam: {{project.name}}<br/>
                                                                         Projecteigenaar: {{project.manager}} <br/>
                                                                         Website: {{project.url}}<br/>
                                                                         E-mailadres: {{project.email}}

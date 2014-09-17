@@ -5,7 +5,8 @@ import logging
 #Class to convert Niki data to the numbers needed
 class NikiConverter:
     #static for now, should be replaced by oauth security model
-    oauth_token = "90302891-25b2-43cb-8ef9-3dd4bc0955be"
+    #oauth_token = "90302891-25b2-43cb-8ef9-3dd4bc0955be"
+    oauth_token = "5060cbaf-35f5-41fe-9792-3c0c30012b7d"
     api_url = "https://api.niki.nl"
     #projectResource = "/projects/54/AMVP9518"
     availability = []
