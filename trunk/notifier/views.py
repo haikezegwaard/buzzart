@@ -40,6 +40,7 @@ class DigestView(TemplateView):
         #get testproject
         project = Project.objects.get(name = context['projectname'])
         context['project'] = project
+
         #for testing purpose add content directly to context
         ga_manager = AnalyticsManager()
         ga_view = project.ga_view
@@ -64,15 +65,20 @@ class DigestView(TemplateView):
 
         #Get number of interested people from niki for this  and previous period
         interestManager = InterestManager()
-        account = InterestAccount.objects.get(username='interessetester')
-        projectId = '36002'
-        start = datetime.today() - timedelta(days=360)
-        idlist = interestManager.getIdsByProjectFrom(account, projectId, start)
+        nip = interestManager.getNikiInterestProjectByProject(project)
+        account = nip.interestAccount
+        #account = InterestAccount.objects.get(username='interessetester')
+        #projectId = '36002'
+
+        start = datetime.today() - timedelta(days=31)
+        idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, start, datetime.today())
         context['interest'] = len(idlist)
 
-        startprevious = start - timedelta(360)
-        idlist = interestManager.getIdsByProjectBetween(account, projectId, startprevious, start)
-        context['previousinterest'] = len(idlist)
+        startprevious = start - timedelta(31)
+        previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, startprevious, start)
+        context['previousinterest'] = len(previousidlist)
+
+        context['interesttotal'] = len(interestManager.getIdsByProject(account, nip.nikiProjectId))
 
         #Get project Niki sales stats
         nikimanager = NikiConverter()
@@ -80,7 +86,7 @@ class DigestView(TemplateView):
 
         #Get the sex and age spread of likes on the fanpage
         fbmanager = FacebookManager()
-        agesexspread = fbmanager.get_likes_sex_age_spread_sorted('217907011622497')
+        agesexspread = fbmanager.get_likes_sex_age_spread_sorted(project.fanpage_id)
         context['fbagesexspread'] = agesexspread
 
 

@@ -72,8 +72,9 @@ def create_app_super_user():
             cd %(project_path)s/%(project_name)s/src/CAS;\
             python manage.py createsuperuser' % env)
 
-def copy_nginx_config():
-    run('cp %(project_path)s/%(project_name)s/configs/nginx/default /etc/nginx/sites-available/' % env)
+def copy_apache_config():
+    run('ln -s %(project_path)s/%(project_name)s/deployment/apache/buzzart-dev.conf /etc/apache2/sites-available/%(project_name)s' % env)
+    run('ln -s /etc/apache2/sites-available/%(project_name)s /etc/apache2/sites-enabled/%(project_name)s' % env)
 
 
 def copy_supervisor_config():
@@ -81,10 +82,9 @@ def copy_supervisor_config():
 
 
 def copy_config_files():
-    copy_nginx_config()
+    copy_apache_config()
     copy_supervisor_config()
 
 
 def restart_server():
-    run('service nginx restart')
-    run('supervisorctl restart gunicorn')
+    run('apachectl graceful')

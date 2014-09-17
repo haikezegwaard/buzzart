@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 from nikiInterest.models import InterestAccount
-from nikiInterest import interestmanager
+from nikiInterest.interestmanager import InterestManager
 from datetime import date, datetime, timedelta
 import xml.etree.ElementTree as ET
 
@@ -20,17 +20,20 @@ class IndexView(generic.TemplateView):
         start = datetime.today() - timedelta(days=14)
 
         # Add in a QuerySet of all the books
-        interestManager = interestmanager()
+        interestManager = InterestManager()
         #context['myVar'] = interestManager.getSubscribersSinceDate(datetime(2014, 7, 29, 13, 1, 31))
-        account = InterestAccount.objects.get(username='interessetester')
+        account = InterestAccount.objects.get(username='vanwijnen@fundament.nl')
         #context['myVar'] = interestManager.getById(account, '171795')
         #context['myVar'] = interestManager.syncAllAccounts()
-        projectId = '36002'
-        idlist = interestManager.getIdsByProjectFrom(account, projectId, start)
-        context['project_count'] = len(idlist)
-        document = interestManager.getSubscriptionsAsDocument(account, idlist)
-        context['alldoc'] = ET.tostring(document, encoding='utf8', method='xml')
-        context['occurrences'] = interestManager.mapSubscriptionDocumentToTypCountDictionary(document)
+
+        context['all'] = interestManager.getIdsByProject(account, 'GEN_630D1B86-31EE-494F-A718-48C8B6B4EA11')
+
+        #projectId = '36002'
+        #idlist = interestManager.getIdsByProjectFrom(account, projectId, start)
+        #context['project_count'] = len(idlist)
+        #document = interestManager.getSubscriptionsAsDocument(account, idlist)
+        #context['alldoc'] = ET.tostring(document, encoding='utf8', method='xml')
+        #context['occurrences'] = interestManager.mapSubscriptionDocumentToTypCountDictionary(document)
         return context
 
 

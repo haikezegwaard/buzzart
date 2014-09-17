@@ -9,18 +9,18 @@ class InterestManager:
 
     def __init__(self):
         #LIVE
-        #self.client = SoapClient(
-        #                    location = "https://xml.niki.nl/services/soap/interest",
-        #                    action = 'https://xml.niki.nl/services/soap/interest', # SOAPAction
-        #                    namespace = "http://endpoint.interest.service.lnp.fundament.nl",
-        #                    soap_ns='soap', ns = False)
-
-        #ACCEPTATIE
         self.client = SoapClient(
-                            location = "http://acc.niki.nl/services/soap/interest",
-                            action = 'http://acc.niki.nl/services/soap/interest', # SOAPAction
+                            location = "https://xml.niki.nl/services/soap/interest",
+                            action = 'https://xml.niki.nl/services/soap/interest', # SOAPAction
                             namespace = "http://endpoint.interest.service.lnp.fundament.nl",
                             soap_ns='soap', ns = False)
+
+        #ACCEPTATIE
+        #self.client = SoapClient(
+        #                    location = "http://acc.niki.nl/services/soap/interest",
+        #                    action = 'http://acc.niki.nl/services/soap/interest', # SOAPAction
+        #                    namespace = "http://endpoint.interest.service.lnp.fundament.nl",
+        #                    soap_ns='soap', ns = False)
 
 
     #return all subscribers from a list as one big xml document
@@ -187,8 +187,9 @@ class InterestManager:
     #
 
     #helper lookup function
-    def getAccountByProjectId(self, projectId):
-        return InterestProject.objects.get(nikiProjectId = projectId)
+    def getNikiInterestProjectByProject(self, project):
+        logging.debug('trying to fetch interestaccount by project id: {}'.format(project.id))
+        return InterestProject.objects.get(project = project)
 
     #Loop through subscriptions xml, and create a dictionary of
     #Housetype -> occurrences, the number of  preferred interests per housetype

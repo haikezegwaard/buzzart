@@ -34,6 +34,9 @@
         // draws it.
         function drawChart() {
 
+            //
+            //Draw traffic plot from Google Analytics
+            //
             var traffic_data = new google.visualization.DataTable();
             traffic_data.addColumn('string','Day');
             traffic_data.addColumn('number','Target sessies');
@@ -64,8 +67,9 @@
                 //console.log(chart_div.innerHTML);
             //});
 
-
+            //
             //Interest Gauge
+            //
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
                 [' ', {{interest}}]
@@ -80,7 +84,9 @@
             var interest_chart = new google.visualization.Gauge(document.getElementById('interest_plot'));
             interest_chart.draw(data, options);
 
+            //
             //Conversion Gauge
+            //
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
                 [' ', {{conversions}}]
@@ -212,7 +218,7 @@
 
             var recentInterest = {{interest}};
             var previousInterest = {{previousinterest}};
-            var totalInterest = recentInterest + previousInterest;
+            var totalInterest = {{interesttotal}};
             var interestDiff = recentInterest - previousInterest;
             document.getElementById("totalInterest").innerHTML = totalInterest;
 
@@ -352,6 +358,7 @@
                                                                     </td>
                                                                     <td width="240" align="left" valign="top" style="font-family:Tahoma,Geneva, sans-serif;
                                                                     font-size: 13px; line-height: 18px; color: #4c4545; font-weight:normal;">
+                                                                        Periode: september 2014<br/>
                                                                         Projectnaam: {{projectname}}<br/>
                                                                         Projecteigenaar: {{project.manager}} <br/>
                                                                         Website: {{project.url}}<br/>
@@ -419,6 +426,13 @@
                                                                 Verkoopstatus
                                                             </p>
                                                             <div id="availability_plot"></div>
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
+                                                                                                                    font-family:Tahoma,Geneva, sans-serif;">
+                                                                   Hier moet de uitleg en het advies over de verkoopstatus. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. machtig prachtig. <a style="color: #eb762d;" href="calltoaction">Meer advies hier</a>
+                                                            </p>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -586,12 +600,12 @@
                                                                 Traffic
                                                             </p>
                                                             <div id="traffic_plot" style="width: 520px; height: 220px;margin-bottom:10px;"></div>
-                                                            <p style="font-size: 13px; line-height:18px; margin-top: 10px; margin-bottom:10px; color: #4c;
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                    Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
                                                                    dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
                                                                    dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
-                                                                   dat is de meerwaarde van dit product. Hoe vet is dat.
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. machtig prachtig. <a style="color: #eb762d;" href="calltoaction">Meer advies hier</a>
                                                             </p>
                                                         </td>
                                                     </tr>
@@ -617,12 +631,12 @@
                                                                 Facebook
                                                             </p>
                                                             <div id="agesex_plot"></div>
-                                                            <p style="font-size: 13px; line-height:18px; margin-top: 10px; margin-bottom:10px; color: #4c;
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                    Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
                                                                    dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
                                                                    dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
-                                                                   dat is de meerwaarde van dit product. Hoe vet is dat.
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat. machtig prachtig. <a style="color: #eb762d;" href="calltoaction">Meer advies hier</a>
                                                             </p>
                                                         </td>
                                                     </tr>
@@ -653,12 +667,12 @@
                                                                 Mailchimp
                                                             </p>
                                                             <div id="list_plot"></div>
-                                                            <p style="font-size: 13px; line-height:18px; margin-top: 10px; margin-bottom:10px; color: #4c;
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                    Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
                                                                    dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
                                                                    dat is de meerwaarde van dit product. Hoe vet is dat. Hier moet de uitleg en het advies over het verkeer. Een mooie conclusie en vet advies. Want
-                                                                   dat is de meerwaarde van dit product. Hoe vet is dat.
+                                                                   dat is de meerwaarde van dit product. Hoe vet is dat machtig prachtig. <a style="color: #eb762d;" href="calltoaction">Meer advies hier</a>
                                                             </p>
                                                         </td>
                                                     </tr>

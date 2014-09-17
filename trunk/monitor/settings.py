@@ -8,6 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -71,12 +73,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '668855476975-5l8p7sua5hp70o0rbisp941dsfk462ki.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Jfc8k03j8ihL_9U_FgdCvTG4'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'pPz3fT_pTBgPSyZ2uWKbB_8Y'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
 
 ROOT_URLCONF = 'monitor.urls'
 
-WSGI_APPLICATION = 'monitor.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 
@@ -109,3 +111,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/opt/buzzart/static'
+
+""" Import settings from local settings file"""
+try:
+    from local_settings import *
+except ImportError as e:
+    pass
