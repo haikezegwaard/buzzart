@@ -10,6 +10,8 @@ class AnalyticsManager:
 
     logger = logging.getLogger(__name__)
 
+    GA_NULL_DATE = '2005-01-01'
+
     def get_weekly_visits(self, viewid, start, end):
         """For convenience only"""
         return self.reporting_API_call(viewid, start, end, ['sessions','pageviews'], '&sort=ga:date&dimensions=ga:date&max-results=200')

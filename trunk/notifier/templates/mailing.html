@@ -209,13 +209,10 @@
 
             var recentConversions = {{conversions}};
             var previousConversions = {{previous_conversions}};
-            var totalConversions = recentConversions + previousConversions;
             var conversionsDiff = recentConversions - previousConversions;
             if(conversionsDiff > 0){
                 conversionsDiff = '+' + conversionsDiff;
             }
-            document.getElementById("totalConversions").innerHTML = totalConversions;
-
             var recentInterest = {{interest}};
             var previousInterest = {{previousinterest}};
             var totalInterest = {{interesttotal}};
@@ -481,9 +478,9 @@
                                                                                     <canvas id="conversieCanvas" width="150" height="150"></canvas>
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;">
-                                                                                        Deze maand: <strong>{{conversions}}</strong><br/>
-                                                                                        Vorige maand: <strong>{{previous_conversions}}</strong><br/>
-                                                                                        Totaal: <strong id="totalConversions"></strong>
+                                                                                        Deze maand: <strong>{{ conversions }}</strong><br/>
+                                                                                        Vorige maand: <strong>{{ previous_conversions }}</strong><br/>
+                                                                                        Totaal: <strong id="totalConversions">{{ total_conversions }}</strong>
                                                                                     </p>
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="5">

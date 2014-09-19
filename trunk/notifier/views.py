@@ -1,11 +1,9 @@
-from django.shortcuts import render
 from django.views.generic import TemplateView
 from googleAnalytics.analyticsmanager import AnalyticsManager
+from googleAnalytics.models import AnalyticsSettings
 from nikiInterest.interestmanager import InterestManager
-from nikiInterest.models import InterestAccount
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from niki.nikiconverter import NikiConverter
-import xml.etree.ElementTree as ET
 from monitor.models import Project
 from facebook.fbmanager import FacebookManager
 import logging
@@ -54,27 +52,36 @@ class DigestView(TemplateView):
 
         context['project'] = project
 
+        """ Fetch Analytics settings for this project """
+        ga_settings = AnalyticsSettings.objects.get(project = project)
+        self.logger.debug("fetched analytics settings: {}".format(ga_settings))
+        ga_view = ga_settings.ga_view
+        ga_goal = ga_settings.goal_to_track
+
         #for testing purpose add content directly to context
         ga_manager = AnalyticsManager()
-        ga_view = project.ga_view
+
         visits = ga_manager.get_weekly_visits(ga_view, currentstart.date().isoformat(), currentend.date().isoformat())
         context['traffic'] = visits['rows']
 
-        context['traffic_target_sessions'] = 90
-        context['traffic_target_pageviews'] = 300
+        context['traffic_target_sessions'] = ga_settings.sessions_target
+        context['traffic_target_pageviews'] = ga_settings.pageviews_target
+
 
         #Get Google Analytics conversions for this and previous period
-        conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1 ,currentstart.date().isoformat(), currentend.date().isoformat())
+        conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal ,currentstart.date().isoformat(), currentend.date().isoformat())
         context['conversions'] = conversions
-        previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, 1, previousstart.date().isoformat(), previousend.date().isoformat())
+        previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, previousstart.date().isoformat(), previousend.date().isoformat())
         context['previous_conversions'] = previous_conversions
+        total_conversions = ga_manager.get_conversion_count(ga_view, ga_manager.GA_NULL_DATE, currentend.date().isoformat())
+        context['total_conversions'] = total_conversions
 
         #Get Google Analytics conversion rate for this and previous period
         self.logger.debug("analytics period: {} - {}".format(currentstart.date().isoformat(), currentend.date().isoformat()))
-        conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, currentstart.date().isoformat(), currentend.date().isoformat())
+        conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, currentstart.date().isoformat(), currentend.date().isoformat())
         context['conversionrate'] = conversion_rate
 
-        previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, 1, previousstart.date().isoformat(), previousend.date().isoformat())
+        previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, previousstart.date().isoformat(), previousend.date().isoformat())
         context['previousconversionrate'] = previous_conversion_rate
 
         #Get number of interested people from niki for this  and previous period
@@ -83,10 +90,13 @@ class DigestView(TemplateView):
         account = nip.interestAccount
 
         idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, currentstart, currentend)
+        self.logger.debug('fetched idlist from nikiinterest: {}'.format(idlist))
+        #idlist = interestManager.getIdsByProjectFrom(account, nip.nikiProjectId, currentstart)
         context['interest'] = len(idlist)
 
         previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, previousstart, previousend)
         context['previousinterest'] = len(previousidlist)
+
 
         context['interesttotal'] = len(interestManager.getIdsByProject(account, nip.nikiProjectId))
 

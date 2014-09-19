@@ -8,7 +8,7 @@ class Project(models.Model):
     email = models.EmailField()
     url = models.URLField()
     nikiProject = models.CharField(max_length = 1000)
-    ga_view = models.CharField(max_length = 1000)
+    #ga_view = models.CharField(max_length = 1000)
     mailchimp_list_id = models.CharField(max_length = 1000)
     mailchimp_api_token = models.CharField(max_length = 1000)
     fanpage_id = models.CharField(max_length = 1000)
