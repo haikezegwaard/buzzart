@@ -2,6 +2,9 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from monitor import views
 from django.contrib import admin
+from djrill import DjrillAdminSite
+
+admin.site = DjrillAdminSite()
 admin.autodiscover()
 
 urlpatterns = patterns('',

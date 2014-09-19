@@ -22,6 +22,8 @@
     </style>
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script>
+    <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script>
     <script type="text/javascript">
         // Load the Visualization API and the piechart package.
         google.load('visualization', '1.0', {'packages':['corechart','gauge']});
@@ -50,13 +52,19 @@
                     ['{{entry.0}}',targetSessions,targetPageViews,{{entry.1}},{{entry.2}}]
         ]);
             {% endfor %}
-            var traffic_chart = new google.visualization.LineChart(document.getElementById('traffic_plot'));
+            chart_div = document.getElementById('traffic_plot');
+            var traffic_chart = new google.visualization.LineChart(chart_div);
             var traffic_options = {
                 legend: { position: 'bottom', alignment: 'start' },
                 title: 'Pageviews en sessies','width':520,'height':210,
                 chartArea:{left:25,top:40,'width': '100%'},
                 hAxis: {showTextEvery: 2, format:'MMM - d'}
             };
+
+            google.visualization.events.addListener(traffic_chart, 'ready', function () {
+                chart_div.innerHTML = '<img src="' + traffic_chart.getImageURI() + '">';
+                console.log(chart_div.innerHTML);
+            });
 
             traffic_chart.draw(traffic_data,traffic_options);
 
@@ -81,8 +89,14 @@
                 greenFrom: 3, greenTo: 6,
                 minorTicks: 5, max: 6
             };
-            var interest_chart = new google.visualization.Gauge(document.getElementById('interest_plot'));
+            interest_div = document.getElementById('interest_plot');
+            var interest_chart = new google.visualization.Gauge(interest_div);
             interest_chart.draw(data, options);
+            //convert svg to image and replace it
+            toImg(document.getElementById('interest_plot'), document.getElementById('interest_plot'));
+
+
+
 
             //
             //Conversion Gauge
@@ -100,6 +114,7 @@
             };
             var chart = new google.visualization.Gauge(document.getElementById('conversion_plot'));
             chart.draw(data, options);
+            toImg(document.getElementById('conversion_plot'), document.getElementById('conversion_plot'));
 
             //
             //Conversion Gauge
@@ -117,6 +132,7 @@
             };
             var conversion_chart = new google.visualization.Gauge(document.getElementById('conversion_ratio'));
             conversion_chart.draw(data, options);
+            toImg(document.getElementById('conversion_ratio'), document.getElementById('conversion_ratio'));
 
             //
             //Plot a pie chart for availability
@@ -143,7 +159,14 @@
                 legend: {alignment: 'start'},
                 pieSliceText: 'percentage'
             };
-            var availchart = new google.visualization.PieChart(document.getElementById('availability_plot'));
+            avail_div = document.getElementById('availability_plot');
+            var availchart = new google.visualization.PieChart(avail_div);
+
+            google.visualization.events.addListener(availchart, 'ready', function () {
+                avail_div.innerHTML = '<img src="' + availchart.getImageURI() + '">';
+                console.log(avail_div.innerHTML);
+            });
+
             availchart.draw(availdata, availoptions);
 
             //
@@ -162,7 +185,16 @@
                 width: 520, height: 180, chartArea:{left:20,top:40,width:'100%'},
                 legend: { position: 'bottom', alignment: 'start' }
             };
-            var chart = new google.visualization.ColumnChart(document.getElementById('agesex_plot'));
+
+            chart_div = document.getElementById('agesex_plot');
+            var chart = new google.visualization.ColumnChart(chart_div);
+
+
+            google.visualization.events.addListener(chart, 'ready', function () {
+                chart_div.innerHTML = '<img src="' + chart.getImageURI() + '">';
+                console.log(chart_div.innerHTML);
+            });
+
             chart.draw(sexagedata, options);
 
             //
@@ -219,7 +251,11 @@
             var interestDiff = recentInterest - previousInterest;
             document.getElementById("totalInterest").innerHTML = totalInterest;
 
+            drawMyCircels('conversieCanvas', conversionsDiff);
+            drawMyCircels('interesseCanvas', interestDiff);
+            drawMyCircels('conversieRatioCanvas', diffConversionRate);
 
+        }
 
         function drawMyCircels(id, difference){
             var canvas = document.getElementById(id);
@@ -288,16 +324,56 @@
             context.strokeStyle = 'rgba(255,255,255,0.6)';
             context.lineCap = 'square';
             context.stroke();
+            image = convertCanvasToImage(canvas);
+            canvas.parentNode.replaceChild(image, canvas);
         }
 
-        drawMyCircels('conversieCanvas', conversionsDiff);
-        drawMyCircels('interesseCanvas', interestDiff);
-        drawMyCircels('conversieRatioCanvas', diffConversionRate);
-
+        // Converts canvas to an image
+        function convertCanvasToImage(canvas) {
+            var image = new Image();
+            image.src = canvas.toDataURL("image/png");
+            return image;
         }
 
+      function getImgData(chartContainer) {
+        var chartArea = chartContainer.getElementsByTagName('svg')[0].parentNode;
+        var svg = chartArea.innerHTML;
+        var doc = chartContainer.ownerDocument;
+        var canvas = doc.createElement('canvas');
+        canvas.setAttribute('width', chartArea.offsetWidth);
+        canvas.setAttribute('height', chartArea.offsetHeight);
 
-    </script>
+        canvas.setAttribute(
+            'style',
+            'position: absolute; ' +
+            'top: ' + (-chartArea.offsetHeight * 2) + 'px;' +
+            'left: ' + (-chartArea.offsetWidth * 2) + 'px;');
+        doc.body.appendChild(canvas);
+        canvg(canvas, svg);
+        var imgData = canvas.toDataURL("image/png");
+        canvas.parentNode.removeChild(canvas);
+        return imgData;
+      }
+
+      function saveAsImg(chartContainer) {
+        var imgData = getImgData(chartContainer);
+
+        // Replacing the mime-type will force the browser to trigger a download
+        // rather than displaying the image in the browser window.
+        window.location = imgData.replace("image/png", "image/octet-stream");
+      }
+
+      function toImg(chartContainer, imgContainer) {
+        var doc = chartContainer.ownerDocument;
+        var img = doc.createElement('img');
+        img.src = getImgData(chartContainer);
+
+        while (imgContainer.firstChild) {
+          imgContainer.removeChild(imgContainer.firstChild);
+        }
+        imgContainer.appendChild(img);
+      }
+</script>
 
 </head>
 <body style="margin-left: 0px;

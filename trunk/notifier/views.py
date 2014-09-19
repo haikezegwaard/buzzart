@@ -8,6 +8,11 @@ from monitor.models import Project
 from facebook.fbmanager import FacebookManager
 import logging
 from mcapi.mailchimp_manager import MailchimpManager
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.template.loader import render_to_string
 
 class DirectTemplateView(TemplateView):
     """View to display template without model, adding context from parameters"""
@@ -114,9 +119,17 @@ class DigestView(TemplateView):
         mcmanager = MailchimpManager(project.mailchimp_api_token)
         context['mailchimp'] = mcmanager.get_list_size_data(project.mailchimp_list_id)
 
+        plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
+        subject = render_to_string("mailsubject.txt", context, plaintext_context)
+        text_body = render_to_string("sendmail.txt", context, plaintext_context)
+        html_body = render_to_string("mailing.html", context)
+
+        msg = EmailMultiAlternatives(subject=subject, from_email="hz@fundament.nl",
+                                     to=["hz@fundament.nl"], body=text_body)
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+
         return context
-
-
 
 
 

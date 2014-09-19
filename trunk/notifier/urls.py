@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
 from views import DigestView, DirectTemplateView
+import views
 admin.autodiscover()
 
 urlpatterns = patterns('',

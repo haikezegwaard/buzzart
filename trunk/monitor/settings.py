@@ -66,7 +66,7 @@ INSTALLED_APPS = (
     'googleAnalytics',
     'social.apps.django_app.default',
     'debug_toolbar',
-
+    'djrill'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -91,6 +91,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.login_redirect'
 )
 
+#python-social-auth settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '668855476975-5l8p7sua5hp70o0rbisp941dsfk462ki.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Jfc8k03j8ihL_9U_FgdCvTG4'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
@@ -100,7 +101,9 @@ ROOT_URLCONF = 'monitor.urls'
 
 WSGI_APPLICATION = 'wsgi.application'
 
-
+#djrill settings
+MANDRILL_API_KEY = "VWldgpjHZGcavL4jasHiZA"
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 
 
 # Database

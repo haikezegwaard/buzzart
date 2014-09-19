@@ -3,3 +3,4 @@ PySimpleSOAP==1.10
 python-social-auth==0.1.26
 mailchimp==2.0.8
 django-debug-toolbar==1.2.1
+djrill==1.1.1

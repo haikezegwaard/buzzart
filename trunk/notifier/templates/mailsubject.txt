@@ -1,0 +1,1 @@
+notifier digest for {{ project.name }}
