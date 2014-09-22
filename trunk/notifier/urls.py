@@ -6,5 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'canvas$', DirectTemplateView.as_view(template_name='canvas.html', extra_context={ 'projectname': 'testproject'}),  name='canvas'),
+    url(r'images', views.fetch_images,  name='images'),
+    url(r'^(?P<pk>\d+)/sendmail$', views.send_mail,  name='sendmail'),
     url(r'^(?P<pk>\d+)$', DigestView.as_view(template_name='mailing.html', extra_context={ 'fallback': 1}),  name='digest')
 )
