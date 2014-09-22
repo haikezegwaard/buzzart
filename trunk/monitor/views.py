@@ -37,31 +37,6 @@ class ProfileView(generic.TemplateView):
         return context
 
 
-#view to fill the summaries
-def summarize(request, projectId):
-    summary = Summary()
-    summary.project = get_object_or_404(Project, pk=projectId)
-    now = date.today()
-    summary.dateStart = now - timedelta(days=7)
-    summary.dateEnd = now
-    #Get sale info from Niki REST API
-    nikiconverter = NikiConverter()
-    availability = nikiconverter.getAvailability(summary.project.nikiProject)
-    summary.housesForSaleOrRent = availability[0]
-    summary.housesSoldOrRented = availability[1]
-    summary.housesUnderOption = availability[2]
 
-    #GET interest info from Niki Interest API
-    interestManager = interestmanager()
-    projectId = '36002'
-    account = InterestAccount.objects.get(username = "interessetester")
-    interestStart = datetime.combine(summary.dateStart, datetime.min.time())
-    summary.interest = len(interestManager.getIdsByProjectFrom(account, projectId, interestStart))
-    summary.cummulativeInterest = len(interestManager.getIdsByProject(account, projectId))
-
-
-
-    Summary.save(summary);
-    return HttpResponseRedirect(reverse('summary'))
 
 

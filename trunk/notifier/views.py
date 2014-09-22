@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from googleAnalytics.analyticsmanager import AnalyticsManager
 from googleAnalytics.models import AnalyticsSettings
+import util
 from nikiInterest.interestmanager import InterestManager
 from datetime import datetime, timedelta
 from niki.nikiconverter import NikiConverter
@@ -13,6 +14,7 @@ from django.template import Context
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from monitor.models import Summary
 
 
 class DirectTemplateView(TemplateView):
@@ -49,55 +51,79 @@ class DigestView(TemplateView):
                     context[key] = value
 
         # get testproject
-        projectKey = self.kwargs['pk']
-        fill_context(context, projectKey)
+        summary_id = self.kwargs['pk']
+        fill_context(context, summary_id)
         return context
 
 
-def send_mail(request):
-    """Make up the template and send mail via mandrill"""
+class MailView(TemplateView):
 
-    # Fill context dictionary with relevant info
-    context = {}
-    project_id = request.GET['projectId']
-    fill_context(context, project_id)
-    project = Project.objects.get(id=project_id)
+    extra_context = None
+    logger = logging.getLogger(__name__)
 
-    plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
-    subject = render_to_string("mailsubject.txt", context, plaintext_context)
-    text_body = render_to_string("sendmail.txt", context, plaintext_context)
-    html_body = render_to_string("mailing.html", context)
-    msg = EmailMultiAlternatives(subject=subject, from_email="hz@fundament.nl",
-                                     to=["hz@fundament.nl",project.email], body=text_body)
-    msg.attach_alternative(html_body, "text/html")
-    msg.send()
-    return render_to_response('sendmail.html', {'foo' : 'bar'}, context_instance=RequestContext(request))
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        if self.extra_context is not None:
+            for key, value in self.extra_context.items():
+                if callable(value):
+                    context[key] = value()
+                else:
+                    context[key] = value
+
+        summary_id = self.kwargs['pk']
+        fill_context(context, summary_id)
+
+        fetch_images(summary_id)
+
+        plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
+        subject = render_to_string("mailsubject.txt", context, plaintext_context)
+        text_body = render_to_string("sendmail.txt", context, plaintext_context)
+        html_body = render_to_string("mailing.html", context)
+        msg = EmailMultiAlternatives(subject=subject, from_email="hz@fundament.nl",
+                                         to=["hz@fundament.nl",context['project'].email], body=text_body)
+        msg.attach_alternative(html_body, "text/html")
+        #msg.send()
 
 
-def fetch_images(request):
-    import util
-    url = 'http://buzzart.django-dev.fundament.nl/digest/2'
-
-    util.store_remote_image(url, '//div[@id="availability_plot"]/img', 'media/availability.png')
-
-    return render_to_response('images.html',{'foo' : 'bar'}, context_instance=RequestContext(request))
+        return context
 
 
-def fill_context(context, project_id):
+def fetch_images(summary_id):
+
+    url = 'http://127.0.0.1:8000/digest/{}'.format(summary_id)
+    xpaths_files = [
+      ('//div[@id="availability_plot"]/img','media/{}/availability.png'.format(summary_id)),
+      ('//div[@id="conversion_plot"]/img', 'media/{}/conversion_gauge.png'.format(summary_id)),
+      ('//div[@id="interest_plot"]/img', 'media/{}/interest_gauge.png'.format(summary_id)),
+      ('//div[@id="conversion_ratio"]/img', 'media/{}/conversion_ratio_gauge.png'.format(summary_id)),
+      ('//div[@id="interest_delta"]/img', 'media/{}/interest_delta.png'.format(summary_id)),
+      ('//div[@id="conversion_delta"]/img', 'media/{}/conversion_delta.png'.format(summary_id)),
+      ('//div[@id="conversion_rate_delta"]/img', 'media/{}/conversion_rate_delta.png'.format(summary_id)),
+      ('//div[@id="traffic_plot"]/img', 'media/{}/traffic.png'.format(summary_id)),
+      ('//div[@id="agesex_plot"]/img', 'media/{}/agesex.png'.format(summary_id)),
+      ('//div[@id="list_plot"]/img', 'media/{}/mc_list.png'.format(summary_id))
+    ]
+    util.store_remote_images(url, xpaths_files)
+    return "fetched images"
+
+
+def fill_context(context, summary_id):
     """Fetch all data and add to given dict"""
 
     logger = logging.getLogger(__name__)
 
-    # dates for this mailing
-    currentstart = datetime.today() - timedelta(days=15)
-    currentend = datetime.today()
-
-    previousstart = currentstart - timedelta(days=15)
-    previousend = currentstart
-
-    project = Project.objects.get(id=project_id)
-
+    summary = Summary.objects.get(id=summary_id)
+    context['summary'] = summary
+    # Fetch project from summary
+    project = summary.project
     context['project'] = project
+
+    # dates for this mailing
+    currentstart = summary.dateStart
+    currentend = summary.dateEnd
+
+    previousstart = summary.dateStart - timedelta(days=15)
+    previousend = summary.dateStart
 
     """ Fetch Analytics settings for this project """
     ga_settings = AnalyticsSettings.objects.get(project=project)
@@ -108,38 +134,40 @@ def fill_context(context, project_id):
     # for testing purpose add content directly to context
     ga_manager = AnalyticsManager()
 
-    visits = ga_manager.get_weekly_visits(ga_view, currentstart.date().isoformat(), currentend.date().isoformat())
+    visits = ga_manager.get_weekly_visits(ga_view, currentstart.isoformat(), currentend.isoformat())
     context['traffic'] = visits['rows']
 
     context['traffic_target_sessions'] = ga_settings.sessions_target
     context['traffic_target_pageviews'] = ga_settings.pageviews_target
 
     # Get Google Analytics conversions for this and previous period
-    conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal , currentstart.date().isoformat(), currentend.date().isoformat())
+    conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal , currentstart.isoformat(), currentend.isoformat())
     context['conversions'] = conversions
-    previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, previousstart.date().isoformat(), previousend.date().isoformat())
+    previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, previousstart.isoformat(), previousend.isoformat())
     context['previous_conversions'] = previous_conversions
-    total_conversions = ga_manager.get_conversion_count(ga_view, ga_manager.GA_NULL_DATE, currentend.date().isoformat())
+    total_conversions = ga_manager.get_conversion_count(ga_view, ga_manager.GA_NULL_DATE, currentend.isoformat())
     context['total_conversions'] = total_conversions
 
     # Get Google Analytics conversion rate for this and previous period
-    logger.debug("analytics period: {} - {}".format(currentstart.date().isoformat(), currentend.date().isoformat()))
-    conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, currentstart.date().isoformat(), currentend.date().isoformat())
+    logger.debug("analytics period: {} - {}".format(currentstart.isoformat(), currentend.isoformat()))
+    conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, currentstart.isoformat(), currentend.isoformat())
     context['conversionrate'] = conversion_rate
 
-    previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, previousstart.date().isoformat(), previousend.date().isoformat())
+    previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, previousstart.isoformat(), previousend.isoformat())
     context['previousconversionrate'] = previous_conversion_rate
+
+    total_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, ga_manager.GA_NULL_DATE, currentend.isoformat())
+    context['total_conversion_rate'] = total_conversion_rate
 
     # Get number of interested people from niki for this  and previous period
     interestManager = InterestManager()
     nip = interestManager.getNikiInterestProjectByProject(project)
     account = nip.interestAccount
-
-    idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, currentstart, currentend)
+    idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, util.date_to_datetime(currentstart), util.date_to_datetime(currentend))
     logger.debug('fetched idlist from nikiinterest: {}'.format(idlist))
     context['interest'] = len(idlist)
 
-    previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, previousstart, previousend)
+    previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, util.date_to_datetime(previousstart), util.date_to_datetime(previousend))
     context['previousinterest'] = len(previousidlist)
 
     context['interesttotal'] = len(interestManager.getIdsByProject(account, nip.nikiProjectId))

@@ -3,7 +3,7 @@
 <h1>Summary</h1>
 <ul>
 {% for summary in object_list %}
-    <li>{{ summary.housesUnderOption }} - {{ summary.housesForSaleOrRent }}</li>
+    <li>{{ summary }}</li>
 {% empty %}
     <li>No summaries yet.</li>
 {% endfor %}
