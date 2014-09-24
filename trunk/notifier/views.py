@@ -15,6 +15,8 @@ from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from monitor.models import Summary
+import timeit
+from django.contrib.sites.models import Site
 
 
 class DirectTemplateView(TemplateView):
@@ -72,36 +74,35 @@ class MailView(TemplateView):
 
         summary_id = self.kwargs['pk']
         fill_context(context, summary_id)
-
         fetch_images(summary_id)
-
-        plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
-        subject = render_to_string("mailsubject.txt", context, plaintext_context)
-        text_body = render_to_string("sendmail.txt", context, plaintext_context)
-        html_body = render_to_string("mailing.html", context)
-        msg = EmailMultiAlternatives(subject=subject, from_email="hz@fundament.nl",
-                                         to=["hz@fundament.nl",context['project'].email], body=text_body)
-        msg.attach_alternative(html_body, "text/html")
-        #msg.send()
-
+        # Check whether emailaddress is set, if so, send notification mail
+        if context['project'].email:
+            plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
+            subject = render_to_string("mailsubject.txt", context, plaintext_context)
+            text_body = render_to_string("sendmail.txt", context, plaintext_context)
+            html_body = render_to_string("mailing.html", context)
+            msg = EmailMultiAlternatives(subject=subject, from_email="hz@fundament.nl",
+                                             to=["hz@fundament.nl",context['project'].email], body=text_body)
+            msg.attach_alternative(html_body, "text/html")
+            msg.send()
 
         return context
 
 
 def fetch_images(summary_id):
 
-    url = 'http://127.0.0.1:8000/digest/{}'.format(summary_id)
+    url = 'http://buzzart.django-dev.fundament.nl/digest/{}'.format(summary_id)
     xpaths_files = [
-      ('//div[@id="availability_plot"]/img','media/{}/availability.png'.format(summary_id)),
-      ('//div[@id="conversion_plot"]/img', 'media/{}/conversion_gauge.png'.format(summary_id)),
-      ('//div[@id="interest_plot"]/img', 'media/{}/interest_gauge.png'.format(summary_id)),
-      ('//div[@id="conversion_ratio"]/img', 'media/{}/conversion_ratio_gauge.png'.format(summary_id)),
-      ('//div[@id="interest_delta"]/img', 'media/{}/interest_delta.png'.format(summary_id)),
-      ('//div[@id="conversion_delta"]/img', 'media/{}/conversion_delta.png'.format(summary_id)),
-      ('//div[@id="conversion_rate_delta"]/img', 'media/{}/conversion_rate_delta.png'.format(summary_id)),
-      ('//div[@id="traffic_plot"]/img', 'media/{}/traffic.png'.format(summary_id)),
-      ('//div[@id="agesex_plot"]/img', 'media/{}/agesex.png'.format(summary_id)),
-      ('//div[@id="list_plot"]/img', 'media/{}/mc_list.png'.format(summary_id))
+      ('//div[@id="availability_plot"]/img','{}/availability.png'.format(summary_id)),
+      ('//div[@id="conversion_plot"]/img', '{}/conversion_gauge.png'.format(summary_id)),
+      ('//div[@id="interest_plot"]/img', '{}/interest_gauge.png'.format(summary_id)),
+      ('//div[@id="conversion_ratio"]/img', '{}/conversion_ratio_gauge.png'.format(summary_id)),
+      ('//div[@id="interest_delta"]/img', '{}/interest_delta.png'.format(summary_id)),
+      ('//div[@id="conversion_delta"]/img', '{}/conversion_delta.png'.format(summary_id)),
+      ('//div[@id="conversion_rate_delta"]/img', '{}/conversion_rate_delta.png'.format(summary_id)),
+      ('//div[@id="traffic_plot"]/img', '{}/traffic.png'.format(summary_id)),
+      ('//div[@id="agesex_plot"]/img', '{}/agesex.png'.format(summary_id)),
+      ('//div[@id="list_plot"]/img', '{}/mc_list.png'.format(summary_id))
     ]
     util.store_remote_images(url, xpaths_files)
     return "fetched images"
@@ -111,6 +112,9 @@ def fill_context(context, summary_id):
     """Fetch all data and add to given dict"""
 
     logger = logging.getLogger(__name__)
+
+    current_site = Site.objects.get_current()
+    context['domain'] = current_site.domain
 
     summary = Summary.objects.get(id=summary_id)
     context['summary'] = summary
@@ -170,7 +174,8 @@ def fill_context(context, summary_id):
     previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, util.date_to_datetime(previousstart), util.date_to_datetime(previousend))
     context['previousinterest'] = len(previousidlist)
 
-    context['interesttotal'] = len(interestManager.getIdsByProject(account, nip.nikiProjectId))
+    interest_total = len(interestManager.getIdsByProject(account, nip.nikiProjectId))
+    context['interesttotal'] = interest_total
 
     # Get project Niki sales stats
     nikimanager = NikiConverter()
@@ -185,6 +190,8 @@ def fill_context(context, summary_id):
     mcmanager = MailchimpManager(project.mailchimp_api_token)
     context['mailchimp'] = mcmanager.get_list_size_data(project.mailchimp_list_id)
 
+    sold_count = context['availability'][2]
+    context['project_score'] = util.project_score(sold_count, interest_total, total_conversion_rate)
     return context
 
 

@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     url(r'^mailchimp/', include('mcapi.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^$',views.ProfileView.as_view(), name='profile')
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

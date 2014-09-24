@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'niki',
     'monitor',
     'notifier',
@@ -88,6 +89,7 @@ AUTHENTICATION_BACKENDS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'social.apps.django_app.context_processors.backends',
+    'django.core.context_processors.request',
     'social.apps.django_app.context_processors.login_redirect'
 )
 
@@ -129,6 +131,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+SITE_ID = 1
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -137,7 +141,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/opt/buzzart/static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = './media/'
+MEDIA_ROOT = '/opt/buzzart/media'
 
 LOGGING = {
     'version': 1,
