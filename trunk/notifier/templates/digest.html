@@ -6,6 +6,7 @@
     <title>Buzzart - Project score {{ project_score }} </title>
     <meta content="width=device-width, user-scalable=yes minimum-scale=1.0" name="viewport"/>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    {% block style %}
     <style type="text/css">
         body {
             margin-left: 0px;
@@ -20,10 +21,14 @@
             text-decoration: underline;
         }
     </style>
+    {% endblock %}
+    {% block plotscripts %}
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script>
     <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script>
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'notifier/js/util.js' %} "></script>
     <script type="text/javascript">
         // Load the Visualization API and the piechart package.
         google.load('visualization', '1.0', {'packages':['corechart','gauge']});
@@ -109,15 +114,15 @@
                 width: 153, height: 153,
                 redFrom: 0, redTo: 3,
                 yellowFrom:3, yellowTo: 10,
-                greenFrom: 20, greenTo: 30,
-                minorTicks: 5, max: 30
+                greenFrom: 50, greenTo: 80,
+                minorTicks: 5, max: 70
             };
             var chart = new google.visualization.Gauge(document.getElementById('conversion_plot'));
             chart.draw(data, options);
             toImg(document.getElementById('conversion_plot'), document.getElementById('conversion_plot'));
 
             //
-            //Conversion Gauge
+            //Conversion rate Gauge
             //
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
@@ -125,10 +130,10 @@
             ]);
             var options = {
                 width: 153, height: 153,
-                redFrom: 0, redTo: 3,
-                yellowFrom:3, yellowTo: 5,
-                greenFrom: 5, greenTo: 10,
-                minorTicks: 5, max: 10
+                redFrom: 0, redTo: 0.5,
+                yellowFrom:0.5, yellowTo: 1,
+                greenFrom: 2, greenTo: 3,
+                minorTicks: 5, max: 3
             };
             var conversion_chart = new google.visualization.Gauge(document.getElementById('conversion_ratio'));
             conversion_chart.draw(data, options);
@@ -252,127 +257,10 @@
             drawMyCircels('conversieCanvas', conversionsDiff);
             drawMyCircels('interesseCanvas', interestDiff);
             drawMyCircels('conversieRatioCanvas', diffConversionRate);
-
         }
 
-        function drawMyCircels(id, difference){
-            var canvas = document.getElementById(id);
-            var context = canvas.getContext('2d');
-            var height = 26 * (Math.sqrt(3)/2);
-            var X = 75;
-            var Y = 35;
-
-            var Xmin = 75;
-            var Ymin = 57;
-
-            var centerX = canvas.width / 2;
-            var centerY = canvas.height / 2;
-            var radius = 55;
-
-            context.beginPath();
-            context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-            if(difference > 0){
-                context.fillStyle = '#00acb7';
-            } else if(difference == 0){
-                context.fillStyle = '#af248e';
-            } else {
-                context.fillStyle = '#ed266b';
-            }
-            context.fill();
-            context.font = '15pt Tahoma';
-            context.fillStyle = 'white';
-            if(difference > 0){
-                context.fillText(difference, 60, 110);
-            } else if(difference == 0){
-                context.fillText(difference, 69, 110);
-            } else{
-                context.fillText(difference, 63, 110);
-            }
-
-            if(difference > 0){
-                context.beginPath();
-                context.moveTo(X, Y);
-                context.lineTo(X+13, Y+height);
-                context.lineTo(X-13, Y+height);
-                context.lineTo(X, Y);
-                context.fillStyle = 'white';
-                context.fill();
-            } else if(difference == 0){
-                context.beginPath();
-                context.moveTo(63, 54);
-                context.lineTo(89, 54);
-                context.lineWidth = 6;
-                context.strokeStyle = '#ffffff';
-                context.lineCap = 'square';
-                context.stroke();
-            }else {
-                context.beginPath();
-                context.moveTo(Xmin, Ymin);
-                context.lineTo(Xmin+13, Ymin-height);
-                context.lineTo(Xmin-13, Ymin-height);
-                context.lineTo(Xmin, Ymin);
-                context.fillStyle = 'white';
-                context.fill();
-            }
-
-            context.beginPath();
-            context.moveTo(30, 77);
-            context.lineTo(119, 77);
-            context.lineWidth = 2;
-            context.strokeStyle = 'rgba(255,255,255,0.6)';
-            context.lineCap = 'square';
-            context.stroke();
-            image = convertCanvasToImage(canvas);
-            canvas.parentNode.replaceChild(image, canvas);
-        }
-
-        // Converts canvas to an image
-        function convertCanvasToImage(canvas) {
-            var image = new Image();
-            image.src = canvas.toDataURL("image/png");
-            return image;
-        }
-
-      function getImgData(chartContainer) {
-        var chartArea = chartContainer.getElementsByTagName('svg')[0].parentNode;
-        var svg = chartArea.innerHTML;
-        var doc = chartContainer.ownerDocument;
-        var canvas = doc.createElement('canvas');
-        canvas.setAttribute('width', chartArea.offsetWidth);
-        canvas.setAttribute('height', chartArea.offsetHeight);
-
-        canvas.setAttribute(
-            'style',
-            'position: absolute; ' +
-            'top: ' + (-chartArea.offsetHeight * 2) + 'px;' +
-            'left: ' + (-chartArea.offsetWidth * 2) + 'px;');
-        doc.body.appendChild(canvas);
-        canvg(canvas, svg);
-        var imgData = canvas.toDataURL("image/png");
-        canvas.parentNode.removeChild(canvas);
-        return imgData;
-      }
-
-      function saveAsImg(chartContainer) {
-        var imgData = getImgData(chartContainer);
-
-        // Replacing the mime-type will force the browser to trigger a download
-        // rather than displaying the image in the browser window.
-        window.location = imgData.replace("image/png", "image/octet-stream");
-      }
-
-      function toImg(chartContainer, imgContainer) {
-        var doc = chartContainer.ownerDocument;
-        var img = doc.createElement('img');
-        img.src = getImgData(chartContainer);
-
-        while (imgContainer.firstChild) {
-          imgContainer.removeChild(imgContainer.firstChild);
-        }
-        imgContainer.appendChild(img);
-      }
 </script>
-
+{% endblock %}
 </head>
 <body style="margin-left: 0px;
     margin-top: 0px;
@@ -466,7 +354,7 @@
                                                                         </p>
                                                                     </td>
                                                                     <td align="center" valign="middle" width="170" bgcolor="#e9e9e9">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/beoordeling.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/beoordeling.png"
                                                                              width="135" height="106" alt="Beoordeling"/>
                                                                     </td>
                                                                 </tr>
@@ -494,7 +382,9 @@
                                                             font-family:Tahoma,Geneva, sans-serif;">
                                                                 Verkoopstatus
                                                             </p>
+                                                            {% block availability_plot %}
                                                             <div id="availability_plot"></div>
+                                                            {% endblock %}
                                                             <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                    {{ summary.availability_advice }}
@@ -528,7 +418,9 @@
                                                                                     &#160;
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="153">
+                                                                                    {% block conversion_plot %}
                                                                                     <div id="conversion_plot" style="margin-top: 5px;"></div>
+                                                                                    {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;
                                                                                         margin-top: 10px; margin-bottom: 10px;">
@@ -544,9 +436,11 @@
                                                                                     &#160;
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="153">
+                                                                                    {% block conversion_delta %}
                                                                                     <div id="conversion_delta">
                                                                                         <canvas id="conversieCanvas" width="150" height="150"></canvas>
                                                                                     </div>
+                                                                                    {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;">
                                                                                         Deze maand: <strong>{{ conversions }}</strong><br/>
@@ -572,7 +466,9 @@
                                                                                     &#160;
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="153">
+                                                                                    {% block interest_plot %}
                                                                                     <div id="interest_plot" style="margin-top: 5px;"></div>
+                                                                                    {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px; margin-top: 10px; margin-bottom: 10px;">
                                                                                         Het aantal mensen dat de afgelopen maand het interesseformulier heeft ingevuld<br/><br/>
@@ -587,9 +483,11 @@
                                                                                     &#160;
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="153">
+                                                                                    {% block interest_delta %}
                                                                                     <div id="interest_delta">
                                                                                         <canvas id="interesseCanvas" width="150" height="150"></canvas>
                                                                                     </div>
+                                                                                    {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;">
                                                                                         Deze maand: <strong>{{interest}}</strong><br/>
@@ -615,7 +513,9 @@
                                                                                     &#160;
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="153">
+                                                                                    {% block conversion_ratio %}
                                                                                     <div id="conversion_ratio" style="margin-top: 5px;"></div>
+                                                                                    {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px; margin-top: 10px; margin-bottom: 10px;">
                                                                                         Dit getal geeft aan hoe goed de conversie is t.o.v. de campagne ea. Alles boven de 5 is zeer goed, 10 is maximaal
@@ -630,9 +530,11 @@
                                                                                     &#160;
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="153">
+                                                                                    {% block conversion_rate_delta %}
                                                                                     <div id="conversion_rate_delta">
                                                                                         <canvas id="conversieRatioCanvas" width="150" height="150"></canvas>
                                                                                     </div>
+                                                                                    {%endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;">
                                                                                         Deze maand: <strong>{{conversionrate}}</strong><br/>
@@ -671,7 +573,9 @@
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                 Traffic
                                                             </p>
+                                                            {% block traffic_plot %}
                                                             <div id="traffic_plot" style="width: 520px; height: 220px;margin-bottom:10px;"></div>
+                                                            {% endblock %}
                                                             <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                    {{ summary.traffic_advice }}
@@ -693,13 +597,16 @@
                                                             <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
                                                         </td>
                                                     </tr>
+                                                    {% if fbagesexspread %}
                                                     <tr>
                                                         <td align="left" valign="top" width="520">
                                                             <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:0; color: #eb762d;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                 Facebook
                                                             </p>
+                                                            {% block agesex_plot %}
                                                             <div id="agesex_plot"></div>
+                                                            {% endblock %}
                                                             <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                    {{ summary.facebook_advice }}
@@ -726,13 +633,17 @@
                                                             <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
                                                         </td>
                                                     </tr>
+                                                    {% endif %}
+                                                    {% if mailchimp %}
                                                     <tr>
                                                         <td align="left" valign="top" width="520">
                                                             <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:0; color: #eb762d;
                                                             font-family:Tahoma,Geneva, sans-serif;">
                                                                 Mailchimp
                                                             </p>
+                                                            {% block list_plot %}
                                                             <div id="list_plot"></div>
+                                                            {% endblock %}
                                                             <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                    {{ summary.mailchimp_advice }}
@@ -749,11 +660,13 @@
                                                             <p style="font-size: 2px; line-height:2px; margin-top: 0; margin-bottom:0;">&#160;</p>
                                                         </td>
                                                     </tr>
+
                                                     <tr>
                                                         <td align="left" valign="top" width="520" height="25">
                                                             <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
                                                         </td>
                                                     </tr>
+                                                    {% endif %}
                                                     <tr>
                                                         <td align="left" valign="top" width="520">
                                                             <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:20px; color: #eb762d;
@@ -770,11 +683,11 @@
                                                             <table cellpadding="0" cellspacing="0" width="520" border="0">
                                                                 <tr bgcolor="#e9e9e9">
                                                                     <td valign="middle" align="center" width="55">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/1.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/1.png"
                                                                              width="23" height="23" alt="1"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="35">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/equal.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/equal.png"
                                                                              width="14" height="3" alt="-"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="320">
@@ -785,21 +698,21 @@
                                                                         </p>
                                                                     </td>
                                                                     <td valign="middle" align="center" width="50">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/diagram.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/diagram.png"
                                                                              width="20" height="21" alt="Diagram"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="60">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/percentage.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/percentage.png"
                                                                              height="38" width="38" alt="Percentage"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td valign="middle" align="center" width="55">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/2.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/2.png"
                                                                              width="23" height="23" alt="2"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="35">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/up.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/up.png"
                                                                              width="14" height="12" alt="up"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="320">
@@ -810,21 +723,21 @@
                                                                         </p>
                                                                     </td>
                                                                     <td valign="middle" align="center" width="50">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/diagram.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/diagram.png"
                                                                              width="20" height="21" alt="Diagram"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="60">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/percentage.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/percentage.png"
                                                                              height="38" width="38" alt="Percentage"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr bgcolor="#e9e9e9">
                                                                     <td valign="middle" align="center" width="55">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/3.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/3.png"
                                                                              width="23" height="23" alt="3"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="35">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/equal.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/equal.png"
                                                                              width="14" height="3" alt="-"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="320">
@@ -835,21 +748,21 @@
                                                                         </p>
                                                                     </td>
                                                                     <td valign="middle" align="center" width="50">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/diagram.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/diagram.png"
                                                                              width="20" height="21" alt="Diagram"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="60">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/percentage.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/percentage.png"
                                                                              height="38" width="38" alt="Percentage"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td valign="middle" align="center" width="55">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/4.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/4.png"
                                                                              width="23" height="23" alt="4"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="35">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/down.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/down.png"
                                                                              width="14" height="14" alt="down"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="320">
@@ -860,21 +773,21 @@
                                                                         </p>
                                                                     </td>
                                                                     <td valign="middle" align="center" width="50">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/diagram.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/diagram.png"
                                                                              width="20" height="21" alt="Diagram"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="60">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/percentage.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/percentage.png"
                                                                              height="38" width="38" alt="Percentage"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr bgcolor="#e9e9e9">
                                                                     <td valign="middle" align="center" width="55">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/5.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/5.png"
                                                                              width="23" height="23" alt="5"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="35">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/down.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/down.png"
                                                                              width="14" height="14" alt="down"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="320">
@@ -885,11 +798,11 @@
                                                                         </p>
                                                                     </td>
                                                                     <td valign="middle" align="center" width="50">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/diagram.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/diagram.png"
                                                                              width="20" height="21" alt="Diagram"/>
                                                                     </td>
                                                                     <td valign="middle" align="left" width="60">
-                                                                        <img src="http://fundament2013.php-dev.fundament.nl/nieuwsbrieven/buzzart/images/percentage.png"
+                                                                        <img src="http://{{ domain }}/static/notifier/percentage.png"
                                                                              height="38" width="38" alt="Percentage"/>
                                                                     </td>
                                                                 </tr>

@@ -39,12 +39,13 @@ def nikisaletable(request):
     project = request.GET.get('project')
     nikimanager = NikiConverter()
     housetypes = nikimanager.getHouseTypes(project)
-    result = ""
+    result = "Woningtype,te koop, in optie, verkocht\n"
     for housetype in housetypes:
+        typename = housetype.get('name').replace(',', '&#44;')
         sale = housetype.get('houses').get('for-sale') if housetype.get('houses').get('for-sale') else 0
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('sold') if housetype.get('houses').get('sold') else 0
-        result += '{},{},{},{}\n'.format(housetype.get('name'),sale,option,sold).replace(',', '&#44;')
+        result += '{},{},{},{}\n'.format(typename,sale,option,sold)
 
     #result = "Woningtype,te koop, in optie, verkocht\n"
     return HttpResponse(result)
@@ -56,12 +57,13 @@ def nikirenttable(request):
     project = request.GET.get('project')
     nikimanager = NikiConverter()
     housetypes = nikimanager.getHouseTypes(project)
-    result = ""
+    result = "Woningtype,te huur, in optie, verhuurd\n"
     for housetype in housetypes:
+        typename = housetype.get('name').replace(',', '&#44;')
         sale = housetype.get('houses').get('for-rent') if housetype.get('houses').get('for-rent') else 0
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('rented') if housetype.get('houses').get('rented') else 0
-        result += '{},{},{},{}\n'.format(housetype.get('name'),sale,option,sold).replace(',', '&#44;')
+        result += '{},{},{},{}\n'.format(typename,sale,option,sold).replace(',', '&#44;')
 
     #result = "Woningtype,te koop, in optie, verkocht\n"
     return HttpResponse(result)
@@ -80,7 +82,6 @@ def nikiglobalstats(request):
     """
 
 
-        $result = "Projecteigenschap,Beschikbaar,Totaal\n";
         $result.= "Projectvoortgang,-,".$niki->getProject($this->project)->{'progress'}."\n";
         $result.= "Aantal woningen,".$availablecount.",".$niki->getTotalHouseCount($this->project)."\n";
         $priceRangeTotal = $niki->getProjectPropertyRange($this->project, 'price-range');

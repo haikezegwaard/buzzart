@@ -9,7 +9,7 @@ import errno
 logger = logging.getLogger(__name__)
 
 
-def store_remote_images(url, xpaths_files):
+def store_remote_images(url, summary_id):
     """
     Fetch image from a remote url and  store it as
     a local asset. Image is retrieved via nodejs / selenium-webdriver
@@ -24,6 +24,18 @@ def store_remote_images(url, xpaths_files):
 
     driver.set_window_size(1024, 768)  # optional
     driver.get(url)
+
+    for img_item in driver.find_elements_by_xpath('//img'):
+        parent_div = img_item.find_element_by_xpath('..')
+        name = parent_div.get_attribute('id')
+        file = '{}/{}.png'.format(summary_id, name)
+        absolute_file = os.path.join(settings.MEDIA_ROOT, file)
+        mkdir_p(os.path.dirname(absolute_file))
+        src = img_item.get_attribute('src')
+        # download the image
+        urllib.urlretrieve(src, absolute_file)
+
+    """
     for (xpath, filename) in xpaths_files:
         # get the image source
         absolute_file = os.path.join(settings.MEDIA_ROOT, filename)
@@ -32,7 +44,7 @@ def store_remote_images(url, xpaths_files):
         src = img.get_attribute('src')
         # download the image
         urllib.urlretrieve(src, absolute_file)
-
+    """
     return "fetched all images"
 
 
