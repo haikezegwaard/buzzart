@@ -133,6 +133,8 @@ USE_TZ = True
 
 SITE_ID = 1
 
+ADMIN_MAIL = 'hz@fundament.nl'
+NOTIFIER_FROM_MAIL = 'info@fundament.nl'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

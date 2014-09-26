@@ -17,6 +17,9 @@ from django.template import RequestContext
 from monitor.models import Summary
 import timeit
 from django.contrib.sites.models import Site
+from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 
 class DirectTemplateView(TemplateView):
@@ -76,36 +79,24 @@ class MailView(TemplateView):
         fill_context(context, summary_id)
         fetch_images(summary_id)
         # Check whether emailaddress is set, if so, send notification mail
-        if context['project'].email == 'jpo':
-            plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
-            subject = render_to_string("mailsubject.txt", context, plaintext_context)
-            text_body = render_to_string("sendmail.txt", context, plaintext_context)
-            html_body = render_to_string("mailing.html", context)
-            msg = EmailMultiAlternatives(subject=subject, from_email="hz@fundament.nl",
-                                             to=["hz@fundament.nl",context['project'].email], body=text_body)
-            msg.attach_alternative(html_body, "text/html")
-            msg.send()
+        #if context['project'].email:
+        plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
+        subject = render_to_string("mailsubject.txt", context, plaintext_context)
+        text_body = render_to_string("sendmail.txt", context, plaintext_context)
+        html_body = render_to_string("mailing.html", context)
+        msg = EmailMultiAlternatives(subject=subject, from_email=settings.NOTIFIER_FROM_MAIL,
+                                         to=[settings.ADMIN_MAIL,context['project'].email], body=text_body)
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
 
         return context
 
 
 def fetch_images(summary_id):
-
-    url = 'http://buzzart.django-dev.fundament.nl/digest/{}'.format(summary_id)
-    """
-    xpaths_files = [
-      ('//div[@id="availability_plot"]/img','{}/availability.png'.format(summary_id)),
-      ('//div[@id="conversion_plot"]/img', '{}/conversion_gauge.png'.format(summary_id)),
-      ('//div[@id="interest_plot"]/img', '{}/interest_gauge.png'.format(summary_id)),
-      ('//div[@id="conversion_ratio"]/img', '{}/conversion_ratio_gauge.png'.format(summary_id)),
-      ('//div[@id="interest_delta"]/img', '{}/interest_delta.png'.format(summary_id)),
-      ('//div[@id="conversion_delta"]/img', '{}/conversion_delta.png'.format(summary_id)),
-      ('//div[@id="conversion_rate_delta"]/img', '{}/conversion_rate_delta.png'.format(summary_id)),
-      ('//div[@id="traffic_plot"]/img', '{}/traffic.png'.format(summary_id)),
-      ('//div[@id="agesex_plot"]/img', '{}/agesex.png'.format(summary_id)),
-      ('//div[@id="list_plot"]/img', '{}/mc_list.png'.format(summary_id))
-    ]
-    """
+    current_site = Site.objects.get_current()
+    domain = current_site.domain
+    logger.debug('domain of current site: {}'.format(domain))
+    url = 'http://{}/digest/{}'.format(domain, summary_id)
     util.store_remote_images(url, summary_id)
     return "fetched images"
 

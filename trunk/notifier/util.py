@@ -35,16 +35,6 @@ def store_remote_images(url, summary_id):
         # download the image
         urllib.urlretrieve(src, absolute_file)
 
-    """
-    for (xpath, filename) in xpaths_files:
-        # get the image source
-        absolute_file = os.path.join(settings.MEDIA_ROOT, filename)
-        mkdir_p(os.path.dirname(absolute_file))
-        img = driver.find_element_by_xpath(xpath)
-        src = img.get_attribute('src')
-        # download the image
-        urllib.urlretrieve(src, absolute_file)
-    """
     return "fetched all images"
 
 

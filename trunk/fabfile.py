@@ -1,16 +1,19 @@
 from fabric.api import *
 
+env.user = 'hz'
+#env.git_user = 'trnguyen'
+env.project_path = '/opt/'
+env.venv_path = '/opt/virtualenvs/'
+env.project_name = 'buzzart'
+env.logs_path = '/opt/log/'
+env.hosts = ['django-dev.fam']
+env.repo = 'svn://svn.fam/data/svn/buzzart'
+
+def test():
+    local('cd c:\tmp')
+    local('svn co %(repo)s/trunk' % env)
 
 
-def production():
-    env.user = 'hz'
-    #env.git_user = 'trnguyen'
-    env.project_path = '/opt/'
-    env.venv_path = '/opt/virtualenvs/'
-    env.project_name = 'buzzart'
-    env.logs_path = '/opt/log/'
-    env.hosts = ['django-dev.fam']
-    env.repo = 'svn://svn.fam/data/svn/buzzart'
 
 def checkout_trunk():
     run('cd %(project_path)s;\
