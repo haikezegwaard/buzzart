@@ -5,7 +5,7 @@ from niki.nikiconverter import NikiConverter
 from nikiInterest.interestmanager import InterestManager
 from monitor.models import InterestProject
 from notifier import util
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 import json
 from collections import Counter
@@ -92,18 +92,27 @@ def niki_interest_subscription_dates(request):
     project = InterestProject.objects.get(nikiProjectId=project_id)
     nip = interestmanager.getNikiInterestProjectByProject(project)
     account = nip.interestAccount
-    # ids = interestmanager.getIdsByProjectBetween(account, project, start, end)
-    ids = interestmanager.getIdsByProject(account, project_id)
+    ids = interestmanager.getIdsByProjectBetween(account, project_id, start, end)
     subscriptions = interestmanager.getByIds(account, ids)
-    dates = []
+    dates = []  # list array of dates
     for subscription in subscriptions:
         posted = str(subscription.posted)[:-4]  # strip off time part
-        dates.append(posted)
-    result = "Date, Subscriptions\n"
+        dates.append(datetime.strptime(posted, "%Y%m%d"))
     counts = Counter(dates)
+    # fill in the date gaps (create entries for non existing dates between start & end
+    for single_date in daterange(start, end):
+        if single_date not in counts:
+            counts[single_date] = 0
+    result = "Date, Subscriptions\n"
     for key, value in counts.items():
-        result += "{},{}\n".format(key, value)
+        result += "{},{}\n".format(datetime.strftime(key, "%Y%m%d"), value)
+    result += "Cumulative,0\n"
+    result += "YAxisShow,1\n"
     return HttpResponse(result)
+
+def daterange(start_date, end_date):
+    for n in range(int ((end_date - start_date).days)):
+        yield start_date + timedelta(n)
 
 
 def nikiglobalstats(request):
