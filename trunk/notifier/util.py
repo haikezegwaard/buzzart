@@ -49,6 +49,13 @@ def date_to_datetime(date):
     return datetime.combine(date, datetime.min.time())
 
 
+def datestr_to_datetime(datestr):
+    """
+    Convert string like "YYYYMMDD" to datetime object
+    """
+    return datetime.strptime(datestr, "%Y%m%d")
+
+
 def mkdir_p(path):
     try:
         logger.debug("trying to make dir (mkdir -p): {}".format(path))

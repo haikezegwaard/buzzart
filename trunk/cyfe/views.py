@@ -2,10 +2,18 @@ from django.shortcuts import render
 from django.views import generic
 from django.http import HttpResponse, HttpRequest
 from niki.nikiconverter import NikiConverter
+from nikiInterest.interestmanager import InterestManager
+from monitor.models import InterestProject
+from notifier import util
+from datetime import datetime
 import logging
 import json
-# Create your views here.
-# create a new summary, store it and render result
+from collections import Counter
+import time
+
+
+logger = logging.getLogger(__name__)
+
 
 def nikisalecount(request):
     """
@@ -67,6 +75,36 @@ def nikirenttable(request):
 
     #result = "Woningtype,te koop, in optie, verkocht\n"
     return HttpResponse(result)
+
+
+def niki_interest_subscription_dates(request):
+    """
+    Return subscription dates and subscription count per date
+    widget url: http://www.yourdomain.com/script?start_date={date_start}&end_date={date_end}
+    """
+    project_id = request.GET.get('project')
+    start_str = request.GET.get('start_date')
+    start = util.datestr_to_datetime(start_str)
+    end_str = request.GET.get('end_date')
+    end = util.datestr_to_datetime(end_str)
+
+    interestmanager = InterestManager()
+    project = InterestProject.objects.get(nikiProjectId=project_id)
+    nip = interestmanager.getNikiInterestProjectByProject(project)
+    account = nip.interestAccount
+    # ids = interestmanager.getIdsByProjectBetween(account, project, start, end)
+    ids = interestmanager.getIdsByProject(account, project_id)
+    subscriptions = interestmanager.getByIds(account, ids)
+    dates = []
+    for subscription in subscriptions:
+        posted = str(subscription.posted)[:-4]  # strip off time part
+        dates.append(posted)
+    result = "Date, Subscriptions\n"
+    counts = Counter(dates)
+    for key, value in counts.items():
+        result += "{},{}\n".format(key, value)
+    return HttpResponse(result)
+
 
 def nikiglobalstats(request):
     """

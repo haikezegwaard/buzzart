@@ -1,4 +1,6 @@
 from fabric.api import *
+from fabric.api import task
+from fabric.contrib.project import upload_project
 
 env.user = 'hz'
 #env.git_user = 'trnguyen'
@@ -9,10 +11,18 @@ env.logs_path = '/opt/log/'
 env.hosts = ['django-dev.fam']
 env.repo = 'svn://svn.fam/data/svn/buzzart'
 
-def test():
-    local('cd c:\tmp')
-    local('svn co %(repo)s/trunk' % env)
 
+@task
+def test():
+    local('cd c:\\tmp')
+    local('svn export --force %(repo)s/trunk c:\\tmp\\buzzart' % env)
+    # make sure the directory is there!
+    #upload_project('c:\\tmp\\buzzart', '/tmp/buzzart')
+    zipfolder()
+
+@serial
+def zipfolder():
+    local('tar czf buzzart.tgz buzzart')
 
 
 def checkout_trunk():

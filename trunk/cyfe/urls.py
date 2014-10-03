@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'niki/saletable/$', views.nikisaletable, name='saletable'),
     url(r'niki/renttable/$', views.nikirenttable, name='renttable'),
     url(r'niki/globalstats/$', views.nikiglobalstats, name='globalstats'),
+    url(r'niki/subscriptions/$', views.niki_interest_subscription_dates, name='subscriptions'),
+
 
 )
 
