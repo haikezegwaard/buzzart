@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'facebook',
     'mcapi',
     'nikiInterest',
+    'dashboard',
     'googleAnalytics',
     'social.apps.django_app.default',
     'debug_toolbar',
