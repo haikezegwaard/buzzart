@@ -68,7 +68,9 @@ INSTALLED_APPS = (
     'googleAnalytics',
     'social.apps.django_app.default',
     'debug_toolbar',
-    'djrill'
+    'djrill',
+    'python-twitter',
+    'twitter',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -107,7 +109,6 @@ WSGI_APPLICATION = 'wsgi.application'
 #djrill settings
 MANDRILL_API_KEY = "VWldgpjHZGcavL4jasHiZA"
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
-
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
