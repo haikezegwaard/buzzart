@@ -69,7 +69,7 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'debug_toolbar',
     'djrill',
-    'python-twitter',
+    'twitterAnalytics',
     'twitter',
 )
 
