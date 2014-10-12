@@ -70,7 +70,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'djrill',
     'twitterAnalytics',
-    'twitter',
+
 )
 
 MIDDLEWARE_CLASSES = (

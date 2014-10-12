@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
-import views
+from views import TwitterView
 
 urlpatterns = patterns('',
-    url(r'^$', views.index, name='index')
+    url(r'^$', TwitterView.as_view(template_name='index.html', extra_context={ 'foo': 1}), name='index')
 )

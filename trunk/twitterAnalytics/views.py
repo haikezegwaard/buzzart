@@ -1,17 +1,27 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from twitter import *
-
+from TwitterAPI import TwitterAPI
+import logging
+from django.views.generic import TemplateView
+from twittermanager import TwitterManager
 # Create your views here.
-def index(request):
-
-    oauth_token = '15916075-vCZIeZn3f4ksDz3Qg8RRgk4opE0rqhkOHkSR2GE4x'
-    oauth_secret = 'Emoq1PJAn98K2mbjBT6hXkfxpmllMLuxwWFYZpBYOr4eD'
-    consumer_secret = 'nyylZGieWcZYpylxocCGySDv5rcHwgTMXK9MOmeIbjqBbBKigW'
-    consumer_key = 'pfhysTbUY4iTCVpdS3MwXHWPc'
 
 
+class TwitterView(TemplateView):
 
-    t = Twitter(auth=OAuth(oauth_token, oauth_secret,
-                           consumer_secret, consumer_key))
-    return HttpResponse(t.statuses.home_timeline(), mimetype='text/html')
+    extra_context = None
+    logger = logging.getLogger(__name__)
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        if self.extra_context is not None:
+            for key, value in self.extra_context.items():
+                if callable(value):
+                    context[key] = value()
+                else:
+                    context[key] = value
+        tm = TwitterManager()
+        tm.get_follower_count('haikezegwaard')
+        return context
+
+
