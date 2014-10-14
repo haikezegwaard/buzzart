@@ -29,6 +29,7 @@
     <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script>
     {% load staticfiles %}
     <script type="text/javascript" src="{% static 'notifier/js/util.js' %} "></script>
+    <script type="text/javascript" src="{% static 'notifier/js/jquery-2.1.1.js' %} "></script>
     <script type="text/javascript">
         // Load the Visualization API and the piechart package.
         google.load('visualization', '1.0', {'packages':['corechart','gauge']});
@@ -68,7 +69,7 @@
 
             google.visualization.events.addListener(traffic_chart, 'ready', function () {
                 chart_div.innerHTML = '<img src="' + traffic_chart.getImageURI() + '">';
-                console.log(chart_div.innerHTML);
+                //console.log(chart_div.innerHTML);
             });
 
             traffic_chart.draw(traffic_data,traffic_options);
@@ -169,7 +170,7 @@
 
             google.visualization.events.addListener(availchart, 'ready', function () {
                 avail_div.innerHTML = '<img src="' + availchart.getImageURI() + '">';
-                console.log(avail_div.innerHTML);
+                //console.log(avail_div.innerHTML);
             });
 
             availchart.draw(availdata, availoptions);
@@ -260,6 +261,14 @@
         }
 
 </script>
+<script type="text/javascript">
+    $(function () {
+        $.getJSON("/mailchimp/listmembers?listid={{ project.mailchimp_list_id }}", function(data) {
+            //$('#container').highcharts(data);
+            console.log(data);
+        });
+    });
+    </script>
 {% endblock %}
 </head>
 <body style="margin-left: 0px;

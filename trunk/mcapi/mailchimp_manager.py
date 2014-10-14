@@ -1,9 +1,6 @@
-from django.shortcuts import render
 import mailchimp
-from django.contrib import messages
-from django.shortcuts import render_to_response, redirect
-from django.template import RequestContext, loader
 import logging
+
 
 class MailchimpManager:
     """
@@ -11,9 +8,9 @@ class MailchimpManager:
     retrieve project specific reporting data
     """
 
-
     def __init__(self, apikey):
         self.api = mailchimp.Mailchimp(apikey)
+        self.logger = logging.getLogger(__name__)
 
     def get_list_growth_data(self, listid):
         """
@@ -21,8 +18,9 @@ class MailchimpManager:
         """
         try:
             result = self.api.lists.growth_history(listid)
+            self.logger.debug('Got from mailchimp api: {}'.format(result))
         except mailchimp.Error:
-            logging.error("Invalid API key")
+            self.logger.error("Invalid API key")
         return result
 
     def get_list_size_data(self, listid):
@@ -32,7 +30,9 @@ class MailchimpManager:
         data = self.get_list_growth_data(listid)
         result = []
         for item in data:
-            result.append((item.get('month'),int(item.get('existing'))))
+            result.append((item.get('month'), int(item.get('existing'))))
+            self.logger.debug('Got from mailchimp api: {}'.format(result))
         return sorted(result)
 
-
+    def get_list_members(self, listid):
+        self.api.lists.members(listid)

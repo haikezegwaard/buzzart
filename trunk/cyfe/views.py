@@ -97,11 +97,12 @@ def niki_interest_subscription_dates(request):
     # fill in the date gaps (create entries for non existing dates between start & end
     for single_date in daterange(start, end):
         if single_date not in counts:
+            logger.debug('filling gap at: {}'.format(single_date))
             counts[single_date] = 0
     result = "Date, Subscriptions\n"
     for key, value in counts.items():
         result += "{},{}\n".format(datetime.strftime(key, "%Y%m%d"), value)
-    result += "Cumulative,0\n"
+    result += "Cumulative,1\n"
     result += "YAxisShow,1\n"
     return HttpResponse(result)
 
