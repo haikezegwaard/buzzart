@@ -13,6 +13,7 @@ import time
 
 
 logger = logging.getLogger(__name__)
+nikimanager = NikiConverter()
 
 
 def nikisalecount(request):
@@ -20,9 +21,8 @@ def nikisalecount(request):
     Return sale status of project in cyfe data format
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     availability = nikimanager.getAvailability(project)
-    result =  "Te koop, Optie, Verkocht\n"
+    result = "Te koop, Optie, Verkocht\n"
     result += ",".join([str(i) for i in availability])+"\n"
     result += "Color,#00cb13,#ff7f00,#ee0000"
     return HttpResponse(result)
@@ -33,19 +33,18 @@ def nikirentcount(request):
     Return rent status of project in cyfe data format
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     availability = nikimanager.getAvailability(project)
-    result =  "Te huur, Optie, Verhuurd\n"
+    result = "Te huur, Optie, Verhuurd\n"
     result += ",".join([str(i) for i in availability])+"\n"
     result += "Color,#00cb13,#ff7f00,#ee0000"
     return HttpResponse(result)
+
 
 def nikisaletable(request):
     """
     Return list of housetypes with according sale status
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     housetypes = nikimanager.getHouseTypes(project)
     result = "Woningtype,te koop, in optie, verkocht\n"
     for housetype in housetypes:
@@ -54,16 +53,14 @@ def nikisaletable(request):
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('sold') if housetype.get('houses').get('sold') else 0
         result += '{},{},{},{}\n'.format(typename,sale,option,sold)
-
-    #result = "Woningtype,te koop, in optie, verkocht\n"
     return HttpResponse(result)
+
 
 def nikirenttable(request):
     """
     Return list of housetypes with according rent status
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     housetypes = nikimanager.getHouseTypes(project)
     result = "Woningtype,te huur, in optie, verhuurd\n"
     for housetype in housetypes:
@@ -71,9 +68,7 @@ def nikirenttable(request):
         sale = housetype.get('houses').get('for-rent') if housetype.get('houses').get('for-rent') else 0
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('rented') if housetype.get('houses').get('rented') else 0
-        result += '{},{},{},{}\n'.format(typename,sale,option,sold).replace(',', '&#44;')
-
-    #result = "Woningtype,te koop, in optie, verkocht\n"
+        result += '{},{},{},{}\n'.format(typename, sale,option, sold).replace(',', '&#44;')
     return HttpResponse(result)
 
 
@@ -110,8 +105,9 @@ def niki_interest_subscription_dates(request):
     result += "YAxisShow,1\n"
     return HttpResponse(result)
 
+
 def daterange(start_date, end_date):
-    for n in range(int ((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
 
 
@@ -120,7 +116,6 @@ def nikiglobalstats(request):
     Return a list of miscellanious project properties
     """
     projectcode = request.GET.get('project')
-    nikimanager = NikiConverter()
     project = nikimanager.apiRequest(projectcode)
     result = "Projecteigenschap,Beschikbaar,Totaal\n"
     result += "Projectvoortgang,-,{}\n".format(project.get('progress'))
