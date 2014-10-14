@@ -132,8 +132,8 @@
                 width: 153, height: 153,
                 redFrom: 0, redTo: 0.5,
                 yellowFrom:0.5, yellowTo: 1,
-                greenFrom: 2, greenTo: 3,
-                minorTicks: 5, max: 3
+                greenFrom: 5, greenTo: 20,
+                minorTicks: 5, max: 20
             };
             var conversion_chart = new google.visualization.Gauge(document.getElementById('conversion_ratio'));
             conversion_chart.draw(data, options);
@@ -366,6 +366,7 @@
                                                             <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
                                                         </td>
                                                     </tr>
+                                                    {% if availability %}
                                                     <tr>
                                                         <td align="left" valign="top" width="520" height="2" bgcolor="#e0dad9">
                                                             <p style="font-size: 2px; line-height:2px; margin-top: 0; margin-bottom:0;">&#160;</p>
@@ -391,6 +392,7 @@
                                                             </p>
                                                         </td>
                                                     </tr>
+                                                    {% endif %}
                                                     <tr>
                                                         <td align="left" valign="top" width="520" height="2" bgcolor="#e0dad9">
                                                             <p style="font-size: 2px; line-height:2px; margin-top: 0; margin-bottom:0;">&#160;</p>

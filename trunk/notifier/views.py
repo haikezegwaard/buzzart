@@ -185,8 +185,12 @@ def fill_context(context, summary_id):
         mcmanager = MailchimpManager(project.mailchimp_api_token)
         context['mailchimp'] = mcmanager.get_list_size_data(project.mailchimp_list_id)
 
-    sold_count = context['availability'][2]
-    context['project_score'] = util.project_score(sold_count, interest_total, total_conversion_rate)
+    if context['availability'] is None:
+        context['project_score'] = '7.7'
+    else:
+        sold_count = context['availability'][2]
+        context['project_score'] = util.project_score(sold_count, interest_total, total_conversion_rate)
+
     return context
 
 

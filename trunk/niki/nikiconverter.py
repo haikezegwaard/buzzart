@@ -28,19 +28,23 @@ class NikiConverter:
         return self.availability[2]
 
     def getAvailability(self, project):
+        self.availability = [0,0,0] # reset counters [forsale/rent, option, sold/rented]
+        validstates = ['In verkoop', 'In verhuur', 'In verkoop / verhuur']
+        if self.getProject(project).get('status') not in validstates:
+            return None
+
         projectType = self.getProjectSaleRentType(project)
-        self.availability = [0,0,0] #reset counters [forsale/rent, option, sold/rented]
-        #get housetypes of project
+        # get housetypes of project
         for housetype in self.apiRequest(project+"/housetypes"):
-            #get number for sale/for rent
+            # get number for sale/for rent
             forSaleOrRent = housetype.get('houses').get(projectType)
             if(forSaleOrRent is not None):
                 self.availability[0] += int(forSaleOrRent)
-            #get number of houses under option
+            # get number of houses under option
             underOption = housetype.get('houses').get('option')
             if(underOption is not None):
                 self.availability[1] += int(underOption)
-            #get number of houses sold or rented
+            # get number of houses sold or rented
             soldRentedStr = 'sold'
             if(projectType == 'for-rent'):
                 soldRentedStr = 'rented'
