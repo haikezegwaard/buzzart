@@ -85,8 +85,8 @@ def niki_interest_subscription_dates(request):
 
     interestmanager = InterestManager()
     project = InterestProject.objects.get(nikiProjectId=project_id)
-    nip = interestmanager.getNikiInterestProjectByProject(project)
-    account = nip.interestAccount
+    #nip = interestmanager.getNikiInterestProjectByProject(project)
+    account = project.interestAccount
     ids = interestmanager.getIdsByProjectBetween(account, project_id, start, end)
     subscriptions = interestmanager.getByIds(account, ids)
     dates = []  # list array of dates

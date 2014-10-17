@@ -24,6 +24,9 @@ class InterestProject(models.Model):
     nikiProjectId = models.CharField(max_length=400)
     interestAccount = models.ForeignKey(InterestAccount)
 
+    def __unicode__(self):
+        return self.project.name
+
 
 # Periodic summary
 class Summary(models.Model):
