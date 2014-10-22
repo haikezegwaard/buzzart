@@ -1,5 +1,6 @@
 import requests
 import logging
+import urllib
 
 
 #Class to convert Niki data to the numbers needed
@@ -82,9 +83,10 @@ class NikiConverter:
         return self.apiRequest(resource)
 
     def apiRequest(self, resource):
-        """do the request, append oauth token"""
-        if(isinstance(resource, int)):
-            logging.error("int: {}".format(resource))
+        """
+        do the request, append oauth token
+        urlencode the resource
+        """
         url = self.api_url+resource+ "?oauth_token=" + self.oauth_token
         logging.warn("api call to: "+ url)
         r = requests.get(url)

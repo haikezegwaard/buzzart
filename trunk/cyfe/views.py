@@ -20,7 +20,7 @@ def nikisalecount(request):
     """
     Return sale status of project in cyfe data format
     """
-    project = request.GET.get('project')
+    project = request.META['QUERY_STRING'].split('=')[1]
     availability = nikimanager.getAvailability(project)
     result = "Te koop, Optie, Verkocht\n"
     result += ",".join([str(i) for i in availability])+"\n"
@@ -32,7 +32,8 @@ def nikirentcount(request):
     """
     Return rent status of project in cyfe data format
     """
-    project = request.GET.get('project')
+    # project = request.GET.get('project')
+    project = request.META['QUERY_STRING'].split('=')[1]
     availability = nikimanager.getAvailability(project)
     result = "Te huur, Optie, Verhuurd\n"
     result += ",".join([str(i) for i in availability])+"\n"
@@ -44,7 +45,8 @@ def nikisaletable(request):
     """
     Return list of housetypes with according sale status
     """
-    project = request.GET.get('project')
+    # project = request.GET.get('project')
+    project = request.META['QUERY_STRING'].split('=')[1]
     housetypes = nikimanager.getHouseTypes(project)
     result = "Woningtype,te koop, in optie, verkocht\n"
     for housetype in housetypes:
@@ -60,7 +62,8 @@ def nikirenttable(request):
     """
     Return list of housetypes with according rent status
     """
-    project = request.GET.get('project')
+    # project = request.GET.get('project')
+    project = request.META['QUERY_STRING'].split('=')[1]
     housetypes = nikimanager.getHouseTypes(project)
     result = "Woningtype,te huur, in optie, verhuurd\n"
     for housetype in housetypes:
@@ -116,7 +119,8 @@ def nikiglobalstats(request):
     """
     Return a list of miscellanious project properties
     """
-    projectcode = request.GET.get('project')
+    # projectcode = request.GET.get('project')
+    projectcode = request.META['QUERY_STRING'].split('=')[1]
     project = nikimanager.apiRequest(projectcode)
     result = "Projecteigenschap,Beschikbaar,Totaal\n"
     result += "Projectvoortgang,-,{}\n".format(project.get('progress'))

@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     #url(r'^summary/(?P<pk>\d+)/$', views.ProjectSummaryMail.as_view(), name='summary'),
     url(r'niki/salecount/$', views.nikisalecount, name='salecount'),
+
     url(r'niki/rentcount/$', views.nikirentcount, name='rentcount'),
     url(r'niki/saletable/$', views.nikisaletable, name='saletable'),
     url(r'niki/renttable/$', views.nikirenttable, name='renttable'),

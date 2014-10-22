@@ -12,7 +12,7 @@ class NikiAPITest(TestCase):
 
     def test_api_request(self):
         response = self.manager.apiRequest(self.resource)
-        self.assertIn('website', response, 'string "website" not in response')
+        self.assertIn('location', response, 'string "location" not in response')
 
     def test_get_availability(self):
         availability = self.manager.getAvailability(self.resource)
