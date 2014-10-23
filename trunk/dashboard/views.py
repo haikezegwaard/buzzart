@@ -29,7 +29,7 @@ def get_campaigns(project_id):
     for item in json.get('data'):
         if(item.get('status') == 'sent'):
             dt = parser.parse(item.get('send_time'))
-            result.append({'x':util.unix_time_millis(dt),'title':item.get('title')})
+            result.append({'x':util.unix_time_millis(dt),'title': 'Mailing verstuurd', 'text':'Mailchimp campaign verstuurd:<br /><b>{}</b>'.format(item.get('title'))})
     return result
 
 def mockDualSeries(request):
