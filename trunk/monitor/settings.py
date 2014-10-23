@@ -142,7 +142,7 @@ NOTIFIER_FROM_MAIL = 'info@fundament.nl'
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/opt/buzzart/static'
+#STATIC_ROOT = '/opt/buzzart/static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/opt/buzzart/media'

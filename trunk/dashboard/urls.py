@@ -5,5 +5,5 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^mockdata', views.mockDualSeries, name='mockData'),
-    url(r'^$', views.index, name='home')
+    url(r'^(?P<project_id>[0-9]*)$', views.index, name='home')
 )

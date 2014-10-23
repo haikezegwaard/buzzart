@@ -5,7 +5,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                <i class="fa fa-bar-chart-o fa-fw"></i> Projectanalyse project {{ project_id }}
                 <div class="pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -55,7 +55,7 @@
 <script>
 $(function () {
   $.getJSON('/dashboard/mockdata', function(data) {
-    $('#container').highcharts({
+    $('#container').highcharts('StockChart', {
         chart: {
             type: 'spline'
         },
@@ -103,10 +103,7 @@ $(function () {
             pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
         },
 
-        series: [{
-            name: 'Website bezoek',
-            data: data[0].data
-        },
+        series: [
         {
             name: 'Inschrijvingen',
             type: 'column',
@@ -116,6 +113,17 @@ $(function () {
                 valueSuffix: ' mm'
             }
 
+        },
+        {
+            name: 'Website bezoek',
+            data: data[0].data
+        },
+        {
+            type: 'Mailings',
+            name: 'Flags on series',
+            data:  data[2].data,
+            onSeries: 'Website bezoek',
+            shape: 'squarepin'
         }
         ]
     });

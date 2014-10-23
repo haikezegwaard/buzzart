@@ -37,3 +37,15 @@ class MailchimpManager:
 
     def get_members(self, listid):
         return self.api.lists.members(listid)
+
+    def get_campaigns(self, start, end):
+        """
+        Return list of campaigns
+        Start & end should be date-strings in 24h GMT format; "2013-12-30 20:30:00"
+        """
+        filters = []
+        if start is not None:
+            filters.append(['start',start])
+        if end is not None:
+            filters.append(['end', end])
+        return self.api.campaigns.list(filters)
