@@ -1,0 +1,39 @@
+<!doctype HTML>
+<html>
+<head>
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://code.highcharts.com/stock/highstock.js"></script>
+<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+
+</head>
+<body>
+<script>
+$(function () {
+    $.getJSON('/mailchimp/chart_data_json', function (data) {
+
+        // Create the chart
+        $('#container').highcharts('StockChart', {
+
+            rangeSelector: {
+                selected: 1
+            },
+
+            title: {
+                text: 'AAPL Stock Price'
+            },
+
+            series: [{
+                name: 'AAPL Stock Price',
+                data: data,
+                step: true,
+                tooltip: {
+                    valueDecimals: 2
+                }
+            }]
+        });
+    });
+});
+</script>
+<div id="container" style="height: 400px; min-width: 310px"></div>
+</body>
+</html>

@@ -35,4 +35,5 @@ class MailchimpManager:
             result.append((item.get('month'),int(item.get('existing'))))
         return sorted(result)
 
-
+    def get_members(self, listid):
+        return self.api.lists.members(listid)

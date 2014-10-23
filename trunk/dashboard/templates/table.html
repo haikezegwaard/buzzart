@@ -1,0 +1,98 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="fa fa-users fa-fw"></i> Social stats
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="list-group">
+            <a href="#" class="list-group-item">
+                <div>
+                    <i class="fa fa-comment fa-fw"></i> 4 Shares
+                    <span class="pull-right text-muted small">Facebook</span>
+                </div>
+            </a>
+
+            <a href="#" class="list-group-item">
+                <div>
+                    <i class="fa fa-twitter fa-fw"></i> 2 Retweets
+                    <span class="pull-right text-muted small">Twitter</span>
+                </div>
+            </a>
+
+            <a href="#" class="list-group-item">
+                <div>
+                    <i class="fa fa-envelope fa-fw"></i> 15 Keer gelezen
+                    <span class="pull-right text-muted small">Facebook</span>
+                </div>
+            </a>
+        </div>
+        <hr />
+        <h4>Periode overzicht</h4>
+        <p><small class="text-muted"><i class="fa fa-clock-o"></i> 5 min ago via Buzzart-Advice</small>
+            <p>Dit is de toelichting bij de grafiek, deze komt ook weer terug in de timeline denk ik.</p>
+
+    </div>
+
+    <!-- /.panel-body -->
+</div>
+<!-- /.panel -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+    Mobiel versus desktop
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div id="donut-chart"></div>
+    </div>
+    <!-- /.panel-body -->
+</div>
+<script>
+$(function () {
+
+    $(document).ready(function () {
+
+        // Build the chart
+        $('#donut-chart').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'Browser market shares at a specific website, 2014'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['Firefox',   45.0],
+                    ['IE',       26.8],
+                    {
+                        name: 'Chrome',
+                        y: 12.8,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['Safari',    8.5],
+                    ['Opera',     6.2],
+                    ['Others',   0.7]
+                ]
+            }]
+        });
+    });
+
+});
+</script>
