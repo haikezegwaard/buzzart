@@ -53,6 +53,7 @@
 
 
 <script>
+
 $(function () {
   $.getJSON('/dashboard/mockdata', function(data) {
     $('#container').highcharts('StockChart', {
@@ -116,19 +117,21 @@ $(function () {
         },
         {
             name: 'Website bezoek',
+            id: 'traffic',
             data: data[0].data
         },
         {
-            type: 'Mailings',
+            type: 'flags',
             name: 'Flags on series',
-            data:  data[2].data,
-            onSeries: 'Website bezoek',
+            data: data[2].data,
+            onSeries: 'traffic',
             shape: 'squarepin'
         }
         ]
     });
   });
 });
+
 </script>
 {% endblock %}
 <!--
