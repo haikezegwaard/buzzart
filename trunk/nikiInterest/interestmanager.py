@@ -5,6 +5,7 @@ import logging
 from pysimplesoap.simplexml import SimpleXMLElement
 import xml.etree.ElementTree as ET
 
+
 class InterestManager:
 
     logger = logging.getLogger(__name__)
@@ -167,17 +168,24 @@ class InterestManager:
 
     #get full subscriptions by array of ids
     def getByIds(self, interestAccount, ids):
+        """
+        Returns array of SimpleXMLElements
+        """
+        if ids is None:
+            raise Exception('no array of ids given as input')
+        if len(ids) == 0:
+            raise Exception('array size of input ids was 0')
         pwd = hashlib.md5(interestAccount.password).hexdigest()
         xml_str = """<?xml version="1.0" encoding="UTF-8"?>
               <getByIds soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:end="http://endpoint.interest.service.lnp.fundament.nl">
          <username xsi:type="xsd:string">{}</username>
          <password xsi:type="xsd:string">{}</password>
-         <ids xsi:type="end:ArrayOf_xsd_long">""".format(interestAccount.username,pwd)
+         <ids xsi:type="end:ArrayOf_xsd_long">""".format(interestAccount.username, pwd)
         for entry in ids:
             xml_str += '<id xsi:type="xsd:Long">{}</id>'.format(entry)
         xml_str += '</ids></getByIds>'
         params = SimpleXMLElement(xml_str)
-        response = self.client.call('getByIds',params)
+        response = self.client.call('getByIds', params)
         result = []
         for subscribtion in response.getByIdsResponse.getByIdsReturn.getByIdsReturn:
             uni = unicode(subscribtion)
@@ -187,6 +195,13 @@ class InterestManager:
     #
     # Helper sheibe
     #
+    def getByProjectBetween(self, project, start, end):
+        """
+        Return subscribers for a given project between start and end date
+        """
+        nip = self.getNikiInterestProjectByProject(project)
+        ids = self.getIdsByProjectBetween(nip.interestAccount, nip.nikiProjectId, start, end)
+        return self.getByIds(nip.interestAccount, ids)
 
     #helper lookup function
     def getNikiInterestProjectByProject(self, project):
