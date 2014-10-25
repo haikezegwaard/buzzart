@@ -195,6 +195,7 @@ class InterestManager:
     #
     # Helper sheibe
     #
+
     def getByProjectBetween(self, project, start, end):
         """
         Return subscribers for a given project between start and end date

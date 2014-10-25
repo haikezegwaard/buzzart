@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 import requests
 import logging
 import json
+from datetime import datetime
 from social.apps.django_app.utils import load_strategy
 
 
@@ -21,12 +22,14 @@ class AnalyticsManager:
         """Get session count for specific view id  in daterange
         Args:
             viewid: string, id of specific property
-            start: string, startdate in format yyyy-mm-dd
-            end: string, enddate in format yyyy-mm-dd
+            start: datetime, startdate
+            end: datetime, enddate in format yyyy-mm-dd
         Returns:
             array of date - count tuples
         """
-        return self.reporting_API_call(viewid, start, end, ['sessions'], '&sort=ga:date&dimensions=ga:date')
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)
+        return self.reporting_API_call(viewid, start_str, end_str, ['sessions'], '&sort=ga:date&dimensions=ga:date')
 
     def get_conversion_count(self, viewid, start, end):
         """Get conversion count for specific view id in daterange
@@ -108,3 +111,11 @@ class AnalyticsManager:
 
         self.logger.debug('response: '+response.content)
         return json.loads(response.content)
+
+
+    def google_date(self, date):
+        """
+        Helper function to convert a datetime object to the format
+        Google wants (yyyy-mm-dd)
+        """
+        return datetime.strftime(date, "%Y-%m-%d")

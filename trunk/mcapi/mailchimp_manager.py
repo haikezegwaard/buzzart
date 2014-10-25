@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext, loader
 import logging
+from datetime import datetime
 
 class MailchimpManager:
     """
@@ -41,11 +42,18 @@ class MailchimpManager:
     def get_campaigns(self, start, end):
         """
         Return list of campaigns
-        Start & end should be date-strings in 24h GMT format; "2013-12-30 20:30:00"
+        Start & end should be datetime objects
         """
         filters = []
         if start is not None:
-            filters.append(['start',start])
+            filters.append(['start',self.mailchimp_date(start)])
         if end is not None:
-            filters.append(['end', end])
+            filters.append(['end', self.mailchimp_date(end)])
         return self.api.campaigns.list(filters)
+
+    def mailchimp_date(self, date):
+        """
+        Convert a python datetime object to the string format the Mailchimp
+        api wants: 24h GMT format; "2013-12-30 20:30:00"
+        """
+        return datetime.strftime(date, "%Y-%m-%d %H:%M:%S")
