@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^cyfe/', include('cyfe.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
     url(r'^mailchimp/', include('mcapi.urls')),
+    url(r'^googleAnalytics/', include('googleAnalytics.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^$',views.ProfileView.as_view(), name='profile')
 )# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

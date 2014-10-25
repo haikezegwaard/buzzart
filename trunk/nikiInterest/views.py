@@ -4,6 +4,9 @@ from nikiInterest.models import InterestAccount
 from nikiInterest.interestmanager import InterestManager
 from datetime import date, datetime, timedelta
 import xml.etree.ElementTree as ET
+import json
+from monitor import models as monitor_models
+from django.http import HttpResponse
 
 # Create your views here.
 # Create your views here.
@@ -22,6 +25,16 @@ class IndexView(generic.TemplateView):
         account = InterestAccount.objects.get(username='vanwijnen@fundament.nl')
         context['all'] = interestManager.getIdsByProject(account, 'GEN_630D1B86-31EE-494F-A718-48C8B6B4EA11')
         return context
+
+def subscriptions_total(request, project_id):
+    """
+    To call using AJAX, perhaps this is too heavy for just a count?
+    """
+    project = monitor_models.Project.objects.get(id = project_id)
+    interestManager = InterestManager()
+    count = interestManager.get_count_for_project(project)
+    data = {'subscriptions' : count}
+    return HttpResponse(json.dumps(data), content_type='application/json')
 
 
 

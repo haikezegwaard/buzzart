@@ -2,6 +2,7 @@ import analyticsmanager
 import models
 from dashboard import util
 from dateutil import parser
+import logging
 
 class StatsService():
     """
@@ -11,6 +12,7 @@ class StatsService():
 
     def __init__(self):
         self.ga_manager = analyticsmanager.AnalyticsManager()
+        self.logger = logging.getLogger(__name__)
 
     def get_traffic_over_time(self, project, start, end):
         """
@@ -25,3 +27,20 @@ class StatsService():
             count = int(item[1])
             result.append([ms, count])
         return result
+
+    def get_conversions_over_time(self, project, start, end):
+        """
+        Get conversion count per day over given interval, format traffic as list of
+        tuples (timestamp, traffic-count)
+        """
+        settings = models.AnalyticsSettings.objects.get(project = project)
+        conversion = self.ga_manager.get_daily_conversions_for_goal(settings.ga_view, settings.goal_to_track, start, end)
+        self.logger.debug(conversion)
+        result = []
+        for item in conversion.get('rows'):
+            ms = util.unix_time_millis(parser.parse(item[0]))
+            count = int(item[1])
+            result.append([ms, count])
+        return result
+
+

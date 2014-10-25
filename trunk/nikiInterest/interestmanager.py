@@ -195,6 +195,13 @@ class InterestManager:
     #
     # Helper sheibe
     #
+    def get_count_for_project(self, project):
+        """
+        Return count of subscribers for given project
+        """
+        nip = self.getNikiInterestProjectByProject(project)
+        ids = self.getIdsByProject(nip.interestAccount, nip.nikiProjectId)
+        return len(ids)
 
     def getByProjectBetween(self, project, start, end):
         """

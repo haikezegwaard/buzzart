@@ -57,6 +57,12 @@ def get_subscriptions(project_id):
     stats_service = statsservice.StatsService()
     return stats_service.get_subscriptions_over_time(project, start_date, end_date)
 
+def get_conversions(project_id):
+    project = Project.objects.get(id=project_id)
+    start = datetime.datetime.today() - datetime.timedelta(days=62)
+    end = datetime.datetime.today()
+    ga_stats = googlestats.StatsService()
+    return ga_stats.get_conversions_over_time(project, start, end)
 
 def mockDualSeries(request):
     traffic = []
@@ -68,6 +74,6 @@ def mockDualSeries(request):
         subscriptions.append([util.unix_time_millis(single_date),random.randint(0, 2)])
 
     data = [{"name": "data1", "data": get_google_stats(1)},
-            {"name": "data2", "data": get_subscriptions(1)},
+            {"name": "data2", "data": get_conversions(1)},
             {"name": "data3", "data": get_campaigns(1)}]
     return HttpResponse(json.dumps(data), content_type='application/json')

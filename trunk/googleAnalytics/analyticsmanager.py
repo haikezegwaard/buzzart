@@ -4,6 +4,7 @@ import logging
 import json
 from datetime import datetime
 from social.apps.django_app.utils import load_strategy
+from datetime import timedelta
 
 
 class AnalyticsManager:
@@ -43,6 +44,20 @@ class AnalyticsManager:
         obj = self.reporting_API_call(viewid, start, end, ['goalCompletionsAll'])
         return int(obj['totalsForAllResults']['ga:goalCompletionsAll'])
 
+    def get_total_conversion_count(self, analyticssettings):
+        """
+        Convenience function to get total of conversions between
+        self.GA_NULL_DATE and now
+        Args:
+            analyticssettings: AnalyticsSettings object containing configuration
+        Returns:
+            total of completed conversions for given configuration
+        """
+        now = self.google_date(datetime.today())
+        viewid = analyticssettings.ga_view
+        goalid = analyticssettings.goal_to_track
+        return self.get_conversion_count_for_goal(viewid, goalid, self.GA_NULL_DATE, now)
+
     def get_conversion_count_for_goal(self, viewid, goalid, start, end):
         """Get conversion count for specific view id and specific goal number in daterange
         Args:
@@ -70,6 +85,17 @@ class AnalyticsManager:
         action = 'goal{}ConversionRate'.format(goalid)
         obj = self.reporting_API_call(viewid, start, end, [action])
         return round(float(obj['totalsForAllResults']['ga:'+action]),2)
+
+    def get_daily_conversions_for_goal(self, viewid, goalid, start, end):
+        """
+        Get conversion count for given goal in view between start and end,
+        sorted by date
+        """
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)
+        action = 'goal{}Completions'.format(goalid)
+        return self.reporting_API_call(viewid, start_str, end_str, [action], '&sort=ga:date&dimensions=ga:date')
+
 
     def get_session_count(self, viewid, start, end):
         """Get session count for specific view id in daterange
