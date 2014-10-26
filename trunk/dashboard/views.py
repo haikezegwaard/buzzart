@@ -22,13 +22,15 @@ from mcapi import statsservice as mcstats
 
 # Create your views here.
 def index(request, project_id):
+    project = Project.objects.get(id=project_id)
     return render_to_response('home.html',
                               {'project_id':project_id,
+                               'project' : project,
                                'campaigns': get_campaigns(project_id),
                                'traffic' : get_google_stats(project_id),
-                               'subscribers': get_subscriptions(project_id)},
+                               'subscribers': get_subscriptions(project_id)
+                               },
                               context_instance=RequestContext(request))
-
 
 def get_google_stats(project_id):
     project = Project.objects.get(id=project_id)
@@ -75,5 +77,6 @@ def mockDualSeries(request):
 
     data = [{"name": "data1", "data": get_google_stats(1)},
             {"name": "data2", "data": get_conversions(1)},
-            {"name": "data3", "data": get_campaigns(1)}]
+            {"name": "data3", "data": get_campaigns(1)},
+            {"name": "data4", "data": get_subscriptions(1)}]
     return HttpResponse(json.dumps(data), content_type='application/json')

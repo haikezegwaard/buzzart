@@ -7,9 +7,11 @@ from django.http import HttpResponse
 import json
 from datetime import datetime as dt
 import datetime
+import statsservice
 
 
 ga_man = analyticsmanager.AnalyticsManager()
+ga_stats = statsservice.StatsService()
 
 # Create your views here.
 def index(request):
@@ -35,6 +37,13 @@ def conversions_daily(request, project_id):
     data = {'conversions' : ga_man.get_daily_conversions_for_goal(settings.ga_view, settings.goal_to_track, start, end)}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+def channel_info(request, project_id):
+    project = models.Project.objects.get(id = project_id)
+    end = dt.today()
+    start = end - datetime.timedelta(days = 31)
+
+    result = ga_stats.get_channels_for_sessions(project, start, end)
+    return HttpResponse(json.dumps(result), content_type='application/json')
 
 def traffic_this_week(request, project_id):
     end = dt.today()

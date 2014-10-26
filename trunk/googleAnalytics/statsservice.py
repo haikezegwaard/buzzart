@@ -43,4 +43,16 @@ class StatsService():
             result.append([ms, count])
         return result
 
+    def get_channels_for_sessions(self, project, start, end):
+        """
+        Get sessions per channel (Direct, Social, Email, Organic, Referral)
+        for the use of plotting in a pie chart
+        """
+        settings = models.AnalyticsSettings.objects.get(project = project)
+        channels = self.ga_manager.get_channels_for_sessions(settings.ga_view, start, end)
+        result = []
+        for item in channels.get('rows'):
+            result.append([item[0],int(item[1])])
+        return result
+
 

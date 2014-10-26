@@ -1,6 +1,7 @@
 import mailchimp_manager
 from dateutil import parser
 from dashboard import util
+from operator import itemgetter
 
 class StatsService():
     """
@@ -25,4 +26,6 @@ class StatsService():
             if(item.get('status') == 'sent'):
                 dt = parser.parse(item.get('send_time'))
                 result.append({'x':util.unix_time_millis(dt),'title': 'Mailing verstuurd', 'text':'Mailchimp campaign verstuurd:<br /><b>{}</b>'.format(item.get('title'))})
-        return result
+        # sort the array of dicts by the value of x
+        newlist = sorted(result, key=itemgetter('x'))
+        return newlist

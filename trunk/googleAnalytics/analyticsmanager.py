@@ -109,6 +109,22 @@ class AnalyticsManager:
         obj = self.reporting_API_call(viewid, start, end, ['sessions'])
         return int(obj['totalsForAllResults']['ga:sessions'])
 
+    def get_channels_for_sessions(self, viewid, start, end):
+        """
+        Get channel grouping as dimension for sessions
+        between start and end
+        Args:
+            viewid: string, id of specific property
+            start: datetime, startdate
+            end: datetime, enddate
+        Returns:
+            channels...
+        """
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)
+        return self.reporting_API_call(viewid, start_str, end_str, ['sessions'], '&dimensions=ga:channelGrouping')
+
+
     def reporting_API_call(self, viewid, start, end, metrics, extra = ''):
         """Generic method for API Calls to Reporting API
         Args:

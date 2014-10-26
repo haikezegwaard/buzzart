@@ -84,7 +84,7 @@ $(function () {
         },
         {
             title: {
-                text: 'Inschrijvingen',
+                text: 'Conversies',
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }
@@ -94,6 +94,22 @@ $(function () {
                 format: '',
                 style: {
                     color: Highcharts.getOptions().colors[0]
+                }
+            },
+            opposite: true,
+            min: 0
+        },
+        {
+            title: {
+                text: 'Inschrijvingen',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            labels: {
+                format: '',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
                 }
             },
             opposite: true,
@@ -109,7 +125,7 @@ $(function () {
         },
         series: [
         {
-            name: 'Inschrijvingen',
+            name: 'Conversies',
             type: 'column',
             yAxis: 1,
             data: data[1].data
@@ -119,6 +135,12 @@ $(function () {
             name: 'Website bezoek',
             id: 'traffic',
             data: data[0].data
+        },
+        {
+            name: 'Inschrijvingen',
+            type: 'column',
+            yAxis: 2,
+            data: data[3].data
         },
         {
             type: 'flags',

@@ -38,7 +38,7 @@
 <!-- /.panel -->
 <div class="panel panel-default">
     <div class="panel-heading">
-    Mobiel versus desktop
+    Analytics herkomst
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
@@ -47,9 +47,9 @@
     <!-- /.panel-body -->
 </div>
 <script>
-$(function () {
+$(document).ready(function () {
 
-    $(document).ready(function () {
+    $.getJSON('/googleAnalytics/channelInfo/{{project_id}}', function(data) {
 
         // Build the chart
         $('#donut-chart').highcharts({
@@ -59,10 +59,10 @@ $(function () {
                 plotShadow: false
             },
             title: {
-                text: 'Browser market shares at a specific website, 2014'
+                text: 'Google analytics herkomst'
             },
             tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
             },
             plotOptions: {
                 pie: {
@@ -76,20 +76,8 @@ $(function () {
             },
             series: [{
                 type: 'pie',
-                name: 'Browser share',
-                data: [
-                    ['Firefox',   45.0],
-                    ['IE',       26.8],
-                    {
-                        name: 'Chrome',
-                        y: 12.8,
-                        sliced: true,
-                        selected: true
-                    },
-                    ['Safari',    8.5],
-                    ['Opera',     6.2],
-                    ['Others',   0.7]
-                ]
+                name: 'Channels',
+                data: data
             }]
         });
     });
