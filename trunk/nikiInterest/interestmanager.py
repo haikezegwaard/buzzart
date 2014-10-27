@@ -187,9 +187,10 @@ class InterestManager:
         params = SimpleXMLElement(xml_str)
         response = self.client.call('getByIds', params)
         result = []
-        for subscribtion in response.getByIdsResponse.getByIdsReturn.getByIdsReturn:
-            uni = unicode(subscribtion)
-            result.append(SimpleXMLElement(uni.encode('UTF-8')))
+        if response.getByIdsResponse.getByIdsReturn is not None:
+            for subscribtion in response.getByIdsResponse.getByIdsReturn.getByIdsReturn:
+                uni = unicode(subscribtion)
+                result.append(SimpleXMLElement(uni.encode('UTF-8')))
         return result
 
     #

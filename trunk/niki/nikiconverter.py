@@ -32,6 +32,8 @@ class NikiConverter:
         self.availability = [0,0,0] #reset counters [forsale/rent, option, sold/rented]
         #get housetypes of project
         for housetype in self.apiRequest(project+"/housetypes"):
+            if housetype.get('houses') is None:
+                continue
             #get number for sale/for rent
             forSaleOrRent = housetype.get('houses').get(projectType)
             if(forSaleOrRent is not None):

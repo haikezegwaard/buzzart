@@ -5,7 +5,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-bar-chart-o fa-fw"></i> Projectanalyse project {{ project_id }}
+                <i class="fa fa-bar-chart-o fa-fw"></i> Projectanalyse project {{ project.name }}
                 <div class="pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -33,9 +33,10 @@
             <!-- /.panel-body -->
             <!--<div class="panel-footer">-->
             <hr />
-            <h4>Toelichting bij grafiek</h4>
-            <p><small class="text-muted"><i class="fa fa-clock-o"></i> 5 min ago via Buzzart-Advice</small>
-            <p>Dit is de toelichting bij de grafiek, deze komt ook weer terug in de timeline denk ik.</p>
+
+            <h4>{{ updates.0.title }}</h4>
+            <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ updates.0.posted }}</small>
+            <p>{{ updates.0.update }}</p>
             <!-- /.panel-footer -->
             </div>
         </div>
@@ -76,9 +77,19 @@ $(function () {
                 text: 'Date'
             }
         },
-        yAxis: [{
+        yAxis: [
+        {
             title: {
-                text: 'Traffic'
+                text: 'Traffic',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                },
+                labels: {
+                format: '',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
             },
             min: 0
         },
@@ -103,13 +114,13 @@ $(function () {
             title: {
                 text: 'Inschrijvingen',
                 style: {
-                    color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[2]
                 }
             },
             labels: {
                 format: '',
                 style: {
-                    color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[2]
                 }
             },
             opposite: true,
@@ -126,7 +137,7 @@ $(function () {
         series: [
         {
             name: 'Conversies',
-            type: 'column',
+            type: 'line',
             yAxis: 1,
             data: data[1].data
 
@@ -138,7 +149,7 @@ $(function () {
         },
         {
             name: 'Inschrijvingen',
-            type: 'column',
+            type: 'line',
             yAxis: 2,
             data: data[3].data
         },

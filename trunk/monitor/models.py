@@ -41,3 +41,14 @@ class Summary(models.Model):
 
     def __unicode__(self):
         return '{}: {} - {}'.format(self.project.name, self.dateStart, self.dateEnd)
+
+
+class BuzzartUpdate(models.Model):
+    project = models.ForeignKey(Project)
+    update = models.TextField(blank=True)
+    title = models.CharField(max_length=1000, blank=True)
+    posted = models.DateTimeField(blank=True)
+    fa_class = models.TextField(max_length=1000, default='fa-check')
+
+    def __unicode__(self):
+        return '{}: {} - {}'.format(self.project.name, self.title, self.posted)

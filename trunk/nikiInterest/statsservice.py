@@ -19,8 +19,8 @@ class StatsService():
         Return array of (timestamp, count) tuples, for use of plotting
         subscriptions over time
         """
-        # subscriptions = self.interest_manager.getByProjectBetween(project, start, end)
-        subscriptions = self.get_mock_subscriptions() # replace this by real data
+        subscriptions = self.interest_manager.getByProjectBetween(project, start, end)
+        # subscriptions = self.get_mock_subscriptions() # replace this by real data
         result = []
         for subscription in subscriptions:
             posted = parser.parse(str(subscription.posted))

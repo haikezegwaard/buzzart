@@ -90,28 +90,33 @@ def niki_interest_subscription_dates(request):
 
     interestmanager = InterestManager()
     project = InterestProject.objects.get(nikiProjectId=project_id)
-    nip = interestmanager.getNikiInterestProjectByProject(project)
-    account = nip.interestAccount
+    #nip = interestmanager.getNikiInterestProjectByProject(project)
+    account = project.interestAccount
     ids = interestmanager.getIdsByProjectBetween(account, project_id, start, end)
-    subscriptions = interestmanager.getByIds(account, ids)
-    dates = []  # list array of dates
-    for subscription in subscriptions:
-        posted = str(subscription.posted)[:-4]  # strip off time part
-        dates.append(datetime.strptime(posted, "%Y%m%d"))
-    counts = Counter(dates)
-    # fill in the date gaps (create entries for non existing dates between start & end
-    for single_date in daterange(start, end):
-        if single_date not in counts:
-            counts[single_date] = 0
+    chart_data = ""
+    if len(ids) > 0:
+        subscriptions = interestmanager.getByIds(account, ids)
+        dates = []  # list array of dates
+        for subscription in subscriptions:
+            posted = str(subscription.posted)[:-4]  # strip off time part
+            dates.append(datetime.strptime(posted, "%Y%m%d"))
+        counts = Counter(dates)
+        # fill in the date gaps (create entries for non existing dates between start & end
+        for single_date in daterange(start, end):
+            if single_date not in counts:
+                counts[single_date] = 0
+        for key, value in counts.items():
+            chart_data += "{},{}\n".format(datetime.strftime(key, "%Y%m%d"), value)
+
     result = "Date, Subscriptions\n"
-    for key, value in counts.items():
-        result += "{},{}\n".format(datetime.strftime(key, "%Y%m%d"), value)
+    result += chart_data
     result += "Cumulative,0\n"
     result += "YAxisShow,1\n"
     return HttpResponse(result)
 
+
 def daterange(start_date, end_date):
-    for n in range(int ((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
 
 

@@ -13,24 +13,31 @@ from googleAnalytics.analyticsmanager import AnalyticsManager
 from googleAnalytics.models import AnalyticsSettings
 from nikiInterest.interestmanager import InterestManager
 from nikiInterest.models import InterestAccount
-from monitor.models import InterestProject
+from monitor.models import InterestProject, BuzzartUpdate
 from nikiInterest import statsservice
 from googleAnalytics import statsservice as googlestats
 from mcapi import statsservice as mcstats
-
 
 
 # Create your views here.
 def index(request, project_id):
     project = Project.objects.get(id=project_id)
     return render_to_response('home.html',
-                              {'project_id':project_id,
-                               'project' : project,
+                              {'project_id': project_id,
+                               'project': project,
                                'campaigns': get_campaigns(project_id),
-                               'traffic' : get_google_stats(project_id),
-                               'subscribers': get_subscriptions(project_id)
+                               'traffic': get_google_stats(project_id),
+                               'subscribers': get_subscriptions(project_id),
+                               'updates': get_updates(project_id)
                                },
                               context_instance=RequestContext(request))
+
+
+def get_updates(project_id):
+    project = Project.objects.get(id=project_id)
+    updates = BuzzartUpdate.objects.filter(project=project)
+    return updates
+
 
 def get_google_stats(project_id):
     project = Project.objects.get(id=project_id)
@@ -38,6 +45,7 @@ def get_google_stats(project_id):
     end = datetime.datetime.today()
     ga_stats = googlestats.StatsService()
     return ga_stats.get_traffic_over_time(project, start, end)
+
 
 def get_campaigns(project_id):
     project = Project.objects.get(id=project_id)
@@ -50,8 +58,8 @@ def get_campaigns(project_id):
 
 def get_subscriptions(project_id):
     """
-    Get Niki subcribers for given project, returns a list of tuples (stamp, count)
-    for the use of plotting in a graph
+    Get Niki subcribers for given project, returns a list of
+    tuples (stamp, count) for the use of plotting in a graph
     """
     project = Project.objects.get(id=project_id)
     start_date = datetime.datetime.today() - datetime.timedelta(days=62)
@@ -59,12 +67,14 @@ def get_subscriptions(project_id):
     stats_service = statsservice.StatsService()
     return stats_service.get_subscriptions_over_time(project, start_date, end_date)
 
+
 def get_conversions(project_id):
     project = Project.objects.get(id=project_id)
     start = datetime.datetime.today() - datetime.timedelta(days=62)
     end = datetime.datetime.today()
     ga_stats = googlestats.StatsService()
     return ga_stats.get_conversions_over_time(project, start, end)
+
 
 def mockDualSeries(request):
     traffic = []
