@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'niki/renttable/$', views.nikirenttable, name='renttable'),
     url(r'niki/globalstats/$', views.nikiglobalstats, name='globalstats'),
     url(r'niki/subscriptions/$', views.niki_interest_subscription_dates, name='subscriptions'),
-
+    url(r'mailchimp/listactivity/$', views.mailchimp_list_activity, name='mailchimp_list_activity'),
 
 )
 
