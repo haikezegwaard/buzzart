@@ -56,7 +56,7 @@
 <script>
 
 $(function () {
-  $.getJSON('/dashboard/mockdata', function(data) {
+  $.getJSON('/dashboard/plotdata/{{ project_id }}', function(data) {
     $('#container').highcharts('StockChart', {
         chart: {
             type: 'spline'
@@ -77,55 +77,30 @@ $(function () {
                 text: 'Date'
             }
         },
-        yAxis: [
-        {
-            title: {
-                text: 'Traffic',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                },
+        yAxis: [{
                 labels: {
-                format: '',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                }
-            },
-            },
-            min: 0
-        },
-        {
-            title: {
-                text: 'Conversies',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            },
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'Traffic'
+                },
+                height: '60%',
+                lineWidth: 2
+            }, {
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'Conversies'
+                },
+                top: '65%',
+                height: '35%',
+                offset: 0,
+                lineWidth: 2
+            }],
 
-            labels: {
-                format: '',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            },
-            opposite: true,
-            min: 0
-        },
-        {
-            title: {
-                text: 'Inschrijvingen',
-                style: {
-                    color: Highcharts.getOptions().colors[2]
-                }
-            },
-            labels: {
-                format: '',
-                style: {
-                    color: Highcharts.getOptions().colors[2]
-                }
-            },
-            opposite: true,
-            min: 0
-        }],
         tooltip: {
         },
         navigator : {
@@ -137,28 +112,28 @@ $(function () {
         series: [
         {
             name: 'Conversies',
-            type: 'line',
+            type: 'spline',
             yAxis: 1,
             data: data[1].data
 
         },
         {
             name: 'Website bezoek',
-            type: 'column',
+            type: 'spline',
             id: 'traffic',
             data: data[0].data
         },
-        {
+       /* {
             name: 'Inschrijvingen',
-            type: 'line',
+            type: 'spline',
             yAxis: 2,
             data: data[3].data
-        },
+        },*/
         {
             type: 'flags',
             data: data[2].data,
             onSeries: 'traffic',
-            shape: 'squarepin'
+            shape: 'circlepin'
         }
         ]
     });
