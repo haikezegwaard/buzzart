@@ -169,5 +169,27 @@ def mailchimp_list_activity(request):
     return HttpResponse(result)
 
 
+def mailchimp_campaign_report(request):
+    """
+    Return report summary for campaign with id 'cid'
+    """
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    else:
+        return HttpResponse('BuzzartError: no Mailchimp Api key given (GET variable apikey)')
+    api_response = m.api.reports.summary(params.get('cid'))
+    result = 'Emails sent,Unsubsribes,Bounces,Opens,Clicks\n'
+    sent = api_response.get('emails_sent')
+    unsubscribes = api_response.get('unsubscribes')
+    bounces = int(api_response.get('hard_bounces')) + int(api_response.get('soft_bounces'))
+    opens = api_response.get('opens')
+    clicks = api_response.get('clicks')
+    result += '{},{},{},{},{}\n'.format(sent,unsubscribes,bounces,opens,clicks)
+    return HttpResponse(result)
+
+
+
+
 
 

@@ -1,0 +1,19 @@
+<!doctype HTML>
+<html>
+    <head>
+    </head>
+    <body>
+    <table>
+        <tr>
+            <th>Projectnaam</th>
+            <th>Code</th>
+        </tr>
+    {% for project in projects %}
+        <tr style="background-color:{{forloop.counter|divisibleby:2|yesno:'#eee,#fff'}}">
+            <td>{{ project.name }}</td>
+            <td>{{ project.link }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    </body>
+</html>

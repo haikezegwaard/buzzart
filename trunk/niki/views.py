@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.views import generic
 from niki.models import Account
 from niki.nikiconverter import NikiConverter
@@ -22,3 +22,9 @@ class IndexView(generic.DetailView):
         account.oauth_token = self.nikiconverter.getProject("/projects/54/AMVP9518")
         return account
 
+
+def project_list(request):
+    nc = NikiConverter()
+    return render_to_response('niki/projects.html',
+                              {"projects": nc.getAllProjects()},
+                              content_type="text/html")
