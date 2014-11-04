@@ -16,8 +16,11 @@ m = MailchimpManager('8e7536a78b89a35edfa0122d2e417186-us1')
 logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
-    list_growth = m.get_list_size_data('23c3cfb062')
-    return render_to_response('members.html', {'members' :  list_growth}, context_instance=RequestContext(request))
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    result = m.api.lists.list()
+    return render_to_response('index.html', {'lists' :  result}, context_instance=RequestContext(request))
 
 
 def campaign_stats(request):
@@ -41,6 +44,12 @@ def list_campaigns(request):
     logger.debug(result)
     return HttpResponse(result, content_type='application/json')
 
+def lists(request):
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    result = m.api.lists.list()
+    return HttpResponse(result, content_type='application/json')
 
 def chart_data_json(request):
     data = {}

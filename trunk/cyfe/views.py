@@ -71,7 +71,7 @@ def nikirenttable(request):
         sale = housetype.get('houses').get('for-rent') if housetype.get('houses').get('for-rent') else 0
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('rented') if housetype.get('houses').get('rented') else 0
-        result += '{},{},{},{}\n'.format(typename,sale,option,sold).replace(',', '&#44;')
+        result += '{},{},{},{}\n'.format(typename,sale,option,sold)
 
     #result = "Woningtype,te koop, in optie, verkocht\n"
     return HttpResponse(result)

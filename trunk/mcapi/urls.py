@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'chart_data_json', views.chart_data_json, name='chart_data_json'),
     url(r'campaign_stats', views.campaign_stats,name='campaign_stats'),
     url(r'list_campaigns', views.list_campaigns,name='list_campaigns'),
+    url(r'lists', views.lists,name='lists'),
     #url(r'^lists/', include('lists.urls')),
     #url(r'^reports/', include('reports.urls'))
 
