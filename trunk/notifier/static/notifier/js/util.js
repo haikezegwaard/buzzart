@@ -24,12 +24,13 @@ function drawMyCircels(id, difference) {
     context.fill();
     context.font = '15pt Tahoma';
     context.fillStyle = 'white';
+    context.textAlign = 'center'
     if (difference > 0) {
-        context.fillText(difference, 60, 110);
+        context.fillText('+'+difference, centerX, 110);
     } else if (difference == 0) {
-        context.fillText(difference, 69, 110);
+        context.fillText(difference, centerX, 110);
     } else {
-        context.fillText(difference, 63, 110);
+        context.fillText('-'+difference, centerX, 110);
     }
 
     if (difference > 0) {

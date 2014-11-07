@@ -55,7 +55,7 @@
             {% for entry in traffic %}
                 traffic_data.addRows([
                     ['{{entry.0}}',targetSessions,targetPageViews,{{entry.1}},{{entry.2}}]
-        ]);
+                ]);
             {% endfor %}
             chart_div = document.getElementById('traffic_plot');
             var traffic_chart = new google.visualization.LineChart(chart_div);
@@ -73,15 +73,8 @@
 
             traffic_chart.draw(traffic_data,traffic_options);
 
-            // Wait for the chart to finish drawing before calling the getImageURI() method.
-            //chart_div = document.getElementById('traffic_plot');
-            //google.visualization.events.addListener(traffic_chart, 'ready', function () {
-              //  chart_div.innerHTML = '<img src="' + traffic_chart.getImageURI() + '">';
-                //console.log(chart_div.innerHTML);
-            //});
-
             //
-            //Interest Gauge
+            //Niki Interest Gauge
             //
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
@@ -90,9 +83,9 @@
             var options = {
                 width: 153, height: 153,
                 redFrom: 0, redTo: 1,
-                yellowFrom:1, yellowTo: 3,
-                greenFrom: 3, greenTo: 6,
-                minorTicks: 5, max: 6
+                yellowFrom:1, yellowTo: 5,
+                greenFrom: 10, greenTo: 20,
+                minorTicks: 5, max: 20
             };
             interest_div = document.getElementById('interest_plot');
             var interest_chart = new google.visualization.Gauge(interest_div);
@@ -100,23 +93,14 @@
             //convert svg to image and replace it
             toImg(document.getElementById('interest_plot'), document.getElementById('interest_plot'));
 
-
-
-
             //
             //Conversion Gauge
+            //(use options from interest gauge)
             //
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
                 [' ', {{conversions}}]
             ]);
-            var options = {
-                width: 153, height: 153,
-                redFrom: 0, redTo: 3,
-                yellowFrom:3, yellowTo: 10,
-                greenFrom: 50, greenTo: 80,
-                minorTicks: 5, max: 70
-            };
             var chart = new google.visualization.Gauge(document.getElementById('conversion_plot'));
             chart.draw(data, options);
             toImg(document.getElementById('conversion_plot'), document.getElementById('conversion_plot'));
@@ -177,53 +161,56 @@
             //
             //Plot Sex/Age spreak for fanpage likes
             //
-            var sexagedata = google.visualization.arrayToDataTable([
-                    ['Leeftijd','Mannen','Vrouwen']
-                    {% for item in fbagesexspread %}
-            ,['{{item.0}}',{{item.1.0}},{{item.1.1}}]
-            {% endfor %}
-            ]);
+            {% if fbagesexspread %}
+                var sexagedata = google.visualization.arrayToDataTable([
+                        ['Leeftijd','Mannen','Vrouwen']
+                        {% for item in fbagesexspread %}
+                ,['{{item.0}}',{{item.1.0}},{{item.1.1}}]
+                {% endfor %}
+                ]);
 
-            var options = {
-                title: 'Fanpage likes m/v en leeftijd',
-                colors: ['#5C3292', '#1A8763'],
-                width: 520, height: 180, chartArea:{left:20,top:40,width:'100%'},
-                legend: { position: 'bottom', alignment: 'start' }
-            };
+                var options = {
+                    title: 'Fanpage likes m/v en leeftijd',
+                    colors: ['#5C3292', '#1A8763'],
+                    width: 520, height: 180, chartArea:{left:20,top:40,width:'100%'},
+                    legend: { position: 'bottom', alignment: 'start' }
+                };
 
-            chart_div = document.getElementById('agesex_plot');
-            var chart = new google.visualization.ColumnChart(chart_div);
+                chart_div = document.getElementById('agesex_plot');
+                var chart = new google.visualization.ColumnChart(chart_div);
 
 
-            google.visualization.events.addListener(chart, 'ready', function () {
-                chart_div.innerHTML = '<img src="' + chart.getImageURI() + '">';
-                console.log(chart_div.innerHTML);
-            });
+                google.visualization.events.addListener(chart, 'ready', function () {
+                    chart_div.innerHTML = '<img src="' + chart.getImageURI() + '">';
+                    console.log(chart_div.innerHTML);
+                });
 
-            chart.draw(sexagedata, options);
-
+                chart.draw(sexagedata, options);
+            {% endif %}
             //
             //Plot mailchimp list growth stats
             //
             var mc_data = new google.visualization.DataTable();
             mc_data.addColumn('string','Month');
-            mc_data.addColumn('number','Ingeschrevenen');
+            mc_data.addColumn('number','Geimporteerd');
+            mc_data.addColumn('number','Ingeschreven');
+            mc_data.addColumn('number','Bestaand');
+
             {% for entry in mailchimp %}
                 mc_data.addRows([
-                    ['{{entry.0}}',{{entry.1}}]
+                    ['{{entry.month}}',{{entry.imports}},{{entry.optins}},{{entry.existing}}]
             ]);
             {% endfor %}
             var mc_chart = new google.visualization.ColumnChart(document.getElementById('list_plot'));
             var mc_options = {
-                'title':'Lijst grootte',
+                'title':'Inschrijvingen nieuwsbrief',
                 'width':520,'height':200,
                 chartArea:{left:40,top:40,width:'100%',height:'60%'},
                 legend: { position: 'bottom', alignment: 'start' },
-                hAxis: {showTextEvery: 2}
+                //hAxis: {showTextEvery: 2},
+                isStacked: 'true'
 
             };
-
-            //mc_chart.draw(mc_data,mc_options);
 
             // Wait for the chart to finish drawing before calling the getImageURI() method.
             chart_div = document.getElementById('list_plot');
@@ -245,9 +232,7 @@
             var recentConversions = {{conversions}};
             var previousConversions = {{previous_conversions}};
             var conversionsDiff = recentConversions - previousConversions;
-            if(conversionsDiff > 0){
-                conversionsDiff = '+' + conversionsDiff;
-            }
+
             var recentInterest = {{interest}};
             var previousInterest = {{previousinterest}};
             var totalInterest = {{interesttotal}};
@@ -424,7 +409,7 @@
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;
                                                                                         margin-top: 10px; margin-bottom: 10px;">
-                                                                                        Het aantal mensen dat de afgelopen maand er is bijgekomen in de database van niki<br/><br/>
+                                                                                        Het aantal conversies op de website. (Ingevulde interesseformulieren)<br/><br/><br/>
                                                                                     </p>
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="5">
@@ -443,8 +428,8 @@
                                                                                     {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;">
-                                                                                        Deze maand: <strong>{{ conversions }}</strong><br/>
-                                                                                        Vorige maand: <strong>{{ previous_conversions }}</strong><br/>
+                                                                                        Deze periode: <strong>{{ conversions }}</strong><br/>
+                                                                                        Vorige periode: <strong>{{ previous_conversions }}</strong><br/>
                                                                                         Totaal: <strong id="totalConversions">{{ total_conversions }}</strong>
                                                                                     </p>
                                                                                 </td>
@@ -471,7 +456,7 @@
                                                                                     {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px; margin-top: 10px; margin-bottom: 10px;">
-                                                                                        Het aantal mensen dat de afgelopen maand het interesseformulier heeft ingevuld<br/><br/>
+                                                                                        Het aantal mensen dat de afgelopen periode het interesseformulier heeft ingevuld<br/><br/>
                                                                                     </p>
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="5">
@@ -490,8 +475,8 @@
                                                                                     {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;">
-                                                                                        Deze maand: <strong>{{interest}}</strong><br/>
-                                                                                        Vorige maand: <strong>{{previousinterest}}</strong><br/>
+                                                                                        Deze periode: <strong>{{interest}}</strong><br/>
+                                                                                        Vorige periode: <strong>{{previousinterest}}</strong><br/>
                                                                                         Totaal: <strong>{{ interesttotal }}</strong>
                                                                                     </p>
                                                                                 </td>
@@ -537,8 +522,8 @@
                                                                                     {%endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px;">
-                                                                                        Deze maand: <strong>{{conversionrate}}</strong><br/>
-                                                                                        Vorige maand: <strong>{{previousconversionrate}}</strong><br/>
+                                                                                        Deze periode: <strong>{{conversionrate}}</strong><br/>
+                                                                                        Vorige periode: <strong>{{previousconversionrate}}</strong><br/>
                                                                                         Totaal: <strong>{{ total_conversion_rate  }}</strong>
                                                                                     </p>
                                                                                 </td>
@@ -677,7 +662,7 @@
                                                             <p style="font-size: 13px; line-height:20px; margin-top: 0; margin-bottom:20px; color: #4c4545;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">
                                                                 Uw weet nu hoe uw project het doet maar is dat nou goed of slecht? <br/>Hier de 5 meest
-                                                                opmerklijke projecten van de afgelopen maand
+                                                                opmerklijke projecten van de afgelopen periode
                                                             </p>
 
                                                             <table cellpadding="0" cellspacing="0" width="520" border="0">

@@ -20,6 +20,7 @@ class MailchimpManager:
         """
         Retrieve aggregated list growth stats for specific list
         """
+        result = []
         try:
             result = self.api.lists.growth_history(listid)
         except mailchimp.Error:
