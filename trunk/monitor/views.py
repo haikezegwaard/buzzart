@@ -11,7 +11,8 @@ from nikiInterest import interestmanager
 from django.shortcuts import get_object_or_404
 from nikiInterest.models import InterestAccount
 from googleAnalytics.analyticsmanager import AnalyticsManager
-
+from django.shortcuts import render_to_response
+import models
 # Create your views here.
 
 class ProjectDetail(generic.DetailView):
@@ -35,6 +36,16 @@ class ProfileView(generic.TemplateView):
         analyticsManager = AnalyticsManager()
         context['ga'] = analyticsManager.get_conversion_count('67007798', '2013-01-01', '2014-08-13')
         return context
+
+def index(request):
+    """
+    View for main entrance, listing various possible actions
+    in the buzzart application. For convenience only
+    """
+    summaries = models.Summary.objects.all()
+    return render_to_response('index.html',
+                              {'summaries': summaries},
+                              context_instance=RequestContext(request))
 
 
 

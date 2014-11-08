@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^mailchimp/', include('mcapi.urls')),
     url(r'^googleAnalytics/', include('googleAnalytics.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
-    url(r'^$',views.ProfileView.as_view(), name='profile')
+    url(r'^$',views.index, name='index')
 )# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
