@@ -1,0 +1,16 @@
+<!doctype HTML>
+<html>
+<head>
+</head>
+<body>
+<table>
+<tr><th>Naam</th><th>Id</th></tr>
+{% for list in lists.data %}
+<tr>
+    <td>{{ list.name }}</td>
+    <td>{{ list.id }}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

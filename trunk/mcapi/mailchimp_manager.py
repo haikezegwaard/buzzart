@@ -6,12 +6,12 @@ from django.template import RequestContext, loader
 import logging
 from datetime import datetime
 
+
 class MailchimpManager:
     """
     Converter class to interface with Mailchimp API and
     retrieve project specific reporting data
     """
-
 
     def __init__(self, apikey):
         self.api = mailchimp.Mailchimp(apikey)
@@ -20,6 +20,7 @@ class MailchimpManager:
         """
         Retrieve aggregated list growth stats for specific list
         """
+        result = []
         try:
             result = self.api.lists.growth_history(listid)
         except mailchimp.Error:

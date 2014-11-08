@@ -9,21 +9,51 @@ import json
 from django.http import HttpResponse
 import dateutil.parser
 import time
+import logging
+
 
 m = MailchimpManager('8e7536a78b89a35edfa0122d2e417186-us1')
+logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    result = m.api.lists.list()
+    return render_to_response('index.html', {'lists' :  result}, context_instance=RequestContext(request))
 
 
-    list_growth = m.get_list_size_data('23c3cfb062')
+def campaign_stats(request):
+    """
+    Generic method to perform Mailchimp API call
+    Params:
+        apikey: mailchimp api token
+        cid: campaign id
+    """
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    result = m.api.reports.opened(params.get('cid'))
+    return HttpResponse(result, content_type='application/json')
 
-    return render_to_response('members.html', {'members' :  list_growth}, context_instance=RequestContext(request))
+def list_campaigns(request):
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    result = m.get_campaigns(None,None)
+    logger.debug(result)
+    return HttpResponse(result, content_type='application/json')
 
+def lists(request):
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    result = m.api.lists.list()
+    return HttpResponse(result, content_type='application/json')
 
 def chart_data_json(request):
     data = {}
     params = request.GET
-
     days = params.get('listid', '')
     members = m.get_members('a30a6e97d6')
     cumulative = 0

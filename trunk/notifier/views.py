@@ -142,7 +142,7 @@ def fill_context(context, summary_id):
     context['conversions'] = conversions
     previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, previousstart.isoformat(), previousend.isoformat())
     context['previous_conversions'] = previous_conversions
-    total_conversions = ga_manager.get_conversion_count(ga_view, ga_manager.GA_NULL_DATE, currentend.isoformat())
+    total_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, ga_manager.GA_NULL_DATE, currentend.isoformat())
     context['total_conversions'] = total_conversions
 
     """ Get Google Analytics conversion rate for this and previous period """
@@ -183,7 +183,7 @@ def fill_context(context, summary_id):
     if(project.mailchimp_list_id != '0'):
         """ Get Mailchimp list growth statistics """
         mcmanager = MailchimpManager(project.mailchimp_api_token)
-        context['mailchimp'] = mcmanager.get_list_size_data(project.mailchimp_list_id)
+        context['mailchimp'] = mcmanager.get_list_growth_data(project.mailchimp_list_id)
 
     sold_count = context['availability'][2]
     context['project_score'] = util.project_score(sold_count, interest_total, total_conversion_rate)

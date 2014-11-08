@@ -79,6 +79,13 @@ class NikiConverter:
         resource = project+"/housetypes"
         return self.apiRequest(resource)
 
+    def getAllProjects(self):
+        """
+        Return list of all projects for given token
+        """
+        resource = "/search/projects"
+        return self.apiRequest(resource)
+
     def apiRequest(self, resource):
         """do the request, append oauth token"""
         if(isinstance(resource, int)):

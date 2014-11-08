@@ -10,7 +10,7 @@ import logging
 import json
 from collections import Counter
 import time
-
+from mcapi.mailchimp_manager import MailchimpManager
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ def nikirenttable(request):
         sale = housetype.get('houses').get('for-rent') if housetype.get('houses').get('for-rent') else 0
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('rented') if housetype.get('houses').get('rented') else 0
-        result += '{},{},{},{}\n'.format(typename,sale,option,sold).replace(',', '&#44;')
+        result += '{},{},{},{}\n'.format(typename,sale,option,sold)
 
     #result = "Woningtype,te koop, in optie, verkocht\n"
     return HttpResponse(result)
@@ -132,8 +132,6 @@ def nikiglobalstats(request):
     result += "Aantal woningen,"
     return HttpResponse(result)
     """
-
-
         $result.= "Projectvoortgang,-,".$niki->getProject($this->project)->{'progress'}."\n";
         $result.= "Aantal woningen,".$availablecount.",".$niki->getTotalHouseCount($this->project)."\n";
         $priceRangeTotal = $niki->getProjectPropertyRange($this->project, 'price-range');
@@ -144,5 +142,54 @@ def nikiglobalstats(request):
         $livingSurfaceRangeAvailable = $niki->getProjectPropertyRange($project,'livingsurface-range',true);
         $result.= "Oppervlakte vanaf,".$livingSurfaceRangeAvailable['min'].",".$allHouseStats['livingSurfaceMin']."\n";
         $result.= "Oppervlakte tot,".$livingSurfaceRangeAvailable['max'].",".$allHouseStats['livingSurfaceMax']."\n";
-        return $result;"""
+        return $result;
+    """
+
+
+def mailchimp_list_activity(request):
+    """
+    Return aggregated info on list activity
+    """
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    else:
+        return HttpResponse('BuzzartError: no Mailchimp Api key given (GET variable apikey)')
+    api_response = m.api.lists.activity(params.get('lid'))
+    result = 'Date,Subscribes,Unsubscribes,Mails sent,Opens,Clicks,Bounces\n'
+    for item in api_response:
+        date = item.get('day').replace('-', '')
+        subs = item.get('subs')
+        unsubs = item.get('unsubs')
+        sent = item.get('emails_sent')
+        opens = item.get('unique_opens')
+        clicks = item.get('recipient_clicks')
+        bounces = int(item.get('hard_bounce')) + int(item.get('soft_bounce'))
+        result += '{},{},{},{},{},{}\n'.format(date, subs, unsubs, sent, opens, clicks, bounces)
+    return HttpResponse(result)
+
+
+def mailchimp_campaign_report(request):
+    """
+    Return report summary for campaign with id 'cid'
+    """
+    params = request.GET
+    if params.get('apikey') is not None:
+        m = MailchimpManager(params.get('apikey'))
+    else:
+        return HttpResponse('BuzzartError: no Mailchimp Api key given (GET variable apikey)')
+    api_response = m.api.reports.summary(params.get('cid'))
+    result = 'Emails sent,Unsubsribes,Bounces,Opens,Clicks\n'
+    sent = api_response.get('emails_sent')
+    unsubscribes = api_response.get('unsubscribes')
+    bounces = int(api_response.get('hard_bounces')) + int(api_response.get('soft_bounces'))
+    opens = api_response.get('opens')
+    clicks = api_response.get('clicks')
+    result += '{},{},{},{},{}\n'.format(sent,unsubscribes,bounces,opens,clicks)
+    return HttpResponse(result)
+
+
+
+
+
 
