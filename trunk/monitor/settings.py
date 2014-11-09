@@ -143,6 +143,12 @@ NOTIFIER_FROM_MAIL = 'info@fundament.nl'
 
 STATIC_URL = '/static/'
 #STATIC_ROOT = '/opt/buzzart/static'
+import os.path
+PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__)+'/..')
+# Additional locations of static files
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'assets'),
+)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/opt/buzzart/media'

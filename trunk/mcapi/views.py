@@ -34,7 +34,7 @@ def campaign_stats(request):
     if params.get('apikey') is not None:
         m = MailchimpManager(params.get('apikey'))
     result = m.api.reports.opened(params.get('cid'))
-    return HttpResponse(result, content_type='application/json')
+    return HttpResponse(json.dumps(result), content_type='application/json')
 
 def list_campaigns(request):
     params = request.GET
@@ -42,14 +42,15 @@ def list_campaigns(request):
         m = MailchimpManager(params.get('apikey'))
     result = m.get_campaigns(None,None)
     logger.debug(result)
-    return HttpResponse(result, content_type='application/json')
+    return HttpResponse(json.dumps(result), content_type='application/json')
 
 def lists(request):
     params = request.GET
+    m = None
     if params.get('apikey') is not None:
         m = MailchimpManager(params.get('apikey'))
     result = m.api.lists.list()
-    return HttpResponse(result, content_type='application/json')
+    return HttpResponse(json.dumps(result), content_type='application/json')
 
 def chart_data_json(request):
     data = {}
