@@ -85,7 +85,7 @@
             $.getJSON('/mailchimp/lists/?apikey='+$('#apikey').val(), function(data) {
                 for(i = 0; i < data.data.length ; i++){
                     console.log(data.data[i].name + ' : ' + data.data[i].web_id);
-                    $("#mc_lists_group").append("<li class='list-group-item'>"+data.data[i].name + ' : ' + data.data[i].web_id+"</li>");
+                    $("#mc_lists_group").append("<li class='list-group-item'>"+data.data[i].name + ' : ' + data.data[i].id+"</li>");
                 }
 
             });
