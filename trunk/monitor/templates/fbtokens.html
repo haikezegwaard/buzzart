@@ -1,0 +1,27 @@
+<!doctype HTML>
+<html>
+    <head>
+    {% include "bootstrap.html" %}
+    </head>
+    <body>
+    <div class="page-header">
+      <h1>Facebook access tokens</h1>
+    </div>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Projecten met fanpage</div>
+        <div class="panel-body">
+            <table class="table">
+                <tr><th>Project</th><th>Fanpage</th><th>Token</th></tr>
+                {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }} ( {{ project.manager }} )</td>
+                    <td>{{ project.fanpage_id }}</td>
+                    <td>{{ project.fanpage_token }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    </body>
+</html>
