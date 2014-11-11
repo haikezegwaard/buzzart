@@ -1,12 +1,7 @@
 <!doctype HTML>
 <html>
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<!-- Bootstrap Core CSS -->
-{% load staticfiles %}
-<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-<script src="{% static 'js/bootstrap.js' %}"></script>
-<link href="{% static 'css/bs-callouts.css' %}" rel="stylesheet">
+{% include "bootstrap.html" %}
 </head>
 <body>
     <div class="bs-docs-section">
@@ -21,6 +16,7 @@
                     </span>
                     <input type="text" id="apikey" class="form-control" placeholder="api token">
                   </div>
+                  <a href="/fbtokens" class="list-group-item">Update facebook tokens</a>
                 </div>
             </p>
         </div>

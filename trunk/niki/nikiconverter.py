@@ -28,6 +28,11 @@ class NikiConverter:
         return self.availability[2]
 
     def getAvailability(self, project):
+        #check project status
+        projectJson = self.apiRequest(project)
+        if projectJson.get('status') not in ("In verkoop", "In verhuur", "In verkoop / verhuur"):
+            return None
+
         projectType = self.getProjectSaleRentType(project)
         self.availability = [0,0,0] #reset counters [forsale/rent, option, sold/rented]
         #get housetypes of project

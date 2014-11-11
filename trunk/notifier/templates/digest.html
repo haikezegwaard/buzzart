@@ -126,6 +126,7 @@
             //
             //Plot a pie chart for availability
             //
+            {% if availability %}
             var availdata = new google.visualization.DataTable();
             availdata.addColumn('string','Label');
             availdata.addColumn('number','Aantal');
@@ -157,7 +158,7 @@
             });
 
             availchart.draw(availdata, availoptions);
-
+            {% endif %}
             //
             //Plot Sex/Age spreak for fanpage likes
             //
@@ -361,6 +362,7 @@
                                                             <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>
                                                         </td>
                                                     </tr>
+                                                    {% if availability %}
                                                     <tr>
                                                         <td align="left" valign="top" width="520">
                                                             <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:4; color: #eb762d;
@@ -381,6 +383,7 @@
                                                             <p style="font-size: 2px; line-height:2px; margin-top: 0; margin-bottom:0;">&#160;</p>
                                                         </td>
                                                     </tr>
+                                                    {% endif %}
                                                     <tr>
                                                         <td align="left" valign="top" width="520" height="25">
                                                             <p style="font-size: 25px; line-height:25px; margin-top: 0; margin-bottom:0;">&#160;</p>

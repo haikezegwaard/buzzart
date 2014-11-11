@@ -215,7 +215,10 @@ class InterestManager:
     #helper lookup function
     def getNikiInterestProjectByProject(self, project):
         self.logger.debug('trying to fetch interestaccount by project id: {}'.format(project.id))
-        return InterestProject.objects.get(project = project)
+        try:
+            return InterestProject.objects.get(project = project)
+        except InterestProject.DoesNotExist:
+            return None
 
     #Loop through subscriptions xml, and create a dictionary of
     #Housetype -> occurrences, the number of  preferred interests per housetype

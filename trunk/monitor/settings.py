@@ -1,3 +1,4 @@
+import os.path
 """
 Django settings for monitor project.
 
@@ -86,6 +87,7 @@ MIDDLEWARE_CLASSES = (
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
+    'social.backends.facebook.Facebook2OAuth2',
     'django.contrib.auth.backends.ModelBackend'
 )
 
@@ -101,6 +103,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '668855476975-5l8p7sua5hp70o0rbisp941dsfk462ki.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Jfc8k03j8ihL_9U_FgdCvTG4'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'access_type': 'offline'}
+
+SOCIAL_AUTH_FACEBOOK_KEY = '333949410120374' #'333944963454152'
+SOCIAL_AUTH_FACEBOOK_SECRET = '991f1166a3075bb6a7e3712d38404a71' #'4139129df43a25df06654aa4aa2c0ee3'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['read_insights','manage_pages']
+
 
 ROOT_URLCONF = 'monitor.urls'
 
@@ -142,8 +149,8 @@ NOTIFIER_FROM_MAIL = 'info@fundament.nl'
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = '/opt/buzzart/static'
-import os.path
+STATIC_ROOT = '/opt/buzzart/static'
+
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__)+'/..')
 # Additional locations of static files
 STATICFILES_DIRS = (

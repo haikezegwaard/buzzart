@@ -13,6 +13,7 @@ class Project(models.Model):
     mailchimp_list_id = models.CharField(max_length=1000)
     mailchimp_api_token = models.CharField(max_length=1000)
     fanpage_id = models.CharField(max_length=1000)
+    fanpage_token = models.CharField(max_length=1000)
 
     def __unicode__(self):
         return self.name
@@ -23,6 +24,9 @@ class InterestProject(models.Model):
     project = models.ForeignKey(Project)
     nikiProjectId = models.CharField(max_length=400)
     interestAccount = models.ForeignKey(InterestAccount)
+
+    def __unicode__(self):
+        return self.project.name
 
 
 # Periodic summary

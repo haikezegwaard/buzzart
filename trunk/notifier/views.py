@@ -159,20 +159,24 @@ def fill_context(context, summary_id):
     """ Get number of interested people from niki for this  and previous period """
     interestManager = InterestManager()
     nip = interestManager.getNikiInterestProjectByProject(project)
-    account = nip.interestAccount
-    idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, util.date_to_datetime(currentstart), util.date_to_datetime(currentend))
-    logger.debug('fetched idlist from nikiinterest: {}'.format(idlist))
-    context['interest'] = len(idlist)
+    idlist = []
+    context['interest'] = 0
+    context['previousinterest'] = 0
+    context['interesttotal'] = 0
+    if nip is not None:
+        account = nip.interestAccount
+        idlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, util.date_to_datetime(currentstart), util.date_to_datetime(currentend))
+        logger.debug('fetched idlist from nikiinterest: {}'.format(idlist))
+        context['interest'] = len(idlist)
+        previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, util.date_to_datetime(previousstart), util.date_to_datetime(previousend))
+        context['previousinterest'] = len(previousidlist)
+        interest_total = len(interestManager.getIdsByProject(account, nip.nikiProjectId))
+        context['interesttotal'] = interest_total
 
-    previousidlist = interestManager.getIdsByProjectBetween(account, nip.nikiProjectId, util.date_to_datetime(previousstart), util.date_to_datetime(previousend))
-    context['previousinterest'] = len(previousidlist)
-
-    interest_total = len(interestManager.getIdsByProject(account, nip.nikiProjectId))
-    context['interesttotal'] = interest_total
-
-    """ Get project Niki sales stats """
-    nikimanager = NikiConverter()
-    context['availability'] = nikimanager.getAvailability(project.nikiProject)
+    if(project.nikiProject != '0'):
+        """ Get project Niki sales stats """
+        nikimanager = NikiConverter()
+        context['availability'] = nikimanager.getAvailability(project.nikiProject)
 
     if(project.fanpage_id != '0'):
         """ Get the sex and age spread of likes on the fanpage """
@@ -184,9 +188,11 @@ def fill_context(context, summary_id):
         """ Get Mailchimp list growth statistics """
         mcmanager = MailchimpManager(project.mailchimp_api_token)
         context['mailchimp'] = mcmanager.get_list_growth_data(project.mailchimp_list_id)
-
-    sold_count = context['availability'][2]
-    context['project_score'] = util.project_score(sold_count, interest_total, total_conversion_rate)
+        sold_count = context['availability'][2]
+    try:
+        context['project_score'] = util.project_score(sold_count, interest_total, total_conversion_rate)
+    except:
+        context['project_score'] = 0
     return context
 
 
