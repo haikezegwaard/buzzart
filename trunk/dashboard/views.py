@@ -32,18 +32,34 @@ def index(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
+def origin(request, project_id):
+    project = Project.objects.get(id=project_id)
+    return render_to_response('origin.html',
+                              {'project_id': project_id,
+                               'project': project,
+                               'referrals':get_referrals(project_id)
+                               },
+                              context_instance=RequestContext(request))
+
 
 def get_updates(project_id):
     project = Project.objects.get(id=project_id)
     updates = BuzzartUpdate.objects.filter(project=project)
     return updates
 
+ga_stats = googlestats.StatsService()
+
+def get_referrals(project_id):
+    project = Project.objects.get(id=project_id)
+    start = datetime.datetime.today() - datetime.timedelta(days=128)
+    end = datetime.datetime.today()
+    return ga_stats.get_referrals(project, start, end)
+
 
 def get_google_stats(project_id):
     project = Project.objects.get(id=project_id)
     start = datetime.datetime.today() - datetime.timedelta(days=128)
     end = datetime.datetime.today()
-    ga_stats = googlestats.StatsService()
     return ga_stats.get_traffic_over_time(project, start, end)
 
 

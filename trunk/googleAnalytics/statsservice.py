@@ -55,4 +55,16 @@ class StatsService():
             result.append([item[0],int(item[1])])
         return result
 
+    def get_referrals(self, project, start, end):
+        """
+        Get ordered list of tuples (referral, sessioncount) for given project
+        between dates
+        """
+        settings = models.AnalyticsSettings.objects.get(project = project)
+        referrals = self.ga_manager.get_referrals(settings.ga_view, start, end)
+        result = []
+        for item in referrals.get('rows'):
+            result.append([item[0], int(item[1])])
+        return sorted(result, key=lambda tup: tup[1], reverse=True)
+
 
