@@ -9,7 +9,8 @@ from datetime import timedelta
 
 class AnalyticsManager:
 
-    GA_URL = 'https://www.googleapis.com/analytics/v3/data/ga?'
+    GA_REPORTING_URL = 'https://www.googleapis.com/analytics/v3/data/ga?'
+    GA_MANAGEMENT_URL = 'https://www.googleapis.com/analytics/v3'
 
     logger = logging.getLogger(__name__)
 
@@ -96,6 +97,15 @@ class AnalyticsManager:
         action = 'goal{}Completions'.format(goalid)
         return self.reporting_API_call(viewid, start_str, end_str, [action], '&sort=ga:date&dimensions=ga:date')
 
+    def get_conversion_count_summary(self, viewid, start, end):
+        """
+        Get list of conversion names and corresponding counts in
+        given time interval
+        """
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)
+        obj = self.reporting_API_call(viewid, start, end, ['goalCompletionsAll'])
+        return obj
 
     def get_session_count(self, viewid, start, end):
         """Get session count for specific view id in daterange
@@ -144,24 +154,28 @@ class AnalyticsManager:
         Returns:
             json decoded http response
         """
-        user = User.objects.get(username="haike") #this should not be static
-        #get the oath2 token for user haike
-        social = user.social_auth.get(provider='google-oauth2')
-        strategy = load_strategy(backend='google-oauth2')
-        social.refresh_token(strategy)
-
-        url = self.GA_URL + 'ids=ga:{}&start-date={}&end-date={}'.format(viewid, start, end)
+        url = self.GA_REPORTING_URL + 'ids=ga:{}&start-date={}&end-date={}'.format(viewid, start, end)
         url += '&metrics='
         for metric in metrics:
             url += 'ga:{},'.format(metric)
         url = url[:-1]
         url += extra
-        self.logger.debug('calling url: '+url)
+        return self.API_call(url)
+
+    def API_call(self, url):
+        """
+        Generic base API interfacing method
+        """
+
+        user = User.objects.get(username="haike") #this should not be static
+        #get the oath2 token for user haike
+        social = user.social_auth.get(provider='google-oauth2')
+        strategy = load_strategy(backend='google-oauth2')
+        social.refresh_token(strategy)
+        self.logger.debug('calling url: {}'.format(url))
         response = requests.get(url,params={'access_token': social.extra_data['access_token']})
-
-        self.logger.debug('response: '+response.content)
+        self.logger.debug('response: {}'.format(response.content))
         return json.loads(response.content)
-
 
     def google_date(self, date):
         """
