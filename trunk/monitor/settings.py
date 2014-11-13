@@ -71,6 +71,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'djrill',
     'twitterAnalytics',
+    'south',
 
 )
 

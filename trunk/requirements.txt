@@ -6,3 +6,4 @@ django-debug-toolbar==1.2.1
 djrill==1.1.1
 selenium==2.43.0
 TwitterAPI==2.2.5
+south==1.0.1
