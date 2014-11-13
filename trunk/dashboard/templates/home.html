@@ -51,7 +51,8 @@ Analyse {{project.name}}
         {% include "timeline.html" %}
     </div>
     <div class="col-lg-4">
-        {% include "table.html" %}
+        {% include "social-stats.html" %}
+        {% include "analytics-origin-pie-plot.html" %}
     </div>
 </div>
 
@@ -145,48 +146,3 @@ $(function () {
 
 </script>
 {% endblock %}
-<!--
-series: [{
-            name: 'Website bezoek',
-            data: [
-                [Date.UTC(2014,  0,  1), 75],
-                [Date.UTC(2014,  1, 24), 77],
-                [Date.UTC(2014,  2,  1), 74],
-                [Date.UTC(2014,  3,  7), 77],
-                [Date.UTC(2014,  4, 23), 100],
-                [Date.UTC(2014,  5,  8), 120],
-                [Date.UTC(2014,  5, 14), 75],
-                [Date.UTC(2014,  6, 24), 56],
-                [Date.UTC(2014,  8,  4), 77 ],
-                [Date.UTC(2014,  9, 18), 77],
-                [Date.UTC(2014,  10, 24), 79 ],
-                [Date.UTC(2014,  11, 16), 74],
-                [Date.UTC(2014,  11, 21), 74   ]
-            ]
-        },
-        {
-            name: 'Inschrijvingen',
-            type: 'column',
-            yAxis: 1,
-            data: [
-                [Date.UTC(2014,  0,  2), 1],
-                [Date.UTC(2014,  0, 2), 1],
-                [Date.UTC(2014,  1,  2), 1],
-                [Date.UTC(2014,  1,  3), 1],
-                [Date.UTC(2014,  1, 23), 1 ],
-                [Date.UTC(2014,  2, 14), 1],
-                [Date.UTC(2014,  2, 22), 2 ],
-                [Date.UTC(2014,  4,  1), 1],
-                [Date.UTC(2014,  5,  2), 1],
-                [Date.UTC(2014,  6, 3), 1],
-                [Date.UTC(2014,  7, 4), 1 ],
-                [Date.UTC(2014,  8, 1), 2 ],
-                [Date.UTC(2014,  10, 2), 2],
-                [Date.UTC(2014,  11,  3), 1   ]
-              ],
-            tooltip: {
-                valueSuffix: ' mm'
-            }
-
-        },
--->
