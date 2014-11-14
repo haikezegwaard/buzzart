@@ -27,10 +27,8 @@ function drawMyCircels(id, difference) {
     context.textAlign = 'center'
     if (difference > 0) {
         context.fillText('+'+difference, centerX, 110);
-    } else if (difference == 0) {
-        context.fillText(difference, centerX, 110);
     } else {
-        context.fillText('-'+difference, centerX, 110);
+        context.fillText(difference, centerX, 110);
     }
 
     if (difference > 0) {

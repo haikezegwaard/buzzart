@@ -10,7 +10,6 @@ from datetime import timedelta
 class AnalyticsManager:
 
     GA_REPORTING_URL = 'https://www.googleapis.com/analytics/v3/data/ga?'
-    GA_MANAGEMENT_URL = 'https://www.googleapis.com/analytics/v3'
 
     logger = logging.getLogger(__name__)
 
@@ -166,7 +165,6 @@ class AnalyticsManager:
         """
         Generic base API interfacing method
         """
-
         user = User.objects.get(username="haike") #this should not be static
         #get the oath2 token for user haike
         social = user.social_auth.get(provider='google-oauth2')
@@ -176,6 +174,49 @@ class AnalyticsManager:
         response = requests.get(url,params={'access_token': social.extra_data['access_token']})
         self.logger.debug('response: {}'.format(response.content))
         return json.loads(response.content)
+
+    """
+    Management API functions and utils
+    """
+
+    GA_MANAGEMENT_URL = 'https://www.googleapis.com/analytics/v3'
+
+    def get_accounts(self):
+        return self.API_call('{}/management/accountSummaries'.format(self.GA_MANAGEMENT_URL))
+
+    def get_properties(self, account_id):
+        return self.API_call('{}/management/accounts/{}/webproperties'.format(self.GA_MANAGEMENT_URL, account_id))
+
+    def get_profiles(self, account_id, property_id):
+        return self.API_call('{}/management/accounts/{}/webproperties/{}/profiles'.format(self.GA_MANAGEMENT_URL, account_id, property_id))
+
+    def reverse_view_lookup(self, view_id):
+        accounts = self.get_accounts()
+        result = 'not found'
+        for account_summary in accounts.get('items'):
+            for web_property in account_summary.get('webProperties'):
+                for profile in web_property.get('profiles'):
+                    if profile.get('id') == view_id:
+                        account_id = account_summary.get('id')
+                        property_id = web_property.get('id')
+                        result = self.API_call('{}/management/accounts/{}/webproperties/{}'.format(self.GA_MANAGEMENT_URL, account_id, property_id))
+        return result
+
+    def get_goals_for_view(self, view_id):
+        """
+        Return list of goals for given view (and account / property )
+        see: https://developers.google.com/analytics/devguides/config/mgmt/v3/mgmtReference/management/goals/list
+        """
+        web_property = self.reverse_view_lookup(view_id)
+        account_id = web_property.get('accountId')
+        property_id = web_property.get('id')
+        url = '{}/management/accounts/{}/webproperties/{}/profiles/{}/goals'.format(self.GA_MANAGEMENT_URL, account_id, property_id, view_id)
+        return self.API_call(url)
+
+
+    """
+    Helper and convenience functions
+    """
 
     def google_date(self, date):
         """

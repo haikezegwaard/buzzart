@@ -61,3 +61,26 @@ def get_settings_by_project_id(project_id):
     """
     project = models.Project.objects.get(id = project_id)
     return ga_models.AnalyticsSettings.objects.get(project = project)
+
+def list_accounts(request):
+    """
+    Render a list of all accounts available for user
+    """
+    data = ga_man.get_accounts()
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+def list_properties(request, account_id):
+    data = ga_man.get_properties(account_id)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+def list_profiles(request, account_id, property_id):
+    data = ga_man.get_profiles(account_id, property_id)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+def find_account(request, profile_id):
+    data = ga_man.reverse_view_lookup(profile_id)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+def list_goals(request, profile_id):
+    data = ga_man.get_goals_for_view(profile_id)
+    return HttpResponse(json.dumps(data), content_type='application/json')
