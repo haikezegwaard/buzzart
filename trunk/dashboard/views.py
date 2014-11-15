@@ -42,6 +42,7 @@ def origin(request, project_id):
                               context_instance=RequestContext(request))
 
 
+
 def get_updates(project_id):
     project = Project.objects.get(id=project_id)
     updates = BuzzartUpdate.objects.filter(project=project)
