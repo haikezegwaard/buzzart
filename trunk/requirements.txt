@@ -7,3 +7,4 @@ djrill==1.1.1
 selenium==2.43.0
 TwitterAPI==2.2.5
 south==1.0.1
+facebookads==2.2.1
