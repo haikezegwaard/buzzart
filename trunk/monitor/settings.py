@@ -14,8 +14,10 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # DEBUG TOOLBAR #
 #################
 DEBUG_TOOLBAR_PATCH_SETTINGS = False  # explicit setup
+
+
 def _show_toolbar(request):
-    #avoid executing in tests (which sets DEBUG to False)
+    # avoid executing in tests (which sets DEBUG to False)
     if request.is_ajax():
         return False
     user_agent = request.META.get('HTTP_USER_AGENT', '')
@@ -25,7 +27,7 @@ def _show_toolbar(request):
     return settings.TEMPLATE_DEBUG
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'monitor.settings._show_toolbar',  # 'debug_toolbar.middleware.show_toolbar'
-        'INTERCEPT_REDIRECTS': False,
+    'INTERCEPT_REDIRECTS': False,
 }
 
 
@@ -100,17 +102,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.login_redirect'
 )
 
-#python-social-auth settings
+# python-social-auth settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '668855476975-5l8p7sua5hp70o0rbisp941dsfk462ki.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Jfc8k03j8ihL_9U_FgdCvTG4'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'access_type': 'offline'}
 
-SOCIAL_AUTH_FACEBOOK_KEY = '333949410120374' #'333944963454152'
-SOCIAL_AUTH_FACEBOOK_SECRET = '991f1166a3075bb6a7e3712d38404a71' #'4139129df43a25df06654aa4aa2c0ee3'
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['read_insights','manage_pages']
+SOCIAL_AUTH_FACEBOOK_KEY = '333949410120374' # '333944963454152'
+SOCIAL_AUTH_FACEBOOK_SECRET = '991f1166a3075bb6a7e3712d38404a71' # '4139129df43a25df06654aa4aa2c0ee3'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['read_insights', 'manage_pages']
 
-#configuration for facebook ads api
+# configuration for facebook ads api
 FACEBOOK_ADS_APP_ID = '335693869945928'
 FACEBOOK_ADS_APP_SECRET = 'd02596c23bd1d14519fab88aa6e67a1d'
 FACEBOOK_ADS_ACCESS_TOKEN = 'CAAExT9HfFEgBAFl9GdeRouQxjCVm4R2vgxqRxhCXCSPW8AwDs4rfOUOKlfnaoTDadSupJIiPqjzZBmbFvJhBJdORbZBby8WzPZCgd8xgMQrsgumzOhHjN4rFqWOdl5AlHibs4wOgudXGu44HVphwNTydrGiCBzSEsnLZCNQes3GsVdXFn9Q2TjTV0gjuoNvpMw2irSlqXMHbHFQradmWwyMp7aCrZAP8ZD'
@@ -120,7 +122,7 @@ ROOT_URLCONF = 'monitor.urls'
 
 WSGI_APPLICATION = 'wsgi.application'
 
-#djrill settings
+# djrill settings
 MANDRILL_API_KEY = "VWldgpjHZGcavL4jasHiZA"
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 
@@ -172,8 +174,8 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -189,9 +191,9 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers':['file'],
+            'handlers': ['file'],
             'propagate': True,
-            'level':'DEBUG',
+            'level': 'DEBUG',
         },
         'buzzart': {
             'handlers': ['file'],

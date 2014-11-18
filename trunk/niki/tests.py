@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
 from nikiconverter import NikiConverter
 
 
@@ -16,5 +15,5 @@ class NikiAPITest(TestCase):
 
     def test_get_availability(self):
         availability = self.manager.getAvailability(self.resource)
-        self.assertEqual(len(availability), 3, 'length of availability array is not 3')
-
+        self.assertEqual(len(availability), 3,
+                         'length of availability array is not 3')
