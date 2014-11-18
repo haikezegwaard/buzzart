@@ -5,11 +5,13 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext, loader
 import logging
 from mailchimp_manager import MailchimpManager
+from statsservice import StatsService
 import json
 from django.http import HttpResponse
 import dateutil.parser
 import time
 import logging
+from monitor.models import Project
 
 
 m = MailchimpManager('8e7536a78b89a35edfa0122d2e417186-us1')
@@ -65,4 +67,10 @@ def chart_data_json(request):
         mydate = dateutil.parser.parse(member.get('timestamp_opt'))
         data.append([time.mktime(mydate.timetuple()), cumulative])
     logger.debug(data)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+def list_stats(request, project_id):
+    project = Project.objects.get(id=project_id)
+    stats_service = StatsService()
+    data = stats_service.get_list_stats(project)
     return HttpResponse(json.dumps(data), content_type='application/json')

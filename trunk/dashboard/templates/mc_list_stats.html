@@ -1,0 +1,87 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="fa fa-bar-chart-o fa-fw"></i> Mailchimp lijst ontwikkeling
+    </div>
+    <div class="panel-body">
+        <div id="mc_list_container"></div>
+    </div>
+    <div class="panel-footer">
+    </div>
+</div>
+<script>
+
+$(function () {
+  $.getJSON('/mailchimp/liststats/{{ project_id }}', function(data) {
+    $('#mc_list_container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Mailchimp lijst ontwikkeling'
+        },
+        xAxis: {
+            categories: data[3].data
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Lijst grootte'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -70,
+            verticalAlign: 'top',
+            y: 20,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                    style: {
+                        textShadow: '0 0 3px black, 0 0 3px black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name : data[0].name,
+            data : data[0].data,
+            type: 'column'
+        },
+        {
+            name : data[1].name,
+            data : data[1].data,
+            type: 'column'
+        },
+        {
+            name : data[2].name,
+            data : data[2].data,
+            type: 'column'
+        }]
+    });
+  });
+});
+
+</script>
