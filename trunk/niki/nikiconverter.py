@@ -2,16 +2,16 @@ import requests
 import logging
 
 
-#Class to convert Niki data to the numbers needed
 class NikiConverter:
-    #static for now, should be replaced by oauth security model
-    #oauth_token = "90302891-25b2-43cb-8ef9-3dd4bc0955be"
+    """
+    Class to convert Niki data to the numbers needed
+    static for now, should be replaced by oauth security model
+    """
     oauth_token = "5060cbaf-35f5-41fe-9792-3c0c30012b7d"
     api_url = "https://api.niki.nl"
-    #projectResource = "/projects/54/AMVP9518"
+
     availability = []
 
-    #https://api.niki.nl/projects/54/AMVP9518
     def getProject(self, project):
         return self.apiRequest(project)
 
@@ -28,26 +28,31 @@ class NikiConverter:
         return self.availability[2]
 
     def getAvailability(self, project):
-        #check project status
+        """
+        check project status
+        """
         projectJson = self.apiRequest(project)
-        if projectJson.get('status') not in ("In verkoop", "In verhuur", "In verkoop / verhuur"):
+        if projectJson.get('status') not in ("In verkoop",
+                                             "In verhuur",
+                                             "In verkoop / verhuur"):
             return None
 
         projectType = self.getProjectSaleRentType(project)
-        self.availability = [0,0,0] #reset counters [forsale/rent, option, sold/rented]
-        #get housetypes of project
+        # reset counters [forsale/rent, option, sold/rented]
+        self.availability = [0, 0, 0]
+        # get housetypes of project
         for housetype in self.apiRequest(project+"/housetypes"):
             if housetype.get('houses') is None:
                 continue
-            #get number for sale/for rent
+            # get number for sale/for rent
             forSaleOrRent = housetype.get('houses').get(projectType)
             if(forSaleOrRent is not None):
                 self.availability[0] += int(forSaleOrRent)
-            #get number of houses under option
+            # get number of houses under option
             underOption = housetype.get('houses').get('option')
             if(underOption is not None):
                 self.availability[1] += int(underOption)
-            #get number of houses sold or rented
+            # get number of houses sold or rented
             soldRentedStr = 'sold'
             if(projectType == 'for-rent'):
                 soldRentedStr = 'rented'
@@ -61,13 +66,13 @@ class NikiConverter:
         self.getAvailability(project)
         result = {}
         if(projectType == 'for-rent'):
-            result = {'te huur' : self.availability[0],
-                      'optie' : self.availability[1],
-                      'verhuurd' : self.availability[2]}
+            result = {'te huur': self.availability[0],
+                      'optie': self.availability[1],
+                      'verhuurd': self.availability[2]}
         else:
-            result = {'te koop' : self.availability[0],
-                      'optie' : self.availability[1],
-                      'verkocht' : self.availability[2]}
+            result = {'te koop': self.availability[0],
+                      'optie': self.availability[1],
+                      'verkocht': self.availability[2]}
         return result
 
     def getProjectSaleRentType(self, project):
@@ -95,7 +100,7 @@ class NikiConverter:
         """do the request, append oauth token"""
         if(isinstance(resource, int)):
             logging.error("int: {}".format(resource))
-        url = self.api_url+resource+ "?oauth_token=" + self.oauth_token
-        logging.warn("api call to: "+ url)
+        url = self.api_url + resource + "?oauth_token=" + self.oauth_token
+        logging.warn("api call to: " + url)
         r = requests.get(url)
         return r.json()
