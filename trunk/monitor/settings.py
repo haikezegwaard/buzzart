@@ -72,6 +72,7 @@ INSTALLED_APPS = (
     'djrill',
     'twitterAnalytics',
     'south',
+    'facebookAds'
 
 )
 
@@ -112,7 +113,7 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['read_insights','manage_pages']
 #configuration for facebook ads api
 FACEBOOK_ADS_APP_ID = '335693869945928'
 FACEBOOK_ADS_APP_SECRET = 'd02596c23bd1d14519fab88aa6e67a1d'
-FACEBOOK_ADS_ACCESS_TOKEN = '92730bf58bf7999873f203a015edaa12'
+FACEBOOK_ADS_ACCESS_TOKEN = 'CAAExT9HfFEgBAFl9GdeRouQxjCVm4R2vgxqRxhCXCSPW8AwDs4rfOUOKlfnaoTDadSupJIiPqjzZBmbFvJhBJdORbZBby8WzPZCgd8xgMQrsgumzOhHjN4rFqWOdl5AlHibs4wOgudXGu44HVphwNTydrGiCBzSEsnLZCNQes3GsVdXFn9Q2TjTV0gjuoNvpMw2irSlqXMHbHFQradmWwyMp7aCrZAP8ZD'
 
 
 ROOT_URLCONF = 'monitor.urls'

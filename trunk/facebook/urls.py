@@ -9,7 +9,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     #url(r'^summary/(?P<pk>\d+)/$', views.ProjectSummaryMail.as_view(), name='summary'),
     url(r'sexagespread/$', views.fanpage_age_sex, name='fanpage_age_sex'),
-    url(r'longlivedtoken/$', views.get_long_lived_token, name='long_lived_token'),
 
 )
 

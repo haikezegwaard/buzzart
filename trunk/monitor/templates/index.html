@@ -4,6 +4,7 @@
 {% include "bootstrap.html" %}
 </head>
 <body>
+
     <div class="bs-docs-section">
         <div class="bs-callout bs-callout-info">
             <h4>Helper functies</h4>
@@ -16,56 +17,73 @@
                     </span>
                     <input type="text" id="apikey" class="form-control" placeholder="api token">
                   </div>
-                  <a href="/fbtokens" class="list-group-item">Update facebook tokens</a>
+                  <a href="/fbtokens" class="list-group-item">Update facebook tokens fanpages</a>
                 </div>
             </p>
         </div>
     </div>
-    <div class="page-header">
-      <h1>Projectoverzicht <small>klik op 'overzicht' voor een preview van de mailing</small></h1>
-    </div>
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Bestaande overzichten</div>
-        <div class="panel-body">
-            <table class="table">
-                <tr><th>Project</th><th>Periode</th><th>Mailing</th></tr>
-                {% for summary in summaries %}
-                <tr>
-                    <td>{{ summary.project.name }} ( {{ summary.project.manager }} )</td>
-                    <td>{{ summary.dateStart }} - {{ summary.dateEnd }}</td>
-                    <td><a href='/digest/{{summary.id}}'>preview</a></td>
-                </tr>
-                {% endfor %}
-            </table>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="page-header">
+              <h1>Adviezen <small>klik op 'overzicht' voor een preview van de mailing</small></h1>
+            </div>
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Bestaande overzichten</div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tr><th>Project</th><th>Periode</th><th>Mailing</th><th>Dashboard</th></tr>
+                        {% for summary in summaries %}
+                        <tr>
+                            <td>{{ summary.project.name }} ( {{ summary.project.manager }} )</td>
+                            <td>{{ summary.dateStart }} - {{ summary.dateEnd }}</td>
+                            <td><a href='/digest/{{summary.id}}'>preview</a></td>
+                            <td><a href='/dashboard/{{summary.id}}'>dashboard</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="panel-footer">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header">
+              <h1>Cyfe acties <small>formatted export</small></h1>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Acties</div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        {% for item in cyfeurls %}
+                        <div class="list-group-item">{{ item }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="panel-footer">
+                </div>
+            </div>
         </div>
     </div>
-
-
-
-
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Mailchimp lijsten</h4>
-      </div>
-      <div class="modal-body">
-        <ul id="mc_lists_group" class="list-group">
-        </ul>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Mailchimp lijsten</h4>
+          </div>
+          <div class="modal-body">
+            <ul id="mc_lists_group" class="list-group">
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
 
 

@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^googleAnalytics/', include('googleAnalytics.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^fbtokens',views.facebook_tokens, name='fbtokens'),
+    url(r'^fbads', include('facebookAds.urls')),
     url(r'^$',views.index, name='index')
 )# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

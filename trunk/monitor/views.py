@@ -46,9 +46,13 @@ def index(request):
     View for main entrance, listing various possible actions
     in the buzzart application. For convenience only
     """
+    import cyfe.urls as cyfeurls
     summaries = models.Summary.objects.all()
+    projects = models.Project.objects.all()
     return render_to_response('index.html',
-                              {'summaries': summaries},
+                              {'summaries': summaries,
+                               'projects': projects,
+                               'cyfeurls': cyfeurls.urlpatterns},
                               context_instance=RequestContext(request))
 
 
