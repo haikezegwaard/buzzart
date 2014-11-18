@@ -22,7 +22,7 @@ def nikisalecount(request):
     project = request.GET.get('project')
     nikimanager = NikiConverter()
     availability = nikimanager.getAvailability(project)
-    result =  "Te koop, Optie, Verkocht\n"
+    result = "Te koop, Optie, Verkocht\n"
     result += ",".join([str(i) for i in availability])+"\n"
     result += "Color,#00cb13,#ff7f00,#ee0000"
     return HttpResponse(result)
@@ -35,10 +35,11 @@ def nikirentcount(request):
     project = request.GET.get('project')
     nikimanager = NikiConverter()
     availability = nikimanager.getAvailability(project)
-    result =  "Te huur, Optie, Verhuurd\n"
+    result = "Te huur, Optie, Verhuurd\n"
     result += ",".join([str(i) for i in availability])+"\n"
     result += "Color,#00cb13,#ff7f00,#ee0000"
     return HttpResponse(result)
+
 
 def nikisaletable(request):
     """
@@ -53,10 +54,9 @@ def nikisaletable(request):
         sale = housetype.get('houses').get('for-sale') if housetype.get('houses').get('for-sale') else 0
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('sold') if housetype.get('houses').get('sold') else 0
-        result += '{},{},{},{}\n'.format(typename,sale,option,sold)
-
-    #result = "Woningtype,te koop, in optie, verkocht\n"
+        result += '{},{},{},{}\n'.format(typename, sale, option, sold)
     return HttpResponse(result)
+
 
 def nikirenttable(request):
     """
@@ -71,9 +71,7 @@ def nikirenttable(request):
         sale = housetype.get('houses').get('for-rent') if housetype.get('houses').get('for-rent') else 0
         option = housetype.get('houses').get('option') if housetype.get('houses').get('option') else 0
         sold = housetype.get('houses').get('rented') if housetype.get('houses').get('rented') else 0
-        result += '{},{},{},{}\n'.format(typename,sale,option,sold)
-
-    #result = "Woningtype,te koop, in optie, verkocht\n"
+        result += '{},{},{},{}\n'.format(typename, sale, option, sold)
     return HttpResponse(result)
 
 
@@ -90,7 +88,6 @@ def niki_interest_subscription_dates(request):
 
     interestmanager = InterestManager()
     project = InterestProject.objects.get(nikiProjectId=project_id)
-    #nip = interestmanager.getNikiInterestProjectByProject(project)
     account = project.interestAccount
     ids = interestmanager.getIdsByProjectBetween(account, project_id, start, end)
     chart_data = ""
@@ -185,11 +182,5 @@ def mailchimp_campaign_report(request):
     bounces = int(api_response.get('hard_bounces')) + int(api_response.get('soft_bounces'))
     opens = api_response.get('opens')
     clicks = api_response.get('clicks')
-    result += '{},{},{},{},{}\n'.format(sent,unsubscribes,bounces,opens,clicks)
+    result += '{},{},{},{},{}\n'.format(sent, unsubscribes, bounces, opens, clicks)
     return HttpResponse(result)
-
-
-
-
-
-
