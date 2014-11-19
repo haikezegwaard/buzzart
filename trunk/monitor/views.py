@@ -14,6 +14,7 @@ from googleAnalytics.analyticsmanager import AnalyticsManager
 from django.shortcuts import render_to_response
 import models
 from facebook.fbmanager import FacebookManager
+from facebookAds.models import FacebookAdsSettings
 
 
 class ProjectDetail(generic.DetailView):
@@ -49,10 +50,12 @@ def index(request):
     import cyfe.urls as cyfeurls
     summaries = models.Summary.objects.all()
     projects = models.Project.objects.all()
+    fbads_settings = FacebookAdsSettings.objects.first()
     return render_to_response('index.html',
                               {'summaries': summaries,
                                'projects': projects,
-                               'cyfeurls': cyfeurls.urlpatterns},
+                               'cyfeurls': cyfeurls.urlpatterns,
+                               'fbads_settings': fbads_settings},
                               context_instance=RequestContext(request))
 
 
