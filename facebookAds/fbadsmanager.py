@@ -8,7 +8,6 @@ import logging
 import json
 
 
-
 class FacebookAdsManager:
 
     def __init__(self, token):
@@ -21,13 +20,10 @@ class FacebookAdsManager:
             fbsettings = FacebookAdsSettings.objects.first()
             long_token = fbsettings.access_token
         FacebookAdsApi.init(settings.FACEBOOK_ADS_APP_ID,
-                        settings.FACEBOOK_ADS_APP_SECRET,
-                        long_token)
+                            settings.FACEBOOK_ADS_APP_SECRET,
+                            long_token)
 
     def get_campaign_stats(self):
-        # me = objects.AdUser(fbid='me')
-        # my_accounts = list(me.get_ad_accounts())
-
         my_account = objects.AdAccount('act_52022373')
         result = ''
         for campaign in my_account.get_ad_campaigns(fields=[AdCampaign.Field.name]):
@@ -38,12 +34,13 @@ class FacebookAdsManager:
                 'unique_clicks',
                 'actions',
             ]):
-                result = '{}<br />{}<br/>'.format(result, campaign[campaign.Field.name])
+                campaign_name = campaign[campaign.Field.name].encode('utf-8')
+                result = '{}<br />{}<br/>'.format(result, campaign_name)
                 for statfield in stat:
                     result = "{}<br />{}{}".format(result, statfield, stat[statfield])
                 break
+            break
         return result
-
 
     def generate_long_lived_token(self, short_token):
         """
@@ -52,14 +49,14 @@ class FacebookAdsManager:
         """
         url = 'https://graph.facebook.com/oauth/access_token'
         response = requests.get(url, params={'client_id': settings.FACEBOOK_ADS_APP_ID,
-                                  'client_secret': settings.FACEBOOK_ADS_APP_SECRET,
-                                  'grant_type':'fb_exchange_token',
-                                  'fb_exchange_token': short_token})
+                                             'client_secret': settings.FACEBOOK_ADS_APP_SECRET,
+                                             'grant_type': 'fb_exchange_token',
+                                             'fb_exchange_token': short_token})
         self.logger.debug(response.content)
         from urlparse import parse_qs, urlparse
         dictresponse = parse_qs(urlparse('?{}'.format(response.content)).query, keep_blank_values=True)
         self.logger.debug(dictresponse)
-        if response.status_code ==  200:
+        if response.status_code == 200:
             token = dictresponse.get('access_token')[0]
             from datetime import datetime, timedelta
             expires = datetime.now() + timedelta(seconds=int(dictresponse.get('expires')[0]))
