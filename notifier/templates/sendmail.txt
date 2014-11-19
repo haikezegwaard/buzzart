@@ -1,0 +1,3 @@
+Yeah textmail
+tracking no: {{ TRACKINGNO }}
+order no: {{ ORDERNO  }}

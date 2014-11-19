@@ -1,0 +1,54 @@
+{% extends "digest.html" %}
+{% block plotscripts %}
+<script>/* no script */</script>
+{% endblock %}
+{% block availability_plot %}
+<div id="availability_plot">
+    <img src="http://{{domain}}/media/{{ summary.id }}/availability_plot.png" />
+</div>
+{% endblock %}
+{% block conversion_plot %}
+<div id="conversion_plot" style="margin-top: 5px;">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/conversion_plot.png" />
+</div>
+{% endblock %}
+{% block conversion_delta %}
+<div id="conversion_delta">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/conversion_delta.png" />
+</div>
+{% endblock %}
+{% block interest_plot %}
+<div id="interest_plot" style="margin-top: 5px;">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/interest_plot.png" />
+</div>
+{% endblock %}
+{% block interest_delta %}
+<div id="interest_delta">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/interest_delta.png" />
+</div>
+{% endblock %}
+{% block conversion_ratio %}
+<div id="conversion_ratio" style="margin-top: 5px;">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/conversion_ratio.png" />
+</div>
+{% endblock %}
+{% block conversion_rate_delta %}
+<div id="conversion_rate_delta">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/conversion_rate_delta.png" />
+</div>
+{%endblock %}
+{% block traffic_plot %}
+<div id="traffic_plot" style="width: 520px; height: 220px;margin-bottom:10px;">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/traffic_plot.png" />
+</div>
+{% endblock %}
+{% block agesex_plot %}
+<div id="agesex_plot">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/agesex_plot.png" />
+</div>
+{% endblock %}
+{% block list_plot %}
+<div id="list_plot">
+    <img src="http://{{ domain }}/media/{{ summary.id }}/list_plot.png" />
+</div>
+{% endblock %}
