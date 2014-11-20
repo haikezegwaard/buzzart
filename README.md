@@ -1,5 +1,5 @@
 # Buzzart #
-=======
+
 ## What is Buzzart? ##
 Buzzart is a Django application ment to connect to external data sources / API's, and provide means to display this data in a meaningfull way. For example plotting gathered data in a dashboard.
 
