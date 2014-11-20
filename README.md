@@ -37,3 +37,16 @@ For the plotting of data, initially the Google Visualisation API was used. In th
 1. As superuser, access http://buzzartdomain/login/facebook?next=/ , it will fetch an oauth token and link it to the current user.
 2. Be sure the linked facebook user is administrator of the configured fanpage ids per project.
 3. Go to the index page http://buzzartdomain/ and push 'Update facebook tokens fanpages'. It will gather a never expiring access token for each of the configured fanpages.
+
+### Mailchimp API ###
+
+1. Create a Mailchimp API token for the mailchimp account you want to access.
+2. Get the List Id from your Mailchimp account
+3. Test the setup by calling http://buzzartdomain/cyfe/mailchimp/?apikey={api_key}&lid={list_id}
+4. Enter the API token and List Id for your project
+
+### Niki API ###
+
+1. Retrieve an Oauth1 token for your application. (At the moment a key is hardcoded in Buzzart)
+2. Test the connection by calling http://buzzartdomain/niki/projects, this will retrieve a list of all projects available for your token.
+3. Configure the resource (from the above response) for your project
