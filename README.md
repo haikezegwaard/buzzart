@@ -25,3 +25,15 @@ Buzzart currently supports the following datasources:
 ## Plotting data ##
 
 For the plotting of data, initially the Google Visualisation API was used. In the dashboard environment however, Buzzart uses [highcharts](http://www.highcharts.com) as a plotting library because of a nicer interface and a lot of options and variations.
+
+## Setting up ##
+
+### Google Analytics API ###
+
+1. As superuser, access http://buzzartdomain/login/google-oauth2?next=/ , it will fetch an oauth token and link it to the current user.
+
+### Facebook Graph API Fanpages ###
+
+1. As superuser, access http://buzzartdomain/login/facebook?next=/ , it will fetch an oauth token and link it to the current user.
+2. Be sure the linked facebook user is administrator of the configured fanpage ids per project.
+3. Go to the index page http://buzzartdomain/ and push 'Update facebook tokens fanpages'. It will gather a never expiring access token for each of the configured fanpages.
