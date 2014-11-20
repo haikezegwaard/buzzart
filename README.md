@@ -19,5 +19,9 @@ Buzzart currently supports the following datasources:
 ## Supported views ##
 
 1. Buzzart can generate data formatted for usage in Cyfe, a third party dashboarding system. It can be included using the 'private url' widget. Main url entry point for this view is http://buzzartdomain/cyfe
-2. Buzzart can generate mailings containing plots (images generated from interactive plots) plus contextual advise (provided by hand.) These advisory mailings are semi-automaticly generated over a given time span. Entry point: http://buzzartdomain/digest/{summary-id}
+2. Buzzart can generate mailings containing plots (images generated from interactive plots) plus contextual advise (provided by hand.) These advisory mailings are semi-automaticly generated over a given time span. Entry point: http://buzzartdomain/digest/{summary-id}. Mailings are sent by [mandrill](http://www.mandrill.com), a transactional mailing service.
 3. Buzzart can display gathered data in a dashboarding environment. Dashboard template is based on ([sb-admin-2](http://startbootstrap.com/template-overviews/sb-admin-2/)
+
+## Plotting data ##
+
+For the plotting of data, initially the Google Visualisation API was used. In the dashboard environment however, Buzzart uses [highcharts](http://www.highcharts.com) as a plotting library because of a nicer interface and a lot of options and variations.
