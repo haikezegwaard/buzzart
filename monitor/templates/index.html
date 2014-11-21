@@ -50,8 +50,10 @@
         </div>
         <div class="col-lg-4">
             <div class="page-header">
-              <h1>Cyfe acties <small>formatted export</small></h1>
+              <h1>Projectoverzicht</h1>
             </div>
+            <!--
+
             <div class="panel panel-default">
                 <div class="panel-heading">Acties</div>
                 <div class="panel-body">
@@ -63,6 +65,26 @@
                 </div>
                 <div class="panel-footer">
                 </div>
+            </div>
+            -->
+            <div class="panel panel-default">
+              <!-- Default panel contents -->
+              <div class="panel-heading">Projecten</div>
+              <div class="panel-body">
+                  <!-- Table -->
+                  <table class="table">
+                    <tr><th>Naam</th><th>Test</th><th>Preview</th></tr>
+                    {% for project in projects %}
+                        <tr>
+                            <td>{{project.name}}</td>
+                            <td><button data-id="{{project.id}}" class="projecttest btn btn-default">test</td>
+                            <td><a href="/digest/{{project.id}}/test">preview</a></td>
+                        </tr>
+                    {% endfor %}
+                  </table>
+              </div>
+              <div class="panel-footer">
+              </div>
             </div>
         </div>
     </div>
@@ -91,7 +113,6 @@
     <script>
         $(document).ready(function(){
             $('.testbutton').click(function(){
-                console.log('button clicked');
                 $button = $(this);
                 $.ajax({
                    type: 'GET',
@@ -107,14 +128,25 @@
                 });
             });
         });
-    </script>
 
+        $(document).ready(function(){
+            $('.projecttest').click(function(){
+                $button = $(this);
+                $.ajax({
+                   type: 'GET',
+                   url:'/digest/'+$button.data('id')+'/test',
+                   success: function(data, textStatus, request){
+                        $button.toggleClass('btn-default btn-succes');
+                        $button.html(request.status)
+                   },
+                   error: function (request, textStatus, errorThrown) {
+                        $button.toggleClass('btn-default btn-danger');
+                        $button.html(request.status)
+                   }
+                });
+            });
+        });
 
-
-
-
-
-    <script>
         $(document).ready(function(){
           $('#mc_lists').click(function() {
             $.getJSON('/mailchimp/lists/?apikey='+$('#apikey').val(), function(data) {
