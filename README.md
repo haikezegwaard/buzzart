@@ -28,7 +28,7 @@ For the plotting of data, initially the Google Visualisation API was used. In th
 
 ## Setting up ##
 
-## Installation ##
+### Installation ###
 
 
 ```
