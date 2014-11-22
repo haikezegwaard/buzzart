@@ -4,7 +4,6 @@
 {% include "bootstrap.html" %}
 </head>
 <body>
-
     <div class="bs-docs-section">
         <div class="bs-callout bs-callout-info">
             <h4>Helper functies</h4>
@@ -33,12 +32,13 @@
                 <div class="panel-heading">Bestaande overzichten</div>
                 <div class="panel-body">
                     <table class="table">
-                        <tr><th>Project</th><th>Periode</th><th>Mailing</th><th>Dashboard</th></tr>
+                        <tr><th>Project</th><th>Periode</th><th>Mailing</th><th>Mailing HTTP response<th>Dashboard</th></tr>
                         {% for summary in summaries %}
                         <tr>
                             <td>{{ summary.project.name }} ( {{ summary.project.manager }} )</td>
                             <td>{{ summary.dateStart }} - {{ summary.dateEnd }}</td>
                             <td><a href='/digest/{{summary.id}}'>preview</a></td>
+                            <td><button type="button" data-id="{{summary.id}}" class="testbutton btn btn-default" >HTTP test</button>
                             <td><a href='/dashboard/{{summary.id}}'>dashboard</a></td>
                         </tr>
                         {% endfor %}
@@ -50,8 +50,10 @@
         </div>
         <div class="col-lg-4">
             <div class="page-header">
-              <h1>Cyfe acties <small>formatted export</small></h1>
+              <h1>Projectoverzicht</h1>
             </div>
+            <!--
+
             <div class="panel panel-default">
                 <div class="panel-heading">Acties</div>
                 <div class="panel-body">
@@ -63,6 +65,26 @@
                 </div>
                 <div class="panel-footer">
                 </div>
+            </div>
+            -->
+            <div class="panel panel-default">
+              <!-- Default panel contents -->
+              <div class="panel-heading">Projecten</div>
+              <div class="panel-body">
+                  <!-- Table -->
+                  <table class="table">
+                    <tr><th>Naam</th><th>Test</th><th>Preview</th></tr>
+                    {% for project in projects %}
+                        <tr>
+                            <td>{{project.name}}</td>
+                            <td><button data-id="{{project.id}}" class="projecttest btn btn-default">test</td>
+                            <td><a href="/digest/{{project.id}}/test">preview</a></td>
+                        </tr>
+                    {% endfor %}
+                  </table>
+              </div>
+              <div class="panel-footer">
+              </div>
             </div>
         </div>
     </div>
@@ -88,13 +110,43 @@
 
 
 
-
-
-
-
-
-
     <script>
+        $(document).ready(function(){
+            $('.testbutton').click(function(){
+                $button = $(this);
+                $.ajax({
+                   type: 'GET',
+                   url:'/digest/'+$button.data('id'),
+                   success: function(data, textStatus, request){
+                        $button.toggleClass('btn-default btn-succes');
+                        $button.html(request.status)
+                   },
+                   error: function (request, textStatus, errorThrown) {
+                        $button.toggleClass('btn-default btn-danger');
+                        $button.html(request.status)
+                   }
+                });
+            });
+        });
+
+        $(document).ready(function(){
+            $('.projecttest').click(function(){
+                $button = $(this);
+                $.ajax({
+                   type: 'GET',
+                   url:'/digest/'+$button.data('id')+'/test',
+                   success: function(data, textStatus, request){
+                        $button.toggleClass('btn-default btn-succes');
+                        $button.html(request.status)
+                   },
+                   error: function (request, textStatus, errorThrown) {
+                        $button.toggleClass('btn-default btn-danger');
+                        $button.html(request.status)
+                   }
+                });
+            });
+        });
+
         $(document).ready(function(){
           $('#mc_lists').click(function() {
             $.getJSON('/mailchimp/lists/?apikey='+$('#apikey').val(), function(data) {

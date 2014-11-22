@@ -4,6 +4,7 @@ from googleAnalytics.models import AnalyticsSettings
 import util
 from nikiInterest.interestmanager import InterestManager
 from datetime import datetime, timedelta
+import datetime
 from niki.nikiconverter import NikiConverter
 from monitor.models import Project
 from facebook.fbmanager import FacebookManager
@@ -57,7 +58,42 @@ class DigestView(TemplateView):
 
         # get testproject
         summary_id = self.kwargs['pk']
-        fill_context(context, summary_id)
+        summary = Summary.objects.get(id=summary_id)
+        fill_context(context, summary)
+        return context
+
+
+class DigestTestView(TemplateView):
+    """
+    Create a mock summary object for last to weeks for given project and
+    return digest context. For testing purposes
+    """
+    extra_context = None
+    logger = logging.getLogger(__name__)
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        if self.extra_context is not None:
+            for key, value in self.extra_context.items():
+                if callable(value):
+                    context[key] = value()
+                else:
+                    context[key] = value
+
+        # get testproject
+        project_id = self.kwargs['pk']
+        project = Project.objects.get(id=project_id)
+        mock_summary = Summary()
+        mock_summary.project = project
+        mock_summary.dateStart = datetime.date.today() - timedelta(days=14)
+        mock_summary.dateEnd = datetime.date.today()
+        mock_summary.introduction = '''Nam quis nisi eu nulla accumsan congue nec nec enim. Pellentesque sit amet lorem ut augue lobortis iaculis. In elementum suscipit mauris elementum tincidunt. Curabitur pellentesque ullamcorper metus quis venenatis. Nunc urna ipsum, faucibus eu ex sit amet, pellentesque tincidunt est. Sed ullamcorper ipsum non iaculis consectetur. Cras sit amet leo vitae enim viverra auctor sit amet at mi. Proin non arcu eu ligula pharetra lacinia. Donec at metus eget tellus efficitur vulputate. Sed dignissim metus velit, et sollicitudin ex bibendum auctor. Integer ornare felis ante. Sed sit amet facilisis nulla. Nam dapibus maximus dignissim.'''
+        mock_summary.facebook_advice = mock_summary.introduction
+        mock_summary.availability_advice = mock_summary.introduction
+        mock_summary.traffic_advice = mock_summary.introduction
+        mock_summary.conversion_advice = mock_summary.introduction
+        fill_context(context, mock_summary)
+
         return context
 
 
@@ -76,7 +112,8 @@ class MailView(TemplateView):
                     context[key] = value
 
         summary_id = self.kwargs['pk']
-        fill_context(context, summary_id)
+        summary = Summary.objects.get(id=summary_id)
+        fill_context(context, summary)
         fetch_images(summary_id)
         # Check whether emailaddress is set, if so, send notification mail
         #if context['project'].email:
@@ -101,7 +138,7 @@ def fetch_images(summary_id):
     return "fetched images"
 
 
-def fill_context(context, summary_id):
+def fill_context(context, summary):
     """Fetch all data and add to given dict"""
 
     logger = logging.getLogger(__name__)
@@ -109,7 +146,7 @@ def fill_context(context, summary_id):
     current_site = Site.objects.get_current()
     context['domain'] = current_site.domain
 
-    summary = Summary.objects.get(id=summary_id)
+
     context['summary'] = summary
     """ Fetch project from summary """
     project = summary.project
