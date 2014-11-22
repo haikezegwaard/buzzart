@@ -28,6 +28,20 @@ For the plotting of data, initially the Google Visualisation API was used. In th
 
 ## Setting up ##
 
+## Installation ##
+
+
+```
+#!bash
+
+git clone https://fundamentallmedia@bitbucket.org/fundamentallmedia/buzzart.git
+cd buzzart
+pip install -r requirements.txt
+python manage syncdb
+python manage migrate
+python manage runserver
+```
+
 ### Google Analytics API ###
 
 1. As superuser, access http://buzzartdomain/login/google-oauth2?next=/ , it will fetch an oauth token and link it to the current user.
