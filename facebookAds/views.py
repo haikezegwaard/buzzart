@@ -14,6 +14,6 @@ def index(request):
     fbman = FacebookAdsManager(settings.FACEBOOK_ADS_ACCESS_TOKEN)
     stats = fbman.get_campaign_stats()
     return render_to_response('facebookAds/index.html',
-                              {"stats": stats},
+                              {"stats": stats.content},
                               content_type="text/html")
 

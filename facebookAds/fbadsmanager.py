@@ -1,7 +1,7 @@
 from facebookads.api import FacebookAdsApi
 from facebookads import objects
 from django.conf import settings
-from facebookads.objects import AdCampaign
+from facebookads.objects import AdCampaign, ReportStats
 from models import FacebookAdsSettings
 import requests
 import logging
@@ -24,15 +24,29 @@ class FacebookAdsManager:
                             long_token)
 
     def get_campaign_stats(self):
-        my_account = objects.AdAccount('act_52022373')
+        #my_account = objects.AdAccount('act_52022373')
+        #result = my_account.get_report_stats(fields=['date-preset'],params=['last_28_days'])
+        url = '''https://graph.facebook.com/act_52022373/reportstats?
+                 data_columns=['account_id','spend','action_values']&
+                 date_preset=last_7_days&
+                 actions_group_by=['action_type']&
+                 access_token={}'''.format(self.get_stored_token())
+        response = requests.get(url,params={'access_token': self.get_stored_token(),
+                                            'data_columns': "['account_id','spend','action_values']",
+                                            'date_preset' : 'last_7_days',
+                                            'actions_group_by': "['action_type']"})
+        """
         result = ''
         for campaign in my_account.get_ad_campaigns(fields=[AdCampaign.Field.name]):
+
             for stat in campaign.get_stats(fields=[
                 'impressions',
                 'clicks',
                 'spent',
                 'unique_clicks',
                 'actions',
+                'start_time',
+                'end_time'
             ]):
                 campaign_name = campaign[campaign.Field.name].encode('utf-8')
                 result = '{}<br />{}<br/>'.format(result, campaign_name)
@@ -40,7 +54,12 @@ class FacebookAdsManager:
                     result = "{}<br />{}{}".format(result, statfield, stat[statfield])
                 break
             break
-        return result
+        """
+        return response
+
+    def get_stored_token(self):
+        fbsettings = FacebookAdsSettings.objects.first()
+        return fbsettings.access_token
 
     def generate_long_lived_token(self, short_token):
         """
