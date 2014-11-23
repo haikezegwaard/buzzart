@@ -46,7 +46,9 @@ python manage runserver
 
 1. Make sure you have setup a project setup in your Google Developer Console https://console.developers.google.com
 2. Enable 'analytics api'
-3. Configure settings.py:
+3. Under 'Credentials', set the REDIRECT URI setting in the Console to: http://buzzartdomain/complete/google-oauth2/
+4. Set JAVASCRIPT ORIGIN in the Console to: http://buzzartdomain
+5. Configure settings.py:
 
 
 ```
