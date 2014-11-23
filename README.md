@@ -48,13 +48,17 @@ python manage runserver
 2. Enable 'analytics api'
 3. Configure settings.py:
 
+
 ```
 #!python
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY to CLIENT ID, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET to CLIENT SECRET, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = CLIENT_ID
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = CLIENT_SECRET
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'access_type': 'offline'}
 ```
 
-4. As superuser, access http://buzzartdomain/login/google-oauth2?next=/ , it will fetch an oauth token and link it to the current user.
+Finally as superuser, access http://buzzartdomain/login/google-oauth2?next=/ , it will fetch an oauth token and link it to the current user.
 
 ### Facebook Graph API Fanpages ###
 
