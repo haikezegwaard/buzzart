@@ -64,3 +64,12 @@ python manage runserver
 1. Retrieve an Oauth1 token for your application. (At the moment a key is hardcoded in Buzzart)
 2. Test the connection by calling http://buzzartdomain/niki/projects, this will retrieve a list of all projects available for your token.
 3. Configure the resource (from the above response) for your project
+
+### Facebook Ads API ###
+
+1. Create and configure a facebook app
+2. Configure FACEBOOK_ADS_APP_ID, FACEBOOK_ADS_APP_SECRET and FACEBOOK_ADS_ACCESS_TOKEN in settings.py
+3. The access token can be obtained using the graph api explorer https://developers.facebook.com/tools/explorer/
+4. Make sure your facebook app has 'app secret proof' enabled
+5. Permissions for the ACCESS_TOKEN should include 'manage_ads'
+6. Test your setup by accessing http://buzzartdomain/fbads
