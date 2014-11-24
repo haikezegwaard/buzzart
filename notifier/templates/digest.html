@@ -45,25 +45,40 @@
             //Draw traffic plot from Google Analytics
             //
             var traffic_data = new google.visualization.DataTable();
-            traffic_data.addColumn('string','Day');
-            traffic_data.addColumn('number','Target sessies');
-            traffic_data.addColumn('number','Target pageviews');
+            traffic_data.addColumn('date','Day');
+            traffic_data.addColumn('number','Doel sessies');
+            traffic_data.addColumn('number','Doel paginabezoeken');
             traffic_data.addColumn('number','Sessies');
-            traffic_data.addColumn('number','Pageviews');
+            traffic_data.addColumn('number','Paginabezoeken');
             var targetSessions = {{traffic_target_sessions}};
             var targetPageViews = {{traffic_target_pageviews}};
             {% for entry in traffic %}
+                year = "{{entry.0}}".substring(0,4);
+                month = "{{entry.0}}".substring(4,6);
+                day = "{{entry.0}}".substring(6,8);
+                date = new Date(Date.parse(year+" "+month+" "+day));
                 traffic_data.addRows([
-                    ['{{entry.0}}',targetSessions,targetPageViews,{{entry.1}},{{entry.2}}]
+                    [date, targetSessions,targetPageViews,{{entry.1}},{{entry.2}}]
                 ]);
             {% endfor %}
+
+            // Create a formatter.
+            // This example uses object literal notation to define the options.
+            //var formatter = new google.visualization.DateFormat({formatType: 'long'});
+
+            // Reformat our data.
+            //formatter.format(traffic_data, 0);
+
             chart_div = document.getElementById('traffic_plot');
             var traffic_chart = new google.visualization.LineChart(chart_div);
             var traffic_options = {
                 legend: { position: 'bottom', alignment: 'start' },
-                title: 'Pageviews en sessies','width':520,'height':210,
-                chartArea:{left:25,top:40,'width': '100%'},
-                hAxis: {showTextEvery: 2, format:'MMM - d'}
+                title: 'Paginabezoeken en sessies',
+                width: 520,
+                height: 210,
+                chartArea:{left:35,top:40,width: '100%'},
+                domainAxis:{type: 'category'},
+                hAxis: {showTextEvery: '4', format:'MMM - d'}
             };
 
             google.visualization.events.addListener(traffic_chart, 'ready', function () {
@@ -303,10 +318,10 @@
                                                                     </td>
                                                                     <td width="240" align="left" valign="top" style="font-family:Tahoma,Geneva, sans-serif;
                                                                     font-size: 13px; line-height: 18px; color: #4c4545; font-weight:normal;">
-                                                                        Periode: september 2014<br/>
+                                                                        Periode: {{summary.dateStart}}-{{summary.dateEnd}}<br/>
                                                                         Projectnaam: {{project.name}}<br/>
                                                                         Projecteigenaar: {{project.manager}} <br/>
-                                                                        Website: {{project.url}}<br/>
+                                                                        Website: <a href="{{project.url}}">{{project.url}}</a><br/>
                                                                         E-mailadres: {{project.email}}
                                                                     </td>
                                                                 </tr>
