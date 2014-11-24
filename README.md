@@ -42,6 +42,15 @@ python manage migrate
 python manage runserver
 ```
 
+### Creating your first project ###
+
+* login to http://buzzartdomain/admin
+* create new project, fill in all needed data
+* Analytics: create analytics settings object and link to project
+* Niki interesse: create niki interest object (if there is no nikiInterestAccount available, create a new one)
+* create Summary for project: koppelen aan project, fill in dates, texts (lorem ipsum) -> this is your report
+* you can access your report at: http://buzzartdomain/digest/ [^][summary_id
+
 ### Google Analytics API ###
 
 1. Make sure you have setup a project setup in your Google Developer Console https://console.developers.google.com
