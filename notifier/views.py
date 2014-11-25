@@ -193,6 +193,9 @@ def fill_context(context, summary):
     total_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, ga_manager.GA_NULL_DATE, currentend.isoformat())
     context['total_conversion_rate'] = total_conversion_rate
 
+    """ Get top pages """
+    context['top_pages'] = ga_manager.get_top_pages(ga_view, currentstart, currentend)
+
     """ Get number of interested people from niki for this  and previous period """
     interestManager = InterestManager()
     nip = interestManager.getNikiInterestProjectByProject(project)
@@ -214,25 +217,21 @@ def fill_context(context, summary):
         """ Get project Niki sales stats """
         nikimanager = NikiConverter()
         context['availability'] = nikimanager.getAvailability(project.nikiProject)
-
+        context['nikisalerent'] = nikimanager.getProjectSaleRentType(project.nikiProject)
+        sold_count = context['availability'][2]
     if(project.fanpage_id != '0'):
         """ Get the sex and age spread of likes on the fanpage """
         fbmanager = FacebookManager()
-        agesexspread = fbmanager.get_likes_sex_age_spread_sorted(project.fanpage_id)
-        context['fbagesexspread'] = agesexspread
+        agesexspread = fbmanager.get_likes_sex_age_spread_sorted(project)
+        if not agesexspread == []:
+            context['fbagesexspread'] = agesexspread
 
     if(project.mailchimp_list_id != '0'):
         """ Get Mailchimp list growth statistics """
         mcmanager = MailchimpManager(project.mailchimp_api_token)
         context['mailchimp'] = mcmanager.get_list_growth_data(project.mailchimp_list_id)
-        sold_count = context['availability'][2]
     try:
         context['project_score'] = util.project_score(sold_count, interest_total, total_conversion_rate)
     except:
         context['project_score'] = 0
     return context
-
-
-
-
-

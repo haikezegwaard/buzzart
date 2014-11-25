@@ -20,10 +20,9 @@ class FacebookManager:
         """
         Return sex / age spread for likes of page
         """
-        url = '{}{}/insights/page_fans_gender_age?access_token={}'.format(self.GRAPH_URL, project.fanpage_id, project.fanpage_token)
-        result = self.do_request(url)
+        url = '{}{}/{}/insights/page_fans_gender_age'.format(self.GRAPH_URL,self.GRAPH_VERSION, project.fanpage_id)
+        result = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = result.get('data').pop().get('values')
-
         lastvalues = max(data,key=lambda item:item['end_time']) #compare based on EACH items 'end_time' field
         return lastvalues.get('value')
 
@@ -32,6 +31,8 @@ class FacebookManager:
         Return age / sex spread formatted for use in Google Chart
         """
         agesexspread = self.get_likes_sex_age(project)
+        if agesexspread == []:
+            return []
         fullspread = {}
         for k, v in agesexspread.items():
             if k.startswith('M.'):

@@ -53,6 +53,14 @@ def traffic_this_week(request, project_id):
     data = {'traffic': count}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+def top_pages(request, project_id):
+    end = dt.today()
+    start = end - datetime.timedelta(days = 7)
+    settings = get_settings_by_project_id(project_id)
+    response = ga_man.get_top_pages(settings.ga_view, start, end)
+    data = {'pages': response}
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
 
 def get_settings_by_project_id(project_id):
     """

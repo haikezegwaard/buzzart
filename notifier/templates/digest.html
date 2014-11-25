@@ -31,7 +31,7 @@
     <script type="text/javascript" src="{% static 'notifier/js/util.js' %} "></script>
     <script type="text/javascript">
         // Load the Visualization API and the piechart package.
-        google.load('visualization', '1.0', {'packages':['corechart','gauge']});
+        google.load('visualization', '1.0', {'packages':['corechart','gauge','table']});
 
         // Set a callback to run when the Google Visualization API is loaded.
         google.setOnLoadCallback(drawChart);
@@ -87,6 +87,29 @@
             });
 
             traffic_chart.draw(traffic_data,traffic_options);
+
+            //
+            // Analytics top pages
+            //
+            /*
+            var top_pages = new google.visualization.DataTable();
+            top_pages.addColumn('string', 'Pagina');
+            top_pages.addColumn('number', 'bezoeken');
+            {% for item in top_pages %}
+                top_pages.addRows([['{{item.0}}',{{item.2}}]]);
+            {% endfor %}
+            top_pages.sort([{column: 1, desc: true}, {column: 0}]);
+            //var table = new google.visualization.Table(document.getElementById('pages_table'));
+            //table.draw(top_pages, {showRowNumber: true});
+
+            var options = {
+                title: 'Top 5 bezochte paginas',
+                vAxis: {title: 'Year',  titleTextStyle: {color: 'red'}},
+                legend: { position: "none" },
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('pages_table'));
+            chart.draw(top_pages, options);
+            */
 
             //
             //Niki Interest Gauge
@@ -145,10 +168,17 @@
             var availdata = new google.visualization.DataTable();
             availdata.addColumn('string','Label');
             availdata.addColumn('number','Aantal');
+            {% if nikisalerent == 'for-rent' %}
+                availdata.addRows([['Te huur',{{availability.0}}]]);
+                availdata.addRows([['Optie',{{availability.1}}]]);
+                availdata.addRows([['Verhuurd',{{availability.2}}]]);
+            {% else %}
+                availdata.addRows([['Te koop',{{availability.0}}]]);
+                availdata.addRows([['Optie',{{availability.1}}]]);
+                availdata.addRows([['Verkocht',{{availability.2}}]]);
+            {% endif %}
 
-            availdata.addRows([['Te koop',{{availability.0}}]]);
-            availdata.addRows([['Optie',{{availability.1}}]]);
-            availdata.addRows([['Verkocht',{{availability.2}}]]);
+
 
 
 
@@ -355,8 +385,8 @@
                                                                         </p>
                                                                     </td>
                                                                     <td align="center" valign="middle" width="170" bgcolor="#e9e9e9">
-                                                                        <img src="http://{{ domain }}/static/notifier/beoordeling.png"
-                                                                             width="135" height="106" alt="Beoordeling"/>
+                                                                        <img src="http://{{ domain }}/static/notifier/Excellent.png"
+                                                                             alt="Beoordeling"/>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -382,7 +412,11 @@
                                                         <td align="left" valign="top" width="520">
                                                             <p style="font-size: 17px; line-height:22px; margin-top: 0; margin-bottom:4; color: #eb762d;
                                                             font-family:Tahoma,Geneva, sans-serif;">
+                                                                {% if nikisalerent == "for-rent" %}
+                                                                Verhuurstatus
+                                                                {% else %}
                                                                 Verkoopstatus
+                                                                {% endif %}
                                                             </p>
                                                             {% block availability_plot %}
                                                             <div id="availability_plot"></div>
@@ -521,7 +555,8 @@
                                                                                     {% endblock %}
                                                                                     <p style="font-family: Tahoma,Geneva, sans-serif; font-size: 12px;
                                                                                         font-weight: normal; color: #4c4545; line-height: 16px; margin-top: 10px; margin-bottom: 10px;">
-                                                                                        Dit getal geeft aan hoe goed de conversie is t.o.v. de campagne ea. Alles boven de 5 is zeer goed, 10 is maximaal
+                                                                                        Het aantal conversies ten opzichte van het aantal bezoekers van de website. We streven naar een waarde
+                                                                                        boven de 1.
                                                                                     </p>
                                                                                 </td>
                                                                                 <td align="left" valign="top" width="5">
@@ -578,6 +613,7 @@
                                                             </p>
                                                             {% block traffic_plot %}
                                                             <div id="traffic_plot" style="width: 520px; height: 220px;margin-bottom:10px;"></div>
+                                                            <!--<div id="pages_table" style="width: 520px; height: 220px;margin-bottom:10px;"></div>-->
                                                             {% endblock %}
                                                             <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
                                                                                                                     font-family:Tahoma,Geneva, sans-serif;">

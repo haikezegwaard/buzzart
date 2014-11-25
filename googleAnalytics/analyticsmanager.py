@@ -141,6 +141,17 @@ class AnalyticsManager:
         end_str = self.google_date(end)
         return self.reporting_API_call(viewid, start_str, end_str, ['sessions'], '&dimensions=ga:channelGrouping')
 
+    def get_top_pages(self, viewid, start, end, max_results=5):
+        """
+        Get list of pages + titles ordered by session count between
+        start and end
+        https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A3374369&dimensions=ga%3ApagePath%2Cga%3ApageTitle&metrics=ga%3Asessions&start-date=2014-11-11&end-date=2014-11-25&max-results=50
+        """
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)
+        response = self.reporting_API_call(viewid, start_str, end_str, ['pageViews'], '&dimensions=ga:pagePath,ga:pageTitle&max-results={}'.format(max_results))
+        return response.get('rows')
+
 
     def reporting_API_call(self, viewid, start, end, metrics, extra = ''):
         """Generic method for API Calls to Reporting API
