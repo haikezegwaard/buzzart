@@ -175,23 +175,32 @@ def fill_context(context, summary):
     context['traffic_target_pageviews'] = ga_settings.pageviews_target
 
     """ Get Google Analytics conversions for this and previous period """
-    conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal , currentstart.isoformat(), currentend.isoformat())
-    context['conversions'] = conversions
-    previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, previousstart.isoformat(), previousend.isoformat())
-    context['previous_conversions'] = previous_conversions
-    total_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, ga_manager.GA_NULL_DATE, currentend.isoformat())
-    context['total_conversions'] = total_conversions
+    if not ga_goal == '0':
+        conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal , currentstart.isoformat(), currentend.isoformat())
+        context['conversions'] = conversions
+        previous_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, previousstart.isoformat(), previousend.isoformat())
+        context['previous_conversions'] = previous_conversions
+        total_conversions = ga_manager.get_conversion_count_for_goal(ga_view, ga_goal, ga_manager.GA_NULL_DATE, currentend.isoformat())
+        context['total_conversions'] = total_conversions
 
-    """ Get Google Analytics conversion rate for this and previous period """
-    logger.debug("analytics period: {} - {}".format(currentstart.isoformat(), currentend.isoformat()))
-    conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, currentstart.isoformat(), currentend.isoformat())
-    context['conversionrate'] = conversion_rate
+        """ Get Google Analytics conversion rate for this and previous period """
+        logger.debug("analytics period: {} - {}".format(currentstart.isoformat(), currentend.isoformat()))
+        conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, currentstart.isoformat(), currentend.isoformat())
+        context['conversionrate'] = conversion_rate
 
-    previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, previousstart.isoformat(), previousend.isoformat())
-    context['previousconversionrate'] = previous_conversion_rate
+        previous_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, previousstart.isoformat(), previousend.isoformat())
+        context['previousconversionrate'] = previous_conversion_rate
 
-    total_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, ga_manager.GA_NULL_DATE, currentend.isoformat())
-    context['total_conversion_rate'] = total_conversion_rate
+        total_conversion_rate = ga_manager.get_conversion_rate_for_goal(ga_view, ga_goal, ga_manager.GA_NULL_DATE, currentend.isoformat())
+        context['total_conversion_rate'] = total_conversion_rate
+
+    else:
+        context['conversions'] = 0
+        context['previous_conversions'] = 0
+        context['total_conversions'] = 0
+        context['conversionrate'] = 0
+        context['previousconversionrate'] = 0
+        context['total_conversion_rate'] = 0
 
     """ Get top pages """
     context['top_pages'] = ga_manager.get_top_pages(ga_view, currentstart, currentend)

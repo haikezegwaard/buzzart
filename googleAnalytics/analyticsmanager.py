@@ -178,7 +178,7 @@ class AnalyticsManager:
         """
         user = User.objects.get(username="haike") #this should not be static
         #get the oath2 token for user haike
-        social = user.social_auth.get(provider='google-oauth2')
+        social = user.social_auth.get(uid='buzzart.fundament@gmail.com')
         strategy = load_strategy(backend='google-oauth2')
         social.refresh_token(strategy)
         self.logger.debug('calling url: {}'.format(url))
