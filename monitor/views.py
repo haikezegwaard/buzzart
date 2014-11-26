@@ -15,6 +15,9 @@ from django.shortcuts import render_to_response
 import models
 from facebook.fbmanager import FacebookManager
 from facebookAds.models import FacebookAdsSettings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ProjectDetail(generic.DetailView):
