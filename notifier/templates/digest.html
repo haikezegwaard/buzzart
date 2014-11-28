@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <title>Buzzart - Project score {{ project_score }} </title>
+    <title>Buzzart - Projectoverzicht {{project.name}} </title>
     <meta content="width=device-width, user-scalable=yes minimum-scale=1.0" name="viewport"/>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     {% block style %}
@@ -46,8 +46,8 @@
             //
             var traffic_data = new google.visualization.DataTable();
             traffic_data.addColumn('date','Day');
-            traffic_data.addColumn('number','Doel sessies');
-            traffic_data.addColumn('number','Doel paginabezoeken');
+            traffic_data.addColumn('number','Gemm. sessies');
+            traffic_data.addColumn('number','Gemm. paginabezoeken');
             traffic_data.addColumn('number','Sessies');
             traffic_data.addColumn('number','Paginabezoeken');
             var targetSessions = {{traffic_target_sessions}};
@@ -121,7 +121,7 @@
             var options = {
                 width: 153, height: 153,
                 redFrom: 0, redTo: 1,
-                yellowFrom:1, yellowTo: 5,
+                yellowFrom:1, yellowTo: 2,
                 greenFrom: 10, greenTo: 20,
                 minorTicks: 5, max: 20
             };
@@ -218,7 +218,7 @@
                 var options = {
                     title: 'Fanpage likes m/v en leeftijd',
                     colors: ['#5C3292', '#1A8763'],
-                    width: 520, height: 180, chartArea:{left:20,top:40,width:'100%'},
+                    width: 520, height: 180, chartArea:{left:35,top:40,width:'100%'},
                     legend: { position: 'bottom', alignment: 'start' }
                 };
 

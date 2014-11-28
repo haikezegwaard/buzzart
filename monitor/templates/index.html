@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ summary.project.name }} ( {{ summary.project.manager }} )</td>
                             <td>{{ summary.dateStart }} - {{ summary.dateEnd }}</td>
-                            <td><a href='/digest/{{summary.id}}'>preview</a></td>
+                            <td><a href='/digest/{{summary.id}}'>preview</a> | <a href="/digest/{{summary.id}}/mailing?test=yes">testmail</a>| <a href="/digest/{{summary.id}}/mailing">!!mail!!</a></td>
                             <td><button type="button" data-id="{{summary.id}}" class="testbutton btn btn-default" >HTTP test</button>
                             <td><a href='/dashboard/{{summary.id}}'>dashboard</a></td>
                         </tr>

@@ -39,6 +39,8 @@ class FacebookManager:
                 testkey = u'F.{}'.format(k[2:])
             if k.startswith('F.'):
                 testkey = u'M.{}'.format(k[2:])
+            if k.startswith('U.'):
+                continue
             if testkey not in agesexspread:
                 fullspread[testkey] = 0
             fullspread[k] = v

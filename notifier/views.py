@@ -85,8 +85,8 @@ class DigestTestView(TemplateView):
         project = Project.objects.get(id=project_id)
         mock_summary = Summary()
         mock_summary.project = project
-        mock_summary.dateStart = datetime.date.today() - timedelta(days=14)
-        mock_summary.dateEnd = datetime.date.today()
+        mock_summary.dateStart = datetime.date.today() - timedelta(days=15)
+        mock_summary.dateEnd = datetime.date.today() - timedelta(days=1)
         mock_summary.introduction = '''Nam quis nisi eu nulla accumsan congue nec nec enim. Pellentesque sit amet lorem ut augue lobortis iaculis. In elementum suscipit mauris elementum tincidunt. Curabitur pellentesque ullamcorper metus quis venenatis. Nunc urna ipsum, faucibus eu ex sit amet, pellentesque tincidunt est. Sed ullamcorper ipsum non iaculis consectetur. Cras sit amet leo vitae enim viverra auctor sit amet at mi. Proin non arcu eu ligula pharetra lacinia. Donec at metus eget tellus efficitur vulputate. Sed dignissim metus velit, et sollicitudin ex bibendum auctor. Integer ornare felis ante. Sed sit amet facilisis nulla. Nam dapibus maximus dignissim.'''
         mock_summary.facebook_advice = mock_summary.introduction
         mock_summary.availability_advice = mock_summary.introduction
@@ -121,8 +121,13 @@ class MailView(TemplateView):
         subject = render_to_string("mailsubject.txt", context, plaintext_context)
         text_body = render_to_string("sendmail.txt", context, plaintext_context)
         html_body = render_to_string("mailing.html", context)
-        msg = EmailMultiAlternatives(subject=subject, from_email=settings.NOTIFIER_FROM_MAIL,
+        test = self.request.GET.get('test','no')
+        if(test == 'no'):
+            msg = EmailMultiAlternatives(subject=subject, from_email=settings.NOTIFIER_FROM_MAIL,
                                          to=[settings.ADMIN_MAIL,context['project'].email], body=text_body)
+        else:
+            msg = EmailMultiAlternatives(subject=subject, from_email=settings.NOTIFIER_FROM_MAIL,
+                                         to=[settings.ADMIN_MAIL,'we@fundament.nl'], body=text_body)
         msg.attach_alternative(html_body, "text/html")
         msg.send()
 
