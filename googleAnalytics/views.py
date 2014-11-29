@@ -45,9 +45,31 @@ def channel_info(request, project_id):
     result = ga_stats.get_channels_for_sessions(project, start, end)
     return HttpResponse(json.dumps(result), content_type='application/json')
 
+def device_category(request, project_id):
+    project = models.Project.objects.get(id = project_id)
+    end = dt.today()
+    start = end - datetime.timedelta(days = 31)
+
+    result = ga_stats.get_device_category_for_sessions(project, start, end)
+    return HttpResponse(json.dumps(result), content_type='application/json')
+
 def traffic_this_week(request, project_id):
     end = dt.today()
     start = end - datetime.timedelta(days = 7)
+    settings = get_settings_by_project_id(project_id)
+    count = ga_man.get_session_count(settings.ga_view, ga_man.google_date(start), ga_man.google_date(end))
+    data = {'traffic': count}
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+def traffic(request, project_id):
+    from django.contrib.sessions.backends.db import SessionStore
+    session = SessionStore()
+    start = session.get('start')
+    if start is None:
+        start = datetime.date.today() - datetime.timedelta(days=14)
+    end = session.get('end')
+    if end is None:
+        end = datetime.date.today() - datetime.timedelta(days=1)
     settings = get_settings_by_project_id(project_id)
     count = ga_man.get_session_count(settings.ga_view, ga_man.google_date(start), ga_man.google_date(end))
     data = {'traffic': count}

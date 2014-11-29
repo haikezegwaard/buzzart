@@ -5,7 +5,7 @@
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
-        <div id="donut-chart"></div>
+        <div id="origin-donut-chart"></div>
     </div>
     <!-- /.panel-body -->
 </div>
@@ -15,7 +15,7 @@ $(document).ready(function () {
     $.getJSON('/googleAnalytics/channelInfo/{{project_id}}', function(data) {
 
         // Build the chart
-        $('#donut-chart').highcharts({
+        $('#origin-donut-chart').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,

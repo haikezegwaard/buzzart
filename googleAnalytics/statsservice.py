@@ -55,6 +55,17 @@ class StatsService():
             result.append([item[0],int(item[1])])
         return result
 
+    def get_device_category_for_sessions(self, project, start, end):
+        """
+        Get the device for sessions (tablet, mobile, desktop)
+        """
+        settings = models.AnalyticsSettings.objects.get(project = project)
+        categories = self.ga_manager.get_device_categories_for_sessions(settings.ga_view, start, end)
+        result = []
+        for item in categories.get('rows'):
+            result.append([item[0], int(item[1])])
+        return result
+
     def get_referrals(self, project, start, end):
         """
         Get ordered list of tuples (referral, sessioncount) for given project
