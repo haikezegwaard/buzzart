@@ -52,8 +52,8 @@
                         <i class="fa fa-group fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div id="traffic-this-week" class="huge"></div>
-                        <div>Bezoek deze week!</div>
+                        <div id="traffic" class="huge"></div>
+                        <div>Website bezoekers!</div>
                     </div>
                 </div>
             </div>
@@ -101,8 +101,8 @@ $(function () {
 });
 
 $(function () {
-  $.getJSON('/googleAnalytics/trafficThisWeek/{{project_id}}', function(data) {
-    $('#traffic-this-week').html(data['traffic'])
+  $.getJSON('/googleAnalytics/traffic/{{project_id}}', function(data) {
+    $('#traffic').html(data['traffic'])
   });
 });
 /*
