@@ -5,6 +5,8 @@ from niki.nikiconverter import NikiConverter
 from nikiInterest.interestmanager import InterestManager
 from monitor.models import InterestProject
 from notifier import util
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 from datetime import datetime, timedelta
 import logging
 import json
@@ -110,6 +112,35 @@ def niki_interest_subscription_dates(request):
     result += "Cumulative,0\n"
     result += "YAxisShow,1\n"
     return HttpResponse(result)
+
+
+def niki_interest_table(request):
+    project_id = request.GET.get('project')
+    start_str = request.GET.get('start_date')
+    start = util.datestr_to_datetime(start_str)
+    end_str = request.GET.get('end_date')
+    end = util.datestr_to_datetime(end_str)
+
+    interestmanager = InterestManager()
+    project = InterestProject.objects.get(nikiProjectId=project_id)
+    subscriptions = interestmanager.getByProjectBetween(project, start, end)
+    from pysimplesoap.simplexml import SimpleXMLElement
+    occurrences = {}
+    for subscription in subscriptions:
+        if subscription.interests.children() > 0:
+            for housetype in subscription.interests.interest.housetype:
+                if str(housetype) in occurrences:
+                    occurrences[str(housetype)] += 1
+                else:
+                    occurrences[str(housetype)] = 0
+
+
+    return render_to_response('subscriptions.html',
+                              {'subscriptions': occurrences  },
+                              context_instance=RequestContext(request))
+
+
+
 
 
 def daterange(start_date, end_date):

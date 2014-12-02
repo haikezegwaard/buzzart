@@ -588,6 +588,12 @@
                                                                     </td>
                                                                 </tr>
                                                             </table>
+                                                            {% if summary.conversion_advice %}
+                                                            <p style="font-size: 13px; line-height:18px; margin-top: 20px; margin-bottom:10px; color: #4c;
+                                                                                                                    font-family:Tahoma,Geneva, sans-serif;">
+                                                                   {{ summary.conversion_advice }}
+                                                            </p>
+                                                            {% endif %}
                                                         </td>
                                                     </tr>
                                                     <tr>
