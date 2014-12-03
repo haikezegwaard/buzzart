@@ -15,6 +15,7 @@ class MailchimpManager:
 
     def __init__(self, apikey):
         self.api = mailchimp.Mailchimp(apikey)
+        self.logger = logging.getLogger(__name__)
 
     def get_list_growth_data(self, listid):
         """
@@ -40,17 +41,22 @@ class MailchimpManager:
     def get_members(self, listid):
         return self.api.lists.members(listid)
 
-    def get_campaigns(self, start, end):
+    def get_campaigns(self, start, end, listid=None):
         """
         Return list of campaigns
         Start & end should be datetime objects
+        if listid is specified, only campaigns sent to this list are returned
         """
-        filters = []
+        filters = {}
         if start is not None:
-            filters.append(['start',self.mailchimp_date(start)])
+            filters['sendtime_start'] = self.mailchimp_date(start)
         if end is not None:
-            filters.append(['end', self.mailchimp_date(end)])
-        return self.api.campaigns.list(filters)
+            filters['sendtime_end'] = self.mailchimp_date(end)
+        if listid is not None:
+            filters['list_id'] = listid
+        result = self.api.campaigns.list(filters)
+        self.logger.debug(result)
+        return result
 
     def mailchimp_date(self, date):
         """

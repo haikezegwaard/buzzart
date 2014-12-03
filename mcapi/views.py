@@ -14,7 +14,7 @@ import logging
 from monitor.models import Project
 
 
-m = MailchimpManager('8e7536a78b89a35edfa0122d2e417186-us1')
+m = MailchimpManager('7d38a85ef7ae268f27497616c649d921-us2')
 logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
@@ -22,7 +22,7 @@ def index(request):
     if params.get('apikey') is not None:
         m = MailchimpManager(params.get('apikey'))
     result = m.api.lists.list()
-    return render_to_response('index.html', {'lists' :  result}, context_instance=RequestContext(request))
+    return render_to_response('mcapi/index.html', {'lists' :  result}, context_instance=RequestContext(request))
 
 
 def campaign_stats(request):
@@ -38,6 +38,7 @@ def campaign_stats(request):
     result = m.api.reports.opened(params.get('cid'))
     return HttpResponse(json.dumps(result), content_type='application/json')
 
+
 def list_campaigns(request):
     params = request.GET
     if params.get('apikey') is not None:
@@ -46,6 +47,7 @@ def list_campaigns(request):
     logger.debug(result)
     return HttpResponse(json.dumps(result), content_type='application/json')
 
+
 def lists(request):
     params = request.GET
     m = None
@@ -53,6 +55,7 @@ def lists(request):
         m = MailchimpManager(params.get('apikey'))
     result = m.api.lists.list()
     return HttpResponse(json.dumps(result), content_type='application/json')
+
 
 def chart_data_json(request):
     data = {}
@@ -68,6 +71,7 @@ def chart_data_json(request):
         data.append([time.mktime(mydate.timetuple()), cumulative])
     logger.debug(data)
     return HttpResponse(json.dumps(data), content_type='application/json')
+
 
 def list_stats(request, project_id):
     project = Project.objects.get(id=project_id)
