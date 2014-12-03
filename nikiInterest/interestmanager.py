@@ -1,5 +1,6 @@
 from pysimplesoap.client import SoapClient
 from monitor.models import InterestProject
+from monitor.models import Project
 import hashlib
 import logging
 from pysimplesoap.simplexml import SimpleXMLElement
@@ -192,6 +193,28 @@ class InterestManager:
                 uni = unicode(subscribtion)
                 result.append(SimpleXMLElement(uni.encode('UTF-8')))
         return result
+
+    def get_count_by_housetype(self, project, start, end):
+        """
+        Return a dictionary containing housetype names and the number of according
+        interests for the given project between start and enddate
+        """
+        subscriptions = self.getByProjectBetween(project, start, end)
+        occurrences = {}
+        for subscription in subscriptions:
+            root = ET.fromstring(subscription.as_xml())
+            for housetype in root.iter('housetype'):
+                if housetype.text in occurrences:
+                    occurrences[housetype.text] += 1
+                else:
+                    occurrences[housetype.text] = 1
+        allcount = len(subscriptions)
+        speccount = 0
+        for key, value in occurrences.iteritems():
+            speccount += value
+        occurrences['notype'] = allcount - speccount
+        return occurrences
+
 
     #
     # Helper sheibe

@@ -15,14 +15,14 @@ import time
 from mcapi.mailchimp_manager import MailchimpManager
 
 logger = logging.getLogger(__name__)
-
+nikimanager = NikiConverter()
+interestmanager = InterestManager()
 
 def nikisalecount(request):
     """
     Return sale status of project in cyfe data format
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     availability = nikimanager.getAvailability(project)
     result = "Te koop, Optie, Verkocht\n"
     result += ",".join([str(i) for i in availability])+"\n"
@@ -35,7 +35,6 @@ def nikirentcount(request):
     Return rent status of project in cyfe data format
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     availability = nikimanager.getAvailability(project)
     result = "Te huur, Optie, Verhuurd\n"
     result += ",".join([str(i) for i in availability])+"\n"
@@ -48,7 +47,6 @@ def nikisaletable(request):
     Return list of housetypes with according sale status
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     housetypes = nikimanager.getHouseTypes(project)
     result = "Woningtype,te koop, in optie, verkocht\n"
     for housetype in housetypes:
@@ -65,7 +63,6 @@ def nikirenttable(request):
     Return list of housetypes with according rent status
     """
     project = request.GET.get('project')
-    nikimanager = NikiConverter()
     housetypes = nikimanager.getHouseTypes(project)
     result = "Woningtype,te huur, in optie, verhuurd\n"
     for housetype in housetypes:
@@ -88,7 +85,6 @@ def niki_interest_subscription_dates(request):
     end_str = request.GET.get('end_date')
     end = util.datestr_to_datetime(end_str)
 
-    interestmanager = InterestManager()
     project = InterestProject.objects.get(nikiProjectId=project_id)
     account = project.interestAccount
     ids = interestmanager.getIdsByProjectBetween(account, project_id, start, end)
@@ -121,26 +117,19 @@ def niki_interest_table(request):
     end_str = request.GET.get('end_date')
     end = util.datestr_to_datetime(end_str)
 
-    interestmanager = InterestManager()
-    project = InterestProject.objects.get(nikiProjectId=project_id)
-    subscriptions = interestmanager.getByProjectBetween(project, start, end)
-    from pysimplesoap.simplexml import SimpleXMLElement
-    occurrences = {}
-    for subscription in subscriptions:
-        if subscription.interests.children() > 0:
-            for housetype in subscription.interests.interest.housetype:
-                if str(housetype) in occurrences:
-                    occurrences[str(housetype)] += 1
-                else:
-                    occurrences[str(housetype)] = 0
-
-
-    return render_to_response('subscriptions.html',
-                              {'subscriptions': occurrences  },
-                              context_instance=RequestContext(request))
-
-
-
+    nip = InterestProject.objects.get(nikiProjectId=project_id)
+    project = nip.project
+    occurrences = interestmanager.get_count_by_housetype(project, start, end)
+    alltypes = nikimanager.getHouseTypes(project.nikiProject)
+    for housetype in alltypes:
+        if not housetype.get('name') in occurrences:
+            occurrences[housetype.get('name')] = 0
+    result = "Woningtype,Interesse\n"
+    for key, value in occurrences.iteritems():
+        if not key == "notype":
+            result += "{},{}\n".format(key, value)
+    result += "Geen specificatie,{}".format(occurrences.get('notype'))
+    return HttpResponse(result)
 
 
 def daterange(start_date, end_date):
@@ -153,7 +142,6 @@ def nikiglobalstats(request):
     Return a list of miscellanious project properties
     """
     projectcode = request.GET.get('project')
-    nikimanager = NikiConverter()
     project = nikimanager.apiRequest(projectcode)
     result = "Projecteigenschap,Beschikbaar,Totaal\n"
     result += "Projectvoortgang,-,{}\n".format(project.get('progress'))
