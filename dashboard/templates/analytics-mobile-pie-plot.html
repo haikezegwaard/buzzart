@@ -1,0 +1,49 @@
+<!-- /.panel -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+    <i class="fa fa-bar-chart-o fa-fw"></i> Analytics mobiel/tablet/desktop
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div id="mobile-donut-chart"></div>
+    </div>
+    <!-- /.panel-body -->
+</div>
+<script>
+$(document).ready(function () {
+
+    $.getJSON('/googleAnalytics/deviceCategory/{{project_id}}', function(data) {
+
+        // Build the chart
+        $('#mobile-donut-chart').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'Google analytics mobiel/tablet/desktop'
+            },
+            tooltip: {
+                pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Channels',
+                data: data
+            }]
+        });
+    });
+
+});
+</script>

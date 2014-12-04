@@ -52,6 +52,16 @@ def origin(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
+def site_list(request):
+    return render_to_response('sitelist.html',
+                              {},
+                              context_instance=RequestContext(request))
+
+def updates(request):
+    return render_to_response('updates.html',
+                              {},
+                              context_instance=RequestContext(request))
+
 
 
 def get_updates(project_id):
