@@ -53,12 +53,12 @@ def origin(request, project_id):
                               context_instance=RequestContext(request))
 
 def site_list(request):
-    return render_to_response('sitelist.html',
+    return render_to_response('corporate/sitelist.html',
                               {},
                               context_instance=RequestContext(request))
 
 def updates(request):
-    return render_to_response('updates.html',
+    return render_to_response('corporate/updates.html',
                               {},
                               context_instance=RequestContext(request))
 
