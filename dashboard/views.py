@@ -31,7 +31,7 @@ def index(request, project_id):
         session['start'] = parser.parse(request.GET.get('start'))
     if not request.GET.get('end') is None:
         session['end'] = parser.parse(request.GET.get('end'))
-    return render_to_response('home.html',
+    return render_to_response('saref/home.html',
                               {'project_id': project_id,
                                'project': project,
                                'campaigns': get_campaigns(project_id),
