@@ -51,7 +51,9 @@
 
 <body>
 <div id="wrapper">
+    {% block topbar %}
     {% include "top-bar.html" %}
+    {% endblock topbar %}
     {% block leftmenu %}
     {% include "menu.html" %}
     {% endblock leftmenu %}
