@@ -1,12 +1,10 @@
 from facebookads.api import FacebookAdsApi
 from facebookads import objects
 from django.conf import settings
-from facebookads.objects import AdCampaign, ReportStats
 from models import FacebookAdsSettings
 from urlparse import parse_qs, urlparse
 import requests
 import logging
-import json
 from datetime import datetime, timedelta
 import hmac
 import hashlib
@@ -26,29 +24,22 @@ class FacebookAdsManager:
         if FacebookAdsSettings.objects.all().count() > 1:
             raise Exception('''Found more than one Facebook Ad access token
                                in the database, this should not happen!''')
+        my_app_id = settings.FACEBOOK_ADS_APP_ID
+        my_app_secret = settings.FACEBOOK_ADS_APP_SECRET
+        my_access_token = self.get_stored_token()
+        FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
 
+    def get_campaign_stats(self, cid):
+        campaign = objects.AdCampaign(cid)
+        for item in campaign.get_ad_sets(fields=[objects.AdSet.Field.name]):
+            self.logger.debug("adset: {}".format(item[objects.AdSet.Field.name]))
+            adset = objects.AdSet(item[objects.AdSet.Field.id])
+            adgroups = adset.get_ad_groups(fields=[objects.AdGroup.Field.name])
+            for ad in adgroups: #ad = objects.AdGroup(ad[objects.AdGroup.Field.id])
+                self.logger.debug("adgroup: {}".format(ad[objects.AdGroup.Field.name]))
+                self.logger.debug(ad.get_stats())
 
-    def get_async_report(self, job):
-        params={'report_run_id': job}
-        graph_object='act_52022373/reportstats'
-        return self.API_call(graph_object, params)
-
-    def get_campaign_stats(self, async='false'):
-        graph_object = 'act_52022373/reportstats'
-        pars={'data_columns': "['account_id','spend','action_values']",
-              'time_ranges': "[{'day_start':{'day':1,'month':3,'year':2010},'day_stop':{'day':27,'month':3,'year':2012}}]",
-              'actions_group_by': "['action_type']"}
-        if async == 'true':
-            pars['async'] = 'true'
-            response = self.API_call(graph_object, pars, 'POST')
-        else:
-            response = self.API_call(graph_object, pars)
-            if 'Too old' in response.content:
-                return self.get_campaign_stats('true')
-        return response
-
-    def get_job_status(self, job):
-        return self.API_call(job)
+        return 'foo'
 
     def get_stored_token(self):
         """
