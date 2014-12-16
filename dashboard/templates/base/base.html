@@ -42,10 +42,10 @@
             <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
             <div id="wrapper">
                 {% block topbar %}
-                {% include "top-bar.html" %}
+                {% include "base/top-bar.html" %}
                 {% endblock topbar %}
                 {% block leftmenu %}
-                {% include "menu.html" %}
+                {% include "base/menu.html" %}
                 {% endblock leftmenu %}
                 <div id="page-wrapper">
                     <div class="row">
@@ -55,7 +55,6 @@
                         <!-- /.col-lg-12 -->
                     </div>
                     {% block intro %}
-                    {% include "intro.html"%}
                     {% endblock %}
                     {% block home %}
                     {% endblock home%}
