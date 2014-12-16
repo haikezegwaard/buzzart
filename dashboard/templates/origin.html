@@ -6,7 +6,7 @@ Herkomstanalyse {{project.name}}
 {% endblock %}
 {% block home %}
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-bar-chart-o fa-fw"></i> Herkomstanalyse project {{ project.name }}
@@ -26,11 +26,10 @@ Herkomstanalyse {{project.name}}
             </div>
         </div>
     </div>
-</div>
-<div class="row">
     <div class="col-lg-4">
         {% include "widgets/analytics-origin-pie-plot.html" %}
         {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>
+
 </div>
 {% endblock %}
