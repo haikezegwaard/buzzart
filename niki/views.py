@@ -4,7 +4,9 @@ from django.template import RequestContext, loader
 from django.shortcuts import render, render_to_response
 from django.views import generic
 from niki.models import Account
+from monitor.models import Project
 from niki.nikiconverter import NikiConverter
+import json
 
 
 # Create your views here.
@@ -22,9 +24,15 @@ class IndexView(generic.DetailView):
         account.oauth_token = self.nikiconverter.getProject("/projects/54/AMVP9518")
         return account
 
+nc = NikiConverter()
 
 def project_list(request):
-    nc = NikiConverter()
     return render_to_response('niki/projects.html',
                               {"projects": nc.getAllProjects()},
                               content_type="text/html")
+
+def availability(request, project_id):
+    project = Project.objects.get(id=project_id)
+    av = nc.getLabeledAvailability(project.nikiProject)
+    result = [(k,v) for k,v in av.iteritems()]
+    return HttpResponse(json.dumps(result), content_type='application/json')

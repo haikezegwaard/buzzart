@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 from social.apps.django_app.utils import load_strategy
 from datetime import timedelta
+from django.conf import settings
 
 
 class AnalyticsManager:
@@ -191,15 +192,24 @@ class AnalyticsManager:
         """
         Generic base API interfacing method
         """
-        user = User.objects.get(username="haike") #this should not be static
-        #get the oath2 token for user haike
-        social = user.social_auth.get(uid='buzzart.fundament@gmail.com')
-        strategy = load_strategy(backend='google-oauth2')
-        social.refresh_token(strategy)
+        token = self.get_access_token_for_user()
         self.logger.debug('calling url: {}'.format(url))
-        response = requests.get(url,params={'access_token': social.extra_data['access_token']})
+        response = requests.get(url,params={'access_token': token})
         self.logger.debug('response: {}'.format(response.content))
         return json.loads(response.content)
+
+    def get_access_token_for_user(self, user=None):
+        """
+        Retrieve social_auth token for given user, fall back to default user if
+        none given. This is only for demo/R&D purposes.
+        """
+        if user is None:
+            user = User.objects.get(username=settings.SOCIAL_AUTH_FALLBACK_USERNAME)
+        #get the oath2 token for user
+        social = user.social_auth.get(provider='google-oauth2', user=user)
+        strategy = load_strategy(backend='google-oauth2')
+        social.refresh_token(strategy)
+        return social.extra_data['access_token']
 
     """
     Management API functions and utils
