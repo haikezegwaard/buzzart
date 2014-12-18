@@ -48,6 +48,7 @@ def origin(request, project_id):
     return render_to_response('origin.html',
                               {'project_id': project_id,
                                'project': project,
+                               'updates': get_updates(project.id),
                                'referrals':get_referrals(project_id)
                                },
                               context_instance=RequestContext(request))
@@ -57,11 +58,17 @@ def site_list(request):
                               {},
                               context_instance=RequestContext(request))
 
-def updates(request):
+def corporate_updates(request):
     return render_to_response('corporate/updates.html',
                               {},
                               context_instance=RequestContext(request))
 
+def project_updates(request, project_id):
+    project = Project.objects.get(id=project_id)
+    return render_to_response('timeline.html',
+                              {'project': project,
+                               'updates': get_updates(project.id)},
+                              context_instance=RequestContext(request))
 
 
 def get_updates(project_id):

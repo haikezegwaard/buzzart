@@ -1,10 +1,10 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block pagetitle %}
 Analyse {{project.name}}
 {% endblock %}
 
 {% block intro %}
-    {% include "intro.html" %}
+    {% include "base/intro.html" %}
 {% endblock %}
 
 {% block home %}
@@ -51,17 +51,19 @@ Analyse {{project.name}}
 
 </div>
 <div class="row">
-    <div class="col-lg-8">
-        {% include "timeline.html" %}
+    <div class="col-lg-4">
+        {% include "widgets/analytics-origin-pie-plot.html" %}
     </div>
     <div class="col-lg-4">
-        {% include "social-stats.html" %}
-        {% include "analytics-origin-pie-plot.html" %}
+        {% include "widgets/niki-availability-pie-plot.html" %}
+    </div>
+    <div class="col-lg-4">
+        {% include "widgets/social-stats.html" %}
     </div>
 </div>
 <div class="row">
     <div class="col-lg-12">
-        {% include "mc_list_stats.html" %}
+        {% include "widgets/mc_list_stats.html" %}
     </div>
 </div>
 

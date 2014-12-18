@@ -40,6 +40,8 @@ class Summary(models.Model):
     mailchimp_advice = models.TextField(blank=True)
     conversion_advice = models.TextField(blank=True)
 
+    mail_sent = models.BooleanField(blank=False, default=False)
+
     dateStart = models.DateField()
     dateEnd = models.DateField()
 

@@ -1,6 +1,8 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block pagetitle %}
 Herkomstanalyse {{project.name}}
+{% endblock %}
+{% block intro %}
 {% endblock %}
 {% block home %}
 <div class="row">
@@ -25,8 +27,9 @@ Herkomstanalyse {{project.name}}
         </div>
     </div>
     <div class="col-lg-4">
-        {% include "analytics-origin-pie-plot.html" %}
-        {% include "analytics-mobile-pie-plot.html" %}
+        {% include "widgets/analytics-origin-pie-plot.html" %}
+        {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>
+
 </div>
 {% endblock %}
