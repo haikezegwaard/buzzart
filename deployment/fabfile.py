@@ -18,7 +18,9 @@ def test():
     local('svn export --force %(repo)s/trunk c:\\tmp\\buzzart' % env)
     # make sure the directory is there!
     #upload_project('c:\\tmp\\buzzart', '/tmp/buzzart')
+    #put('c:\\tmp\\buzzart','/tmp/buzzart')
     zipfolder()
+
 
 @serial
 def zipfolder():

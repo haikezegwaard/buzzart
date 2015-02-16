@@ -15,7 +15,7 @@ PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "monitor.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

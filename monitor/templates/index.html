@@ -32,11 +32,18 @@
                 <div class="panel-heading">Bestaande overzichten</div>
                 <div class="panel-body">
                     <table class="table">
-                        <tr><th>Project</th><th>Periode</th><th>Mailing</th><th>Mailing HTTP response<th>Dashboard</th></tr>
+                        <tr><th>Project</th><th>Periode</th><th>Verstuurd?</th><th>Mailing</th><th>Mailing HTTP response<th>Dashboard</th></tr>
                         {% for summary in summaries %}
                         <tr>
                             <td>{{ summary.project.name }} ( {{ summary.project.manager }} )</td>
                             <td>{{ summary.dateStart }} - {{ summary.dateEnd }}</td>
+                            <td>
+                                {% if summary.mail_sent %}
+                                    <button type="button" class="btn btn-success" value="verstuurd" >JA</button>
+                                {% else %}
+                                    <button type="button" class="btn btn-danger" value="verstuurd" >NEE</button>
+                                {% endif %}
+                            </td>
                             <td><a href='/digest/{{summary.id}}'>preview</a> | <a href="/digest/{{summary.id}}/mailing?test=yes">testmail</a>| <a href="/digest/{{summary.id}}/mailing">!!mail!!</a></td>
                             <td><button type="button" data-id="{{summary.id}}" class="testbutton btn btn-default" >HTTP test</button>
                             <td><a href='/dashboard/{{summary.project.id}}'>dashboard</a></td>

@@ -128,6 +128,8 @@ class MailView(TemplateView):
         else:
             msg = EmailMultiAlternatives(subject=subject, from_email=settings.NOTIFIER_FROM_MAIL,
                                          to=[settings.ADMIN_MAIL,'we@fundament.nl'], body=text_body)
+            summary.mail_sent = True
+            summary.save()
         msg.attach_alternative(html_body, "text/html")
         msg.send()
 
@@ -232,7 +234,8 @@ def fill_context(context, summary):
         nikimanager = NikiConverter()
         context['availability'] = nikimanager.getAvailability(project.nikiProject)
         context['nikisalerent'] = nikimanager.getProjectSaleRentType(project.nikiProject)
-        sold_count = context['availability'][2]
+        if context['availability'] is not None:
+            sold_count = context['availability'][2]
     if(project.fanpage_id != '0'):
         """ Get the sex and age spread of likes on the fanpage """
         fbmanager = FacebookManager()

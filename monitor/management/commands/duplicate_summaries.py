@@ -17,6 +17,7 @@ class Command(BaseCommand):
         """
 
         for summary in Summary.objects.filter(mail_sent=True).all():
+            print "duplicating summary id {}".format(summary.id)
             duplicate = Summary()
             duplicate.dateStart = date.today() - timedelta(days=14)
             duplicate.dateEnd = date.today()
