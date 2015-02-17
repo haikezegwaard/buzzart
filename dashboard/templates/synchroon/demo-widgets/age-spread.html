@@ -1,0 +1,77 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+    <i class="fa fa-bar-chart-o fa-fw"></i> Spreiding leeftijd/geslacht
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div id="age-spread-container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+    <!-- /.panel-body -->
+</div>
+
+
+
+<table id="age-spread-datatable" style="visibility: hidden;">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Man</th>
+            <th>Vrouw</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>0-18</th>
+            <td>0</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <th>18-24</th>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <th>25-35</th>
+            <td>25</td>
+            <td>27</td>
+        </tr>
+        <tr>
+            <th>36-50</th>
+            <td>18</td>
+            <td>17</td>
+        </tr>
+        <tr>
+            <th>50+</th>
+            <td>2</td>
+            <td>4</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+$(function () {
+    $('#age-spread-container').highcharts({
+        data: {
+            table: 'age-spread-datatable'
+        },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Spreiding leeftijd/geslacht onder geinteresseerden'
+        },
+        yAxis: {
+            allowDecimals: false,
+            title: {
+                text: 'Units'
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    this.point.y + ' ' + this.point.name.toLowerCase();
+            }
+        }
+    });
+});
+</script>

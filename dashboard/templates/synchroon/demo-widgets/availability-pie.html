@@ -1,0 +1,54 @@
+<!-- /.panel -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+    <i class="fa fa-bar-chart-o fa-fw"></i> Niki verkoopstand
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div id="availability-pie"></div>
+    </div>
+    <!-- /.panel-body -->
+</div>
+
+<script>
+$(function () {
+
+    $(document).ready(function () {
+
+        // Build the chart
+        $('#availability-pie').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'Verkoopstand project'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Verkoopstand',
+                data: [
+                    ['Te koop',   45.0],
+                    ['Onder optie',       25.0],
+                    ['Verkocht',   30.0]
+                ]
+            }]
+        });
+    });
+
+});
+</script>

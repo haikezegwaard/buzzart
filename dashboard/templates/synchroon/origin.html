@@ -1,8 +1,6 @@
-{% extends "base/base.html" %}
+{% extends "synchroon/base.html" %}
 {% block pagetitle %}
-Herkomstanalyse {{project.name}}
-{% endblock %}
-{% block intro %}
+Bezoekersanalyse {{project.name}}
 {% endblock %}
 {% block home %}
 <div class="row">
@@ -27,6 +25,7 @@ Herkomstanalyse {{project.name}}
         </div>
     </div>
     <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/conversions-table.html" %}
         {% include "widgets/analytics-origin-pie-plot.html" %}
         {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>

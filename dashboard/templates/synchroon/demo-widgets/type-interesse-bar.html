@@ -1,0 +1,51 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+    <i class="fa fa-bar-chart-o fa-fw"></i> Interesse per type
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div id="type-interesse"></div>
+    </div>
+    <!-- /.panel-body -->
+</div>
+<div id="type-interesse"></div>
+
+<script>
+$(function () {
+    $('#type-interesse').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Interesse per type'
+        },
+        xAxis: {
+            categories: ['Type 1', 'Type 2', 'Type 3', 'Type 4', 'Type 5']
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Totaal interesse, optie en verkocht'
+            }
+        },
+        legend: {
+            reversed: true
+        },
+        plotOptions: {
+            series: {
+                stacking: 'normal'
+            }
+        },
+        series: [{
+            name: 'Verkocht',
+            data: [5, 3, 4, 7, 2]
+        }, {
+            name: 'Optie',
+            data: [2, 2, 3, 2, 1]
+        }, {
+            name: 'Te koop',
+            data: [3, 4, 4, 2, 5]
+        }]
+    });
+});
+</script>

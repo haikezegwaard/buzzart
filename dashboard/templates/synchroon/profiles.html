@@ -1,0 +1,25 @@
+{% extends "synchroon/base.html" %}
+{% load staticfiles %}
+{% block pagetitle %}
+Profielinformatie {{project.name}}
+{% endblock %}
+{% block intro %}
+{% endblock %}
+{% block home %}
+<div class="row">
+    <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/age-spread.html" %}
+    </div>
+    <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/geo-plot.html" %}
+    </div>
+    <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/type-interesse-bar.html" %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/burgerlijke-staat.html" %}
+    </div>
+</div>
+{% endblock %}
