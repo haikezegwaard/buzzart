@@ -2,7 +2,7 @@ import urllib
 from selenium import webdriver
 from datetime import datetime
 import logging
-from monitor import settings
+from settings import defaults
 import os
 import errno
 
@@ -29,7 +29,7 @@ def store_remote_images(url, summary_id):
         parent_div = img_item.find_element_by_xpath('..')
         name = parent_div.get_attribute('id')
         file = '{}/{}.png'.format(summary_id, name)
-        absolute_file = os.path.join(settings.MEDIA_ROOT, file)
+        absolute_file = os.path.join(defaults.MEDIA_ROOT, file)
         mkdir_p(os.path.dirname(absolute_file))
         src = img_item.get_attribute('src')
         # download the image

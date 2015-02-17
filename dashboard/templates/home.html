@@ -40,16 +40,18 @@ Analyse {{project.name}}
             <!-- /.panel-body -->
             <!--<div class="panel-footer">-->
             <hr />
-
+            {% block mainplotsubscript %}
             <h4>{{ updates.0.title }}</h4>
             <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ updates.0.posted }}</small>
             <p>{{ updates.0.update }}</p>
+            {% endblock %}
             <!-- /.panel-footer -->
             </div>
         </div>
     </div>
 
 </div>
+{% block belowmainplot %}
 <div class="row">
     <div class="col-lg-4">
         {% include "widgets/analytics-origin-pie-plot.html" %}
@@ -66,6 +68,7 @@ Analyse {{project.name}}
         {% include "widgets/mc_list_stats.html" %}
     </div>
 </div>
+{% endblock %}
 
 <script>
 

@@ -31,7 +31,13 @@ def index(request, project_id):
         session['start'] = parser.parse(request.GET.get('start'))
     if not request.GET.get('end') is None:
         session['end'] = parser.parse(request.GET.get('end'))
-    return render_to_response('saref/home.html',
+
+    template = request.GET.get('template', '')
+    account = ''
+    if template:
+        account = template + '/'
+
+    return render_to_response(account+'home.html',
                               {'project_id': project_id,
                                'project': project,
                                'campaigns': get_campaigns(project_id),
@@ -43,9 +49,14 @@ def index(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
+
 def origin(request, project_id):
+    template = request.GET.get('template', '')
+    account = ''
+    if template:
+        account = template + '/'
     project = Project.objects.get(id=project_id)
-    return render_to_response('origin.html',
+    return render_to_response(account+'origin.html',
                               {'project_id': project_id,
                                'project': project,
                                'updates': get_updates(project.id),
@@ -53,15 +64,48 @@ def origin(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
+
+def profiles(request, project_id):
+    template = request.GET.get('template', '')
+    account = ''
+    if template:
+        account = template + '/'
+    project = Project.objects.get(id=project_id)
+    return render_to_response(account+'profiles.html',
+                              {
+                               'project': project
+                               },
+                              context_instance=RequestContext(request))
+
+
+def campaigns(request, project_id):
+    template = request.GET.get('template', '')
+    account = ''
+    if template:
+        account = template + '/'
+    project = Project.objects.get(id=project_id)
+    return render_to_response(account+'campaigns.html',
+                              {
+                               'project': project
+                               },
+                              context_instance=RequestContext(request))
+
+
 def site_list(request):
-    return render_to_response('corporate/sitelist.html',
+    template = request.GET.get('template', '')
+    account = ''
+    if template:
+        account = template + '/'
+    return render_to_response(account+'corporate/sitelist.html',
                               {},
                               context_instance=RequestContext(request))
+
 
 def corporate_updates(request):
     return render_to_response('corporate/updates.html',
                               {},
                               context_instance=RequestContext(request))
+
 
 def project_updates(request, project_id):
     project = Project.objects.get(id=project_id)
@@ -96,6 +140,7 @@ def get_end():
 start = get_start()
 end = get_end()
 
+
 def get_referrals(project_id):
     project = Project.objects.get(id=project_id)
     return ga_stats.get_referrals(project, start, end)
@@ -118,7 +163,7 @@ def get_subscriptions(project_id):
     Get Niki subcribers for given project, returns a list of
     tuples (stamp, count) for the use of plotting in a graph
     """
-    #project = Project.objects.get(id=project_id)
+    # project = Project.objects.get(id=project_id)
     stats_service = statsservice.StatsService()
     # return stats_service.get_subscriptions_over_time(project, start_date, end_date)
     return stats_service.get_mock_subscriptions()
@@ -127,6 +172,7 @@ def get_subscriptions(project_id):
 def get_conversions(project_id):
     project = Project.objects.get(id=project_id)
     return ga_stats.get_conversions_over_time(project, start, end)
+
 
 def plottingDataSeries(request, project_id):
     traffic = []

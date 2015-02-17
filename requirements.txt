@@ -9,3 +9,4 @@ TwitterAPI==2.2.5
 south==1.0.1
 facebookads==2.2.3
 googleads==2.2.0
+python-dateutil==2.2
