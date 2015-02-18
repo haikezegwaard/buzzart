@@ -8,6 +8,7 @@ import json
 from datetime import datetime as dt
 import datetime
 import statsservice
+from django.shortcuts import redirect
 
 
 ga_man = analyticsmanager.AnalyticsManager()
@@ -114,3 +115,9 @@ def find_account(request, profile_id):
 def list_goals(request, profile_id):
     data = ga_man.get_goals_for_view(profile_id)
     return HttpResponse(json.dumps(data), content_type='application/json')
+
+def redirect_if_no_refresh_token(backend, response, social, *args, **kwargs):
+    if backend.name == 'google-oauth2' and social and \
+       response.get('refresh_token') is None and \
+       social.extra_data.get('refresh_token') is None:
+        return redirect('/login/google-oauth2?approval_prompt=force')

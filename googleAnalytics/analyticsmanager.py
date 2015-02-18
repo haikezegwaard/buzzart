@@ -6,7 +6,7 @@ from datetime import datetime
 from social.apps.django_app.utils import load_strategy
 from datetime import timedelta
 from django.conf import settings
-
+from django.shortcuts import redirect
 
 class AnalyticsManager:
 
@@ -203,12 +203,13 @@ class AnalyticsManager:
         Retrieve social_auth token for given user, fall back to default user if
         none given. This is only for demo/R&D purposes.
         """
+        self.logger.debug('get acces token debug test')
         if user is None:
             user = User.objects.get(username=settings.SOCIAL_AUTH_FALLBACK_USERNAME)
-        #get the oath2 token for user
+        #get the stored oauth2 access token for user
         social = user.social_auth.get(provider='google-oauth2', user=user)
-        strategy = load_strategy(backend='google-oauth2')
-        social.refresh_token(strategy)
+        # strategy = load_strategy(backend='google-oauth2')
+        # social.refresh_token(strategy)
         return social.extra_data['access_token']
 
     """

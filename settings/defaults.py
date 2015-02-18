@@ -102,11 +102,24 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.login_redirect'
 )
 
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'googleAnalytics.views.redirect_if_no_refresh_token',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+)
+
 # python-social-auth settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '668855476975-5l8p7sua5hp70o0rbisp941dsfk462ki.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Jfc8k03j8ihL_9U_FgdCvTG4'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/analytics.readonly']
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'access_type': 'offline'}
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'access_type': 'offline','approval_prompt': 'auto'}
 
 SOCIAL_AUTH_FACEBOOK_KEY = '333949410120374' # '333944963454152'
 SOCIAL_AUTH_FACEBOOK_SECRET = '991f1166a3075bb6a7e3712d38404a71' # '4139129df43a25df06654aa4aa2c0ee3'

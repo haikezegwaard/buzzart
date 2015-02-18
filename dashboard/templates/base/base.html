@@ -6,15 +6,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
+        <title>
+        {% block sitetitle %}
+        {% if project %}
+        Buzzart Cockpit - {{ project.name }}
+        {% else %}
+        Buzzart Cockpit
+        {% endif %}
+        {% endblock %}
+        </title>
     </head>
     <body>
         {% load staticfiles  %}
-
-        {% if project %}
-        <title>Buzzart Cockpit - {{ project.name }}</title>
-        {% else %}
-        <title>Buzzart Cockpit</title>
-        {% endif %}
         <!--<script href="{% static 'js/jquery-1.11.0.js' %}" rel="stylesheet"></script>-->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="http://code.highcharts.com/stock/highstock.js"></script>

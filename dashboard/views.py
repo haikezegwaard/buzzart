@@ -78,13 +78,39 @@ def profiles(request, project_id):
                               context_instance=RequestContext(request))
 
 
-def campaigns(request, project_id):
+def adwords(request, project_id):
     template = request.GET.get('template', '')
     account = ''
     if template:
         account = template + '/'
     project = Project.objects.get(id=project_id)
-    return render_to_response(account+'campaigns.html',
+    return render_to_response(account+'adwords.html',
+                              {
+                               'project': project
+                               },
+                              context_instance=RequestContext(request))
+
+
+def fbads(request, project_id):
+    template = request.GET.get('template', '')
+    account = ''
+    if template:
+        account = template + '/'
+    project = Project.objects.get(id=project_id)
+    return render_to_response(account+'fbads.html',
+                              {
+                               'project': project
+                               },
+                              context_instance=RequestContext(request))
+
+
+def mailing(request, project_id):
+    template = request.GET.get('template', '')
+    account = ''
+    if template:
+        account = template + '/'
+    project = Project.objects.get(id=project_id)
+    return render_to_response(account+'mailing.html',
                               {
                                'project': project
                                },
