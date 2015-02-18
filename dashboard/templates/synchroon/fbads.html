@@ -1,0 +1,43 @@
+{% extends "synchroon/base.html" %}
+{% load staticfiles %}
+{% block pagetitle %}
+Online campagneinformatie {{project.name}}
+{% endblock %}
+{% block intro %}
+<div class="row">
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+          <li role="presentation"><a href="/dashboard/1/adwords?template=synchroon">Google Adwords</a></li>
+          <li role="presentation" class="active"><a href="/dashboard/1/fbads?template=synchroon">Facebook Ads</a></li>
+          <li role="presentation"><a href="/dashboard/1/mailing?template=synchroon">Mailings</a></li>
+        </ul><br/>
+    </div>
+</div>
+{% endblock %}
+{% block home %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Facebook Ads overzicht
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr><th colspan="2">Facebook advertentie overzicht</th></tr>
+                    <tr><td>Kliks</td><td>82</td></tr>
+                    <tr><td>Views</td><td>1765</td></tr>
+                    <tr><td>Kosten</td><td>&euro; 54,64</td></tr>
+                    <tr><td>Klik ratio</td><td>4,646</td></tr>
+                    <tr><td>CPC</td><td>&euro; 0,67</td></tr>
+                    <tr><td>Conversies</td><td>2</td></tr>
+                    <tr><td>Kosten per conversie</td><td>&euro; 27,32</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+    </div>
+    <div class="col-lg-4">
+    </div>
+</div>
+{% endblock %}

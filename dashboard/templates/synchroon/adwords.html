@@ -1,0 +1,60 @@
+{% extends "synchroon/base.html" %}
+{% load staticfiles %}
+{% block pagetitle %}
+Online campagneinformatie {{project.name}}
+{% endblock %}
+{% block intro %}
+<div class="row">
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+          <li role="presentation" class="active"><a href="/dashboard/1/adwords?template=synchroon">Google Adwords</a></li>
+          <li role="presentation"><a href="/dashboard/1/fbads?template=synchroon">Facebook Ads</a></li>
+          <li role="presentation"><a href="/dashboard/1/mailing?template=synchroon">Mailings</a></li>
+        </ul><br/>
+    </div>
+</div>
+{% endblock %}
+{% block home %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Adwords overzicht
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr><th colspan="2">Google advertentie overzicht</th></tr>
+                    <tr><td>Kliks</td><td>982</td></tr>
+                    <tr><td>Views</td><td>17475</td></tr>
+                    <tr><td>Kosten</td><td>&euro; 52,32</td></tr>
+                    <tr><td>Klik ratio</td><td>5,619</td></tr>
+                    <tr><td>CPC</td><td>&euro; 0,05</td></tr>
+                    <tr><td>Conversies</td><td>3</td></tr>
+                    <tr><td>Kosten per conversie</td><td>&euro; 17,84</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Adwords zoektermen
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr><th>Google advertentie zoektermen</th></tr>
+                    <tr><td>Fluwelen Weide</td></tr>
+                    <tr><td>De Fluwelen Weide</td></tr>
+                    <tr><td>Nieuwbouw fluwelen weide</td></tr>
+                    <tr><td>Huis kopen nieuwbouw synchroon</td></tr>
+                    <tr><td>Huis kopen fluwelen weide</td></tr>
+                    <tr><td>Nieuwbouw fluwelen</td></tr>
+                    <tr><td>In de weide wonen</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+    </div>
+</div>
+{% endblock %}

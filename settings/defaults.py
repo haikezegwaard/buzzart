@@ -9,12 +9,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-
 #################
 # DEBUG TOOLBAR #
 #################
 DEBUG_TOOLBAR_PATCH_SETTINGS = False  # explicit setup
-
 
 def _show_toolbar(request):
     # avoid executing in tests (which sets DEBUG to False)
@@ -29,6 +27,7 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'settings.defaults._show_toolbar',  # 'debug_toolbar.middleware.show_toolbar'
     'INTERCEPT_REDIRECTS': False,
 }
+
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -204,6 +203,11 @@ LOGGING = {
             'filename': 'mysite.log',
             'formatter': 'verbose'
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
     },
     'loggers': {
         'django': {
@@ -218,10 +222,7 @@ LOGGING = {
     }
 }
 
-
-
-
 try:
-    from local_settings import *
+    from settings.local_settings import *
 except ImportError:
     pass

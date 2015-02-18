@@ -6,7 +6,7 @@ from datetime import datetime
 from social.apps.django_app.utils import load_strategy
 from datetime import timedelta
 from django.conf import settings
-from django.shortcuts import redirect
+
 
 class AnalyticsManager:
 
@@ -18,7 +18,9 @@ class AnalyticsManager:
 
     def get_weekly_visits(self, viewid, start, end):
         """For convenience only"""
-        return self.reporting_API_call(viewid, start, end, ['sessions','pageviews'], '&sort=ga:date&dimensions=ga:date&max-results=200')
+        return self.reporting_API_call(viewid, start, end,
+                                       ['sessions', 'pageviews'],
+                                       '&sort=ga:date&dimensions=ga:date&max-results=200')
 
     def get_daily_visits(self, viewid, start, end):
         """Get session count for specific view id  in daterange
@@ -31,7 +33,9 @@ class AnalyticsManager:
         """
         start_str = self.google_date(start)
         end_str = self.google_date(end)
-        return self.reporting_API_call(viewid, start_str, end_str, ['sessions'], '&sort=ga:date&dimensions=ga:date')
+        return self.reporting_API_call(viewid, start_str, end_str,
+                                       ['sessions'],
+                                       '&sort=ga:date&dimensions=ga:date')
 
     def get_conversion_count(self, viewid, start, end):
         """Get conversion count for specific view id in daterange
@@ -42,7 +46,8 @@ class AnalyticsManager:
         Returns:
             int, number of goal completions
         """
-        obj = self.reporting_API_call(viewid, start, end, ['goalCompletionsAll'])
+        obj = self.reporting_API_call(viewid, start, end,
+                                      ['goalCompletionsAll'])
         return int(obj['totalsForAllResults']['ga:goalCompletionsAll'])
 
     def get_total_conversion_count(self, analyticssettings):
@@ -50,17 +55,21 @@ class AnalyticsManager:
         Convenience function to get total of conversions between
         self.GA_NULL_DATE and now
         Args:
-            analyticssettings: AnalyticsSettings object containing configuration
+            analyticssettings: AnalyticsSettings object containing
+            configuration
         Returns:
             total of completed conversions for given configuration
         """
         now = self.google_date(datetime.today())
         viewid = analyticssettings.ga_view
         goalid = analyticssettings.goal_to_track
-        return self.get_conversion_count_for_goal(viewid, goalid, self.GA_NULL_DATE, now)
+        return self.get_conversion_count_for_goal(viewid, goalid,
+                                                  self.GA_NULL_DATE, now)
 
     def get_conversion_count_for_goal(self, viewid, goalid, start, end):
-        """Get conversion count for specific view id and specific goal number in daterange
+        """
+        Get conversion count for specific view id and specific goal number
+        in daterange
         Args:
             viewid: string, id of specific property
             goalid: id of specific goal
@@ -74,7 +83,9 @@ class AnalyticsManager:
         return int(obj['totalsForAllResults']['ga:'+action])
 
     def get_conversion_rate_for_goal(self, viewid, goalid, start, end):
-        """Get conversion rate for specific view id and specific goal number in daterange
+        """
+        Get conversion rate for specific view id and specific goal number
+        in daterange
         Args:
             viewid: string, id of specific property
             goalid: id of specific goal
@@ -85,7 +96,7 @@ class AnalyticsManager:
         """
         action = 'goal{}ConversionRate'.format(goalid)
         obj = self.reporting_API_call(viewid, start, end, [action])
-        return round(float(obj['totalsForAllResults']['ga:'+action]),2)
+        return round(float(obj['totalsForAllResults']['ga:'+action]), 2)
 
     def get_daily_conversions_for_goal(self, viewid, goalid, start, end):
         """
@@ -95,17 +106,16 @@ class AnalyticsManager:
         start_str = self.google_date(start)
         end_str = self.google_date(end)
         action = 'goal{}Completions'.format(goalid)
-        return self.reporting_API_call(viewid, start_str, end_str, [action], '&sort=ga:date&dimensions=ga:date')
+        return self.reporting_API_call(viewid, start_str, end_str, [action],
+                                       '&sort=ga:date&dimensions=ga:date')
 
     def get_conversion_count_summary(self, viewid, start, end):
         """
         Get list of conversion names and corresponding counts in
         given time interval
         """
-        start_str = self.google_date(start)
-        end_str = self.google_date(end)
-        obj = self.reporting_API_call(viewid, start, end, ['goalCompletionsAll'])
-        return obj
+        return self.reporting_API_call(viewid, start, end,
+                                       ['goalCompletionsAll'])
 
     def get_session_count(self, viewid, start, end):
         """Get session count for specific view id in daterange
@@ -140,12 +150,14 @@ class AnalyticsManager:
         """
         start_str = self.google_date(start)
         end_str = self.google_date(end)
-        return self.reporting_API_call(viewid, start_str, end_str, ['sessions'], '&dimensions=ga:channelGrouping')
+        return self.reporting_API_call(viewid, start_str, end_str,
+                                       ['sessions'],
+                                       '&dimensions=ga:channelGrouping')
 
     def get_device_categories_for_sessions(self, viewid, start, end):
         """
-        Get device categories (tablet, mobile or desktop) as dimension for sessions
-        between start and end
+        Get device categories (tablet, mobile or desktop) as dimension
+        for sessions between start and end
         Args:
             viewid: string, id of specific property
             start: datetime, startdate
@@ -155,7 +167,9 @@ class AnalyticsManager:
         """
         start_str = self.google_date(start)
         end_str = self.google_date(end)
-        return self.reporting_API_call(viewid, start_str, end_str, ['sessions'], '&dimensions=ga:deviceCategory')
+        return self.reporting_API_call(viewid, start_str, end_str,
+                                       ['sessions'],
+                                       '&dimensions=ga:deviceCategory')
 
     def get_top_pages(self, viewid, start, end, max_results=5):
         """
@@ -165,17 +179,19 @@ class AnalyticsManager:
         """
         start_str = self.google_date(start)
         end_str = self.google_date(end)
-        response = self.reporting_API_call(viewid, start_str, end_str, ['pageViews'], '&dimensions=ga:pagePath,ga:pageTitle&max-results={}'.format(max_results))
+        response = self.reporting_API_call(viewid, start_str, end_str,
+                                           ['pageViews'],
+                                           '&dimensions=ga:pagePath,ga:pageTitle&max-results={}'.format(max_results))
         return response.get('rows')
 
-
-    def reporting_API_call(self, viewid, start, end, metrics, extra = ''):
+    def reporting_API_call(self, viewid, start, end, metrics, extra=''):
         """Generic method for API Calls to Reporting API
         Args:
             viewid: string, id of specific property
             start: string, startdate in format yyyy-mm-dd
             end: string, enddate in format yyyy-mm-dd
-            metrics: list of strings, metrics to be fetched e.g. goalCompletionsAll, sessions
+            metrics: list of strings, metrics to be fetched e.g.
+            goalCompletionsAll, sessions
             extra: string to append to the query-url
         Returns:
             json decoded http response
@@ -194,7 +210,7 @@ class AnalyticsManager:
         """
         token = self.get_access_token_for_user()
         self.logger.debug('calling url: {}'.format(url))
-        response = requests.get(url,params={'access_token': token})
+        response = requests.get(url, params={'access_token': token})
         self.logger.debug('response: {}'.format(response.content))
         return json.loads(response.content)
 
@@ -206,10 +222,14 @@ class AnalyticsManager:
         self.logger.debug('get acces token debug test')
         if user is None:
             user = User.objects.get(username=settings.SOCIAL_AUTH_FALLBACK_USERNAME)
-        #get the stored oauth2 access token for user
+        # get the stored oauth2 access token for user
         social = user.social_auth.get(provider='google-oauth2', user=user)
-        # strategy = load_strategy(backend='google-oauth2')
-        # social.refresh_token(strategy)
+        # get a new access token using the refresh token if necessary
+        if social.extra_data['expires'] == 0:
+            self.logger.debug("""access token expired, retrieving new token
+                              using refresh token""")
+            strategy = load_strategy(backend='google-oauth2')
+            social.refresh_token(strategy)
         return social.extra_data['access_token']
 
     """
@@ -219,10 +239,12 @@ class AnalyticsManager:
     GA_MANAGEMENT_URL = 'https://www.googleapis.com/analytics/v3'
 
     def get_accounts(self):
-        return self.API_call('{}/management/accountSummaries'.format(self.GA_MANAGEMENT_URL))
+        url = '{}/management/accountSummaries'.format(self.GA_MANAGEMENT_URL)
+        return self.API_call(url)
 
     def get_properties(self, account_id):
-        return self.API_call('{}/management/accounts/{}/webproperties'.format(self.GA_MANAGEMENT_URL, account_id))
+        url = '{}/management/accounts/{}/webproperties'.format(self.GA_MANAGEMENT_URL, account_id)
+        return self.API_call(url)
 
     def get_profiles(self, account_id, property_id):
         return self.API_call('{}/management/accounts/{}/webproperties/{}/profiles'.format(self.GA_MANAGEMENT_URL, account_id, property_id))
@@ -250,11 +272,9 @@ class AnalyticsManager:
         url = '{}/management/accounts/{}/webproperties/{}/profiles/{}/goals'.format(self.GA_MANAGEMENT_URL, account_id, property_id, view_id)
         return self.API_call(url)
 
-
     """
     Helper and convenience functions
     """
-
     def google_date(self, date):
         """
         Helper function to convert a datetime object to the format
