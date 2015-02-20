@@ -14,7 +14,4 @@ class AnalyticsManagerTestCase(TestCase):
             username='jacob', email='jacob@…', password='top_secret')
         self.analytics_manager = AnalyticsManager()
 
-    def test_refresh_access_token_for_user(self):
-        token = self.analytics_manager.refresh_access_token_for_user()
-        self.assertIsNotNone(token, 'token is None')
-        self.assertIsNot(token, '', 'Token is empty string')
+

@@ -2,16 +2,16 @@
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
             <li>
-                <a class="active" href="/dashboard/1?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Home</a>
+                <a class="active" href="{% url 'dashboard.views.index' '1' %}?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Home</a>
             </li>
             <li>
-                <a class="active" href="/dashboard/1/origin?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Webbezoek</a>
+                <a class="active" href="{% url 'dashboard.views.origin' '1' %}?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Webbezoek</a>
             </li>
             <li>
-                <a class="active" href="/dashboard/1/profiles?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Profielen</a>
+                <a class="active" href="{% url 'dashboard.views.profiles' '1' %}?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Profielen</a>
             </li>
             <li>
-                <a class="active" href="/dashboard/1/adwords?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Campagnes</a>
+                <a class="active" href="{% url 'dashboard.views.adwords' '1' %}?template=synchroon"><i class="fa fa-dashboard fa-fw"></i> Campagnes</a>
             </li>
         </ul>
     </div>
