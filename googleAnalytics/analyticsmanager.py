@@ -209,8 +209,14 @@ class AnalyticsManager:
         Generic base API interfacing method
         """
         token = self.get_access_token_for_user()
+        import pdb
+        pdb.set_trace()
         self.logger.debug('calling url: {}'.format(url))
         response = requests.get(url, params={'access_token': token})
+        if response.status_code == 401:
+            if response.json()['error']['message'] == u'Invalid Credentials':
+                new_token = self.refresh_access_token_for_user()
+                self.logger.debug('new token: {}'.format(new_token))
         self.logger.debug('response: {}'.format(response.content))
         return json.loads(response.content)
 
@@ -231,6 +237,18 @@ class AnalyticsManager:
             strategy = load_strategy(backend='google-oauth2')
             social.refresh_token(strategy)
         return social.extra_data['access_token']
+
+    def refresh_access_token_for_user(self, user=None):
+        """
+        Get a new access token using the refresh token
+        """
+        if user is None:
+            user = User.objects.get(username=settings.SOCIAL_AUTH_FALLBACK_USERNAME)
+        # get the stored oauth2 access token for user
+        social = user.social_auth.get(provider='google-oauth2', user=user)
+        strategy = load_strategy(backend='google-oauth2')
+        new_token = social.refresh_token(strategy)
+        return new_token
 
     """
     Management API functions and utils
