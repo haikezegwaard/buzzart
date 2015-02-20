@@ -209,8 +209,6 @@ class AnalyticsManager:
         Generic base API interfacing method
         """
         token = self.get_access_token_for_user()
-        import pdb
-        pdb.set_trace()
         self.logger.debug('calling url: {}'.format(url))
         response = requests.get(url, params={'access_token': token})
         if response.status_code == 401:
