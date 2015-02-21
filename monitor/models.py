@@ -1,6 +1,7 @@
 from django.db import models
 from nikiInterest.models import InterestAccount
-
+from django.contrib.auth.models import User
+from managers import AccountManager
 
 # Create your models here.
 class Project(models.Model):
@@ -17,6 +18,23 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class Account(models.Model):
+    name = models.CharField(max_length=512, blank=False, null=False)
+    users = models.ManyToManyField(User, related_name='accounts', blank=True, through='Role')
+
+    objects = AccountManager()
+
+    def __unicode__(self):
+        return self.name
+
+class Role(models.Model):
+    user = models.OneToOneField(User)
+    account = models.OneToOneField(Account)
+    role = models.CharField(max_length=512, blank=False, null=False, default='owner')
+
+    def __unicode__(self):
+        return "{} : {} - {}".format(self.account.name, self.user.username,self.role)
 
 
 # Account for SOAP interest service
