@@ -116,13 +116,13 @@ class Migration(SchemaMigration):
             'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['monitor.Project']"}),
             'traffic_advice': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
-       # u'nikiInterest.interestaccount': {
-       #     'Meta': {'object_name': 'InterestAccount'},
-       #     u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-       #     'lastUpdate': ('django.db.models.fields.DateTimeField', [], {}),
-       #     'password': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
-       #     'username': ('django.db.models.fields.CharField', [], {'max_length': '400'})
-       # }
+        u'nikiInterest.interestaccount': {
+            'Meta': {'object_name': 'InterestAccount'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lastUpdate': ('django.db.models.fields.DateTimeField', [], {}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
+            'username': ('django.db.models.fields.CharField', [], {'max_length': '400'})
+        }
     }
 
     complete_apps = ['monitor']
