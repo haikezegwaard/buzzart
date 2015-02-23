@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+
+{% block sitetitle %}
+Synchroon dashboard - {{ project.name }}
+{% endblock %}
+
+{% block menuitems %}
+    {% include "synchroon/base/left-menu.html" %}
+{% endblock %}
+
+{% block topbar %}
+    {% include "synchroon/corporate/base/top-bar.html" %}
+{% endblock topbar %}
