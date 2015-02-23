@@ -1,23 +1,23 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-    <i class="fa fa-bar-chart-o fa-fw"></i> Burgerlijke staat
+    <i class="fa fa-bar-chart-o fa-fw"></i> Inkomen
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
-        <div id="burgelijke-staat-container" min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto></div>
+        <div id="inkomen-container" min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto></div>
     </div>
     <!-- /.panel-body -->
 </div>
 <script>
 $(function () {
-    $('#burgelijke-staat-container').highcharts({
+    $('#inkomen-container').highcharts({
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false
         },
         title: {
-            text: 'Burgelijke staat geinteresseerden'
+            text: 'Gezamenlijk inkomen'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -40,10 +40,9 @@ $(function () {
             type: 'pie',
             name: 'Burgerlijke staat',
             data: [
-                ['Gehuwd',   45.0],
-                ['Ongehuwd', 26.8],
-                ['Samenwonend',10.2],
-                ['Anders',   8.0]
+                ['50.000 - 75.000',   20],
+                ['75.000 - 100.000', 65],
+                ['meer dan 100.000',15]
             ]
         }]
     });

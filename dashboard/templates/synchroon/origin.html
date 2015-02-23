@@ -4,6 +4,17 @@ Bezoekersanalyse {{project.name}}
 {% endblock %}
 {% block home %}
 <div class="row">
+    <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/analytics-summary-table.html" %}
+    </div>
+    <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/pagecount-table.html" %}
+    </div>
+    <div class="col-lg-4">
+        {% include "synchroon/demo-widgets/conversions-table.html" %}
+    </div>
+</div>
+<div class="row">
     <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -25,7 +36,7 @@ Bezoekersanalyse {{project.name}}
         </div>
     </div>
     <div class="col-lg-4">
-        {% include "synchroon/demo-widgets/conversions-table.html" %}
+
         {% include "widgets/analytics-origin-pie-plot.html" %}
         {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>

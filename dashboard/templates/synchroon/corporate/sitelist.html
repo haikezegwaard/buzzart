@@ -1,6 +1,6 @@
-{% extends "base/base.html" %}
+{% extends "synchroon/corporate/base/base.html" %}
 {% block leftmenu %}
-{% include "corporate/left-menu.html" %}
+{% include "synchroon/corporate/base/left-menu.html" %}
 {% endblock %}
 {% block pagetitle %}
 Overzicht websites
@@ -35,7 +35,7 @@ Overzicht websites
                             <tr class="danger">
 
                                 <td><a href="{% url 'dashboard.views.index' '1' %}?template=synchroon">Kopblok Houthaven</a></td>
-                                <td><span class="label label-success">In voorbereiding</span></td>
+                                <td><span class="label label-info">In voorbereiding</span></td>
                                 <td>
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%;">
@@ -105,14 +105,14 @@ Overzicht websites
                                 <td><i class="fa fa-desktop"></i></td>
                             </tr>
 
-                            <tr class="success">
+                            <tr class="active">
 
                                 <td><a href="{% url 'dashboard.views.index' '1' %}?template=synchroon">Parc glorieux</a></td>
-                                <td><span class="label label-success">Verkocht</span></td>
+                                <td><span class="label label-default">Verkocht</span></td>
                                 <td>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" style="width: 78%;">
-                                    78%
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                    100%
                                     </div>
                                 </div>
                                 </td>
