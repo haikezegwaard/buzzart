@@ -1,1 +1,1 @@
-web: gunicorn buzzart.wsgi --log-file -
+web: gunicorn wsgi.heroku --log-file -
