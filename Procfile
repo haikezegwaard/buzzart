@@ -1,0 +1,1 @@
+web: gunicorn buzzart.wsgi --log-file -
