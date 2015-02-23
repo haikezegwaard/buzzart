@@ -1,5 +1,5 @@
 from django.db import models
-import monitor.models as monitor_models
+
 
 class AccountManager(models.Manager):
 
