@@ -1,6 +1,8 @@
-<!-- Bootstrap Core CSS -->
+{# Load the tag library #}
+{% load bootstrap3 %}
+    
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1%}
 {% load staticfiles %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-<script src="{% static 'js/bootstrap.js' %}"></script>
 <link href="{% static 'css/bs-callouts.css' %}" rel="stylesheet">

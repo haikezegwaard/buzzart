@@ -16,6 +16,8 @@ import models
 from facebook.fbmanager import FacebookManager
 from facebookAds.models import FacebookAdsSettings
 import logging
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login as djlogin, logout as djlogout
 
 logger = logging.getLogger(__name__)
 
@@ -45,11 +47,12 @@ class ProfileView(generic.TemplateView):
         return context
 
 
+@login_required()
 def index(request):
     """
     View for main entrance, listing various possible actions
     in the buzzart application. For convenience only
-    """
+    """    
     import cyfe.urls as cyfeurls
     summaries = models.Summary.objects.all()
     projects = models.Project.objects.all()
@@ -77,3 +80,18 @@ def facebook_tokens(request):
     return render_to_response('fbtokens.html',
                               {'projects': projects},
                               context_instance=RequestContext(request))
+    
+
+def login(request):
+    djlogout(request)
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                djlogin(request, user)                
+                return HttpResponseRedirect('/')
+    return render_to_response('login-form.html', context_instance=RequestContext(request))

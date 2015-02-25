@@ -59,13 +59,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_extensions',
     'niki',
+    'nikiInterest',
     'monitor',
     'notifier',
     'cyfe',
     'facebook',
-    'mcapi',
-    'nikiInterest',
+    'mcapi',    
     'dashboard',
     'googleAnalytics',
     'social.apps.django_app.default',
@@ -73,7 +74,8 @@ INSTALLED_APPS = (
     'djrill',
     'twitterAnalytics',
     'south',
-    'facebookAds'
+    'facebookAds',
+    'bootstrap3'
 
 )
 
@@ -169,6 +171,8 @@ USE_L10N = True
 USE_TZ = True
 
 SITE_ID = 1
+
+LOGIN_URL = '/login/'
 
 ADMIN_MAIL = 'hz@fundament.nl'
 NOTIFIER_FROM_MAIL = 'info@fundament.nl'

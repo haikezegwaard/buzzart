@@ -20,14 +20,21 @@ class FacebookAdsManager:
         self.api_version = 'v2.2'
         self.logger = logging.getLogger(__name__)
         if FacebookAdsSettings.objects.all().count() == 0:
-            self.generate_long_lived_token(token)
+            try:
+                self.generate_long_lived_token(token)
+            except Exception:
+                self.logger.error('Could not generate long lived token')
+                pass
         if FacebookAdsSettings.objects.all().count() > 1:
             raise Exception('''Found more than one Facebook Ad access token
                                in the database, this should not happen!''')
         my_app_id = settings.FACEBOOK_ADS_APP_ID
         my_app_secret = settings.FACEBOOK_ADS_APP_SECRET
         my_access_token = self.get_stored_token()
-        FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
+        try:
+            FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
+        except Exception:
+            self.logger.error('Could not initialize FB Ads API')
 
     def get_campaign_stats(self, cid):
         campaign = objects.AdCampaign(cid)
