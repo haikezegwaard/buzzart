@@ -9,15 +9,11 @@ https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
 
 import os
 import sys
-
-# put the Django project on sys.path
-PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
-sys.path.insert(0, PROJECT_ROOT)
-
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-
 from django.core.wsgi import get_wsgi_application
+from whitenoise.django import DjangoWhiteNoise
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.heroku")
 application = get_wsgi_application()
+application = DjangoWhiteNoise(application)
 
 
