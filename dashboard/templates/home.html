@@ -36,6 +36,94 @@ Analyse {{project.name}}
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <div id="container"></div>
+                <script>
+
+                    $(function () {
+                      $.getJSON('/dashboard/plotdata/{{ project_id }}', function(data) {
+                        $('#container').highcharts('StockChart', {
+                            chart: {
+                                type: 'spline'
+                            },
+                            title: {
+                                text: 'Website bezoek t.o.v. inschrijvingen'
+                            },
+                            subtitle: {
+                                text: 'Vind de correlatie'
+                            },
+                            xAxis: {
+                                type: 'datetime',
+                                dateTimeLabelFormats: { // don't display the dummy year
+                                    month: '%e. %b',
+                                    year: '%b'
+                                },
+                                title: {
+                                    text: 'Date'
+                                }
+                            },
+                            yAxis: [{
+                                    labels: {
+                                        align: 'right',
+                                        x: -3
+                                    },
+                                    title: {
+                                        text: 'Traffic'
+                                    },
+                                    height: '60%',
+                                    lineWidth: 2
+                                }, {
+                                    labels: {
+                                        align: 'right',
+                                        x: -3
+                                    },
+                                    title: {
+                                        text: 'Conversies'
+                                    },
+                                    top: '65%',
+                                    height: '35%',
+                                    offset: 0,
+                                    lineWidth: 2
+                                }],
+                    
+                            tooltip: {
+                            },
+                            navigator : {
+                                adaptToUpdatedData: false,
+                                series : {
+                                    data : data[0].data
+                                }
+                            },
+                            series: [
+                            {
+                                name: 'Conversies',
+                                type: 'spline',
+                                yAxis: 1,
+                                data: data[1].data
+                    
+                            },
+                            {
+                                name: 'Website bezoek',
+                                type: 'spline',
+                                id: 'traffic',
+                                data: data[0].data
+                            },
+                           /* {
+                                name: 'Inschrijvingen',
+                                type: 'spline',
+                                yAxis: 2,
+                                data: data[3].data
+                            },*/
+                            {
+                                type: 'flags',
+                                data: data[2].data,
+                                onSeries: 'traffic',
+                                shape: 'circlepin'
+                            }
+                            ]
+                        });
+                      });
+                    });
+                    
+                    </script>
             <!--</div>-->
             <!-- /.panel-body -->
             <!--<div class="panel-footer">-->
@@ -70,92 +158,5 @@ Analyse {{project.name}}
 </div>
 {% endblock %}
 
-<script>
 
-$(function () {
-  $.getJSON('/dashboard/plotdata/{{ project_id }}', function(data) {
-    $('#container').highcharts('StockChart', {
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: 'Website bezoek t.o.v. inschrijvingen'
-        },
-        subtitle: {
-            text: 'Vind de correlatie'
-        },
-        xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                month: '%e. %b',
-                year: '%b'
-            },
-            title: {
-                text: 'Date'
-            }
-        },
-        yAxis: [{
-                labels: {
-                    align: 'right',
-                    x: -3
-                },
-                title: {
-                    text: 'Traffic'
-                },
-                height: '60%',
-                lineWidth: 2
-            }, {
-                labels: {
-                    align: 'right',
-                    x: -3
-                },
-                title: {
-                    text: 'Conversies'
-                },
-                top: '65%',
-                height: '35%',
-                offset: 0,
-                lineWidth: 2
-            }],
-
-        tooltip: {
-        },
-        navigator : {
-            adaptToUpdatedData: false,
-            series : {
-                data : data[0].data
-            }
-        },
-        series: [
-        {
-            name: 'Conversies',
-            type: 'spline',
-            yAxis: 1,
-            data: data[1].data
-
-        },
-        {
-            name: 'Website bezoek',
-            type: 'spline',
-            id: 'traffic',
-            data: data[0].data
-        },
-       /* {
-            name: 'Inschrijvingen',
-            type: 'spline',
-            yAxis: 2,
-            data: data[3].data
-        },*/
-        {
-            type: 'flags',
-            data: data[2].data,
-            onSeries: 'traffic',
-            shape: 'circlepin'
-        }
-        ]
-    });
-  });
-});
-
-</script>
 {% endblock %}

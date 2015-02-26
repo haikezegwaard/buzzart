@@ -42,6 +42,19 @@ class StatsService():
             count = int(item[1])
             result.append([ms, count])
         return result
+    
+    def get_named_conversion_count(self, project, start, end):
+        """
+        Get list of tuples (goalname, count) for project over time
+        """
+        settings = models.AnalyticsSettings.objects.get(project = project)       
+        goals = self.ga_manager.get_goals_for_view(settings.ga_view)
+        result = []
+        for goal in goals.get('items'):
+            goal_id = int(goal.get('id'))
+            count = self.ga_manager.get_total_conversion_count_for_goal(settings.ga_view, goal_id)
+            result.append({'name': goal.get('name'), 'count': count})
+        return result
 
     def get_channels_for_sessions(self, project, start, end):
         """

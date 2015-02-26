@@ -9,6 +9,7 @@ from datetime import datetime as dt
 import datetime
 import statsservice
 from django.shortcuts import redirect
+import helper
 
 
 ga_man = analyticsmanager.AnalyticsManager()
@@ -27,14 +28,14 @@ def conversions_total(request, project_id):
     """
     For AJAX-ing purpose
     """
-    settings = get_settings_by_project_id(project_id)
+    settings = helper.get_settings_by_project_id(project_id)
     data = {'conversions' : ga_man.get_total_conversion_count(settings)}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def conversions_daily(request, project_id):
     end = dt.today()
     start = end - datetime.timedelta(days = 31)
-    settings = get_settings_by_project_id(project_id)
+    settings = helper.get_settings_by_project_id(project_id)
     data = {'conversions' : ga_man.get_daily_conversions_for_goal(settings.ga_view, settings.goal_to_track, start, end)}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -57,7 +58,7 @@ def device_category(request, project_id):
 def traffic_this_week(request, project_id):
     end = dt.today()
     start = end - datetime.timedelta(days = 7)
-    settings = get_settings_by_project_id(project_id)
+    settings = helper.get_settings_by_project_id(project_id)
     count = ga_man.get_session_count(settings.ga_view, ga_man.google_date(start), ga_man.google_date(end))
     data = {'traffic': count}
     return HttpResponse(json.dumps(data), content_type='application/json')
@@ -71,7 +72,7 @@ def traffic(request, project_id):
     end = session.get('end')
     if end is None:
         end = datetime.date.today() - datetime.timedelta(days=1)
-    settings = get_settings_by_project_id(project_id)
+    settings = helper.get_settings_by_project_id(project_id)
     count = ga_man.get_session_count(settings.ga_view, ga_man.google_date(start), ga_man.google_date(end))
     data = {'traffic': count}
     return HttpResponse(json.dumps(data), content_type='application/json')
@@ -79,19 +80,17 @@ def traffic(request, project_id):
 def top_pages(request, project_id):
     end = dt.today()
     start = end - datetime.timedelta(days = 7)
-    settings = get_settings_by_project_id(project_id)
+    settings = helper.get_settings_by_project_id(project_id)
     response = ga_man.get_top_pages(settings.ga_view, start, end)
     data = {'pages': response}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-
-def get_settings_by_project_id(project_id):
-    """
-    Helper lookup function, retrieve analyticssettings object
-    by given project id
-    """
-    project = models.Project.objects.get(id = project_id)
-    return ga_models.AnalyticsSettings.objects.get(project = project)
+def conversion_list(request, project_id):
+    project = models.Project.objects.get(id=project_id)
+    end = dt.today()
+    start = end - datetime.timedelta(days = 31)
+    data = ga_stats.get_named_conversion_count(project, start, end)
+    return HttpResponse(json.dumps(data), content_type='application/json')    
 
 def list_accounts(request):
     """

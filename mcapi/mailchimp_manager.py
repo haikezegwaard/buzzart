@@ -14,8 +14,12 @@ class MailchimpManager:
     """
 
     def __init__(self, apikey):
-        self.api = mailchimp.Mailchimp(apikey)
         self.logger = logging.getLogger(__name__)
+        try:
+            self.api = mailchimp.Mailchimp(apikey)
+        except:
+            self.logger.error('could not initialize mc-api')
+        
 
     def get_list_growth_data(self, listid):
         """

@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^properties/(?P<account_id>.*)$', views.list_properties, name='properties'),
     url(r'^profiles/(?P<account_id>.*)/(?P<property_id>.*)$', views.list_profiles, name='profiles'),
     url(r'^findaccount/(?P<profile_id>.*)$', views.find_account, name='findaccount'),
-    url(r'^goals/(?P<profile_id>.*)$', views.list_goals, name='goals')
-    )
+    url(r'^goals/(?P<profile_id>.*)$', views.list_goals, name='goals'),
+    url(r'^conversionList/(?P<project_id>[0-9]*)$', views.conversion_list, name='conversion_list' )
+)

@@ -81,6 +81,15 @@ class AnalyticsManager:
         action = 'goal{}Completions'.format(goalid)
         obj = self.reporting_API_call(viewid, start, end, [action])
         return int(obj['totalsForAllResults']['ga:'+action])
+    
+    def get_total_conversion_count_for_goal(self, viewid, goalid):
+        """
+        Get total conversion count for specific view id and specific 
+        goal number overall
+        """
+        now = self.google_date(datetime.today())
+        return self.get_conversion_count_for_goal(viewid, goalid, 
+                                                  self.GA_NULL_DATE, now)
 
     def get_conversion_rate_for_goal(self, viewid, goalid, start, end):
         """
