@@ -8,10 +8,8 @@ class MonitorTestCase(TestCase):
         self.first = models.Account.objects.create(name="testaccount")
         self.user = User.objects.create_user(
             username='jacob', email='jacob@…', password='top_secret')
-        self.jnjmodels.Role.objects.create(account=first,user=user,role="owner")
+        
 
         models.Account.objects.create(name="secondtestaccount")
 
-    def test_get_account_users(self):
-        manager = managers.AccountManager()
-    manager.get_account_members(account, role)
+    
