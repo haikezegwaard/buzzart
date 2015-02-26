@@ -36,3 +36,9 @@ def availability(request, project_id):
     av = nc.getLabeledAvailability(project.nikiProject)
     result = [(k,v) for k,v in av.iteritems()]
     return HttpResponse(json.dumps(result), content_type='application/json')
+
+def apicall(request):
+    resource = request.GET['resource']
+    result = nc.apiRequest(resource)
+    return HttpResponse(json.dumps(result), content_type='application/json')
+    
