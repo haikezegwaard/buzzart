@@ -4,6 +4,8 @@ from monitor import views
 from django.contrib import admin
 from djrill import DjrillAdminSite
 from django.conf.urls.static import static
+from django.contrib.auth.views import login, logout
+
 
 admin.site = DjrillAdminSite()
 admin.autodiscover()
@@ -23,7 +25,8 @@ urlpatterns = patterns('',
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^fbtokens',views.facebook_tokens, name='fbtokens'),
     url(r'^fbads', include('facebookAds.urls')),    
-    url(r'^login/$', views.login, name='login'),
+    url(r'^login/$', login, {'template_name':'login-form.html'}, name='login'),
+    url(r'^logout/$', logout, name='logout'),
     url(r'^$',views.index, name='index')
 )# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

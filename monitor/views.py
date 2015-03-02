@@ -80,18 +80,3 @@ def facebook_tokens(request):
     return render_to_response('fbtokens.html',
                               {'projects': projects},
                               context_instance=RequestContext(request))
-    
-
-def login(request):
-    djlogout(request)
-    username = password = ''
-    if request.POST:
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                djlogin(request, user)                
-                return HttpResponseRedirect('/')
-    return render_to_response('login-form.html', context_instance=RequestContext(request))
