@@ -62,8 +62,7 @@ def upgrade():
     print(colors.red('TODO: activate a maintenance page?', bold=True))
 
     with cd(tmp_install_dir):
-        run('tar -xf {}'.format(env.uploaded_packed_file),
-             user=env.install_user)
+        run('tar -xf {}'.format(env.uploaded_packed_file))
         run('rm {}'.format(env.uploaded_packed_file))
         with virtualenv.context(env.virtualenv_dir):
             sudo_as = functools.partial(run, user=env.install_user)
