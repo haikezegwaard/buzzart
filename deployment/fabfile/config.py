@@ -63,6 +63,7 @@ def test():
 def acceptation():
     '''Configuration for acceptation server'''
     env.use_ssh_config = False
+    env.django_developing = True # do not restart apache
     env.project_name = 'buzzart'
     env.hosts = ['django-dev.fundament.nl']
     env.install_dir = '/data/www/buzzart/'

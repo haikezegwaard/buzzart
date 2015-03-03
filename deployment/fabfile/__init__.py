@@ -3,6 +3,7 @@ import functools
 import os.path
 
 from fabric.api import *
+from fabric.api import run
 from fabric import colors
 from fabric.contrib import files
 
@@ -39,12 +40,12 @@ def upgrade():
     # on 'new' install we can't backup
     # just create them and backup empties
     if not files.exists(env.install_dir):
-        sudo('mkdir -p {dir}'.format(dir=env.install_dir))
-        sudo('chown {user}.{user} {dir}'.format(user=env.install_user,
+        run('mkdir -p {dir}'.format(dir=env.install_dir))
+        run('chown {user}.{user} {dir}'.format(user=env.install_user,
                                                 dir=env.install_dir))
     if not files.exists(env.django_media_root):
-        sudo('mkdir -p {dir}'.format(dir=env.django_media_root))
-        sudo('chown {user}.{user} {dir}'.format(user=env.install_user,
+        run('mkdir -p {dir}'.format(dir=env.django_media_root))
+        run('chown {user}.{user} {dir}'.format(user=env.install_user,
                                                 dir=env.django_media_root))
 
     pack()
@@ -54,25 +55,25 @@ def upgrade():
     print(colors.red('TODO: impl. upload pip requirements bundle', bold=True))
 
     tmp_install_dir = '{}_new/'.format(env.install_dir[:-1])  # strip '/'
-    sudo('mkdir -p {}'.format(tmp_install_dir))
-    sudo('chown {user}.{user} {dir}'.format(user=env.install_user,
+    run('mkdir -p {}'.format(tmp_install_dir))
+    run('chown {user}.{user} {dir}'.format(user=env.install_user,
                                             dir=tmp_install_dir))
 
     print(colors.red('TODO: activate a maintenance page?', bold=True))
 
     with cd(tmp_install_dir):
-        sudo('tar -xf {}'.format(env.uploaded_packed_file),
+        run('tar -xf {}'.format(env.uploaded_packed_file),
              user=env.install_user)
-        sudo('rm {}'.format(env.uploaded_packed_file))
+        run('rm {}'.format(env.uploaded_packed_file))
         with virtualenv.context(env.virtualenv_dir):
-            sudo_as = functools.partial(sudo, user=env.install_user)
+            sudo_as = functools.partial(run, user=env.install_user)
             django.project_manage_upgrade(exec_cmd=sudo_as)
 
     # move/rename dirs
     install_backup_dir = '{}_old/'.format(env.install_dir[:-1])  # strip '/'
-    sudo('rm -rf {install_backup_dir}'.format(
+    run('rm -rf {install_backup_dir}'.format(
         install_backup_dir=install_backup_dir))
-    sudo('mv {install_dir} {install_backup_dir} && '
+    run('mv {install_dir} {install_backup_dir} && '
          'mv {tmp_install_dir} {install_dir}'.format(
         install_dir=env.install_dir,
         install_backup_dir=install_backup_dir,
