@@ -62,15 +62,16 @@ def test():
 @task(alias='acc')
 def acceptation():
     '''Configuration for acceptation server'''
-    env.project_name = 'buzzart-acc'
+    env.use_ssh_config = False
+    env.project_name = 'buzzart'
     env.hosts = ['django-dev.fundament.nl']
-    env.install_dir = '/opt/buzzart/'
+    env.install_dir = '/data/www/buzzart/'
     env.install_user = 'webdev'
     env.user = env.install_user
-    env.django_media_root = '/opt/buzzart/media/'
+    env.django_media_root = '/data/www/buzzart/media/'
     env.requirements_file = join(env.project_root,
                                  'requirements.txt')
-    env.virtualenv_dir = '/opt/virtualenvs/buzzart/'
+    env.virtualenv_dir = '/data/www/virtualenvs/buzzart/'
     env.django_settings = 'settings.acceptation'
     django_settings_to_env()
     env.django_developing = False
