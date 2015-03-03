@@ -56,8 +56,8 @@ def upgrade():
 
     tmp_install_dir = '{}_new/'.format(env.install_dir[:-1])  # strip '/'
     run('mkdir -p {}'.format(tmp_install_dir))
-    run('chown {user}.{user} {dir}'.format(user=env.install_user,
-                                            dir=tmp_install_dir))
+    #run('chown {user}.{user} {dir}'.format(user=env.install_user,
+    #                                        dir=tmp_install_dir))
 
     print(colors.red('TODO: activate a maintenance page?', bold=True))
 
