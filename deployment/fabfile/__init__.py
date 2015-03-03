@@ -49,7 +49,7 @@ def upgrade():
 
     pack()
     upload()
-    backup(), skip, aborting install when not using mysql
+    backup() 
 
     print(colors.red('TODO: impl. upload pip requirements bundle', bold=True))
 
