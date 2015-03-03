@@ -41,12 +41,12 @@ def upgrade():
     # just create them and backup empties
     if not files.exists(env.install_dir):
         run('mkdir -p {dir}'.format(dir=env.install_dir))
-        run('chown {user}.{user} {dir}'.format(user=env.install_user,
-                                                dir=env.install_dir))
+        #run('chown {user}.{user} {dir}'.format(user=env.install_user,
+        #                                        dir=env.install_dir))
     if not files.exists(env.django_media_root):
         run('mkdir -p {dir}'.format(dir=env.django_media_root))
-        run('chown {user}.{user} {dir}'.format(user=env.install_user,
-                                                dir=env.django_media_root))
+        #run('chown {user}.{user} {dir}'.format(user=env.install_user,
+        #                                        dir=env.django_media_root))
 
     pack()
     upload()
