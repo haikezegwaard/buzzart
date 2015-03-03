@@ -65,7 +65,7 @@ def acceptation():
     env.project_name = 'buzzart-acc'
     env.hosts = ['django-dev.fundament.nl']
     env.install_dir = '/opt/buzzart/'
-    env.install_user = 'hz'
+    env.install_user = 'webdev'
     env.django_media_root = '/opt/buzzart/media/'
     env.requirements_file = join(env.project_root,
                                  'requirements.txt')
