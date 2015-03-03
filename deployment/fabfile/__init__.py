@@ -50,7 +50,7 @@ def upgrade():
 
     pack()
     upload()
-    backup() 
+    #backup() 
 
     print(colors.red('TODO: impl. upload pip requirements bundle', bold=True))
 
