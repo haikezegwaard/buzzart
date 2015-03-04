@@ -27,7 +27,6 @@ from .utils import TmpDirectory
 
 provided_by_config = (config.test, config.acceptation, config.production)
 
-
 @task
 def upgrade():
     '''Upgrade an existing install'''
@@ -64,6 +63,7 @@ def upgrade():
     with cd(tmp_install_dir):
         run('tar -xf {}'.format(env.uploaded_packed_file))
         run('rm {}'.format(env.uploaded_packed_file))
+        pip.install_reqs()
         with virtualenv.context(env.virtualenv_dir):
             #sudo_as = functools.partial(run, user=env.install_user)
             django.project_manage_upgrade(exec_cmd=run)

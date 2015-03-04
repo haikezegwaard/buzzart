@@ -61,4 +61,11 @@ def install_requirements():
         # cleanup
     run('rm -rf {}'.format(tmp_dir))
     run('rm {}'.format(env.uploaded_packed_file))
-
+    
+@task
+def install_reqs():
+    require('virtualenv_dir')
+    require('requirements_file')
+    with virtualenv.context(env.virtualenv_dir):
+        run('pip install --upgrade -r {requirements}'.format(
+            env.requirements_file))

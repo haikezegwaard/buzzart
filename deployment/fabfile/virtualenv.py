@@ -22,3 +22,4 @@ def delete(virtualenv_dir=None, exec_cmd=sudo):
         require('virtualenv_dir')
         virtualenv_dir = env.virtualenv_dir
     exec_cmd('rm -rf {}'.format(virtualenv_dir))
+
