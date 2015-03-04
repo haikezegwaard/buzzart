@@ -67,5 +67,4 @@ def install_reqs():
     require('virtualenv_dir')
     require('requirements_file')
     with virtualenv.context(env.virtualenv_dir):
-        run('pip install --upgrade -r {requirements}'.format(
-            env.requirements_file))
+        run('pip install --upgrade -r {}'.format(env.requirements_file))
