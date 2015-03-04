@@ -70,8 +70,8 @@ def acceptation():
     env.install_user = 'webdev'
     env.user = env.install_user
     env.django_media_root = '/data/www/buzzart/media/'
-    env.requirements_file = join(env.project_root,
-                                 'requirements/acceptation.txt')
+    env.requirements = 'requirements/acceptation.txt'
+    env.requirements_file = join(env.project_root, env.requirements)
     env.virtualenv_dir = '/data/www/virtualenvs/buzzart/'
     env.django_settings = 'settings.acceptation'
     django_settings_to_env()
