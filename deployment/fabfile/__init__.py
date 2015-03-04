@@ -65,8 +65,8 @@ def upgrade():
         run('tar -xf {}'.format(env.uploaded_packed_file))
         run('rm {}'.format(env.uploaded_packed_file))
         with virtualenv.context(env.virtualenv_dir):
-            sudo_as = functools.partial(run, user=env.install_user)
-            django.project_manage_upgrade(exec_cmd=sudo_as)
+            #sudo_as = functools.partial(run, user=env.install_user)
+            django.project_manage_upgrade(exec_cmd=run)
 
     # move/rename dirs
     install_backup_dir = '{}_old/'.format(env.install_dir[:-1])  # strip '/'
