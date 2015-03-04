@@ -34,7 +34,7 @@ def celery_inspect_stats():
             env.django_settings, env.virtualenv_dir, env.django_project))
 
 
-def project_manage_upgrade(exec_cmd=sudo, manage_cmd='./manage.py'):
+def project_manage_upgrade(exec_cmd=sudo, manage_cmd='python ./manage.py'):
     require('django_manage_commands')
     require('django_settings')
     # TODO: check manage_cmd exists?
