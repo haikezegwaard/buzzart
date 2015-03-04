@@ -1,7 +1,10 @@
 <!-- /.panel -->
 <div class="panel panel-default">
     <div class="panel-heading">
-    <i class="fa fa-bar-chart-o fa-fw"></i> Niki verkoopstand
+    <i class="fa fa-bar-chart-o fa-fw"></i> 
+    {% if title %} {{ title }}
+    {% else %} Niki verkoopstand
+    {% endif %}
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
@@ -11,8 +14,14 @@
 </div>
 <script>
 $(document).ready(function () {
+    var action;
+    {% if project_resource %}    
+    action = '/niki/availability_by_resource?resource={{project_resource|urlencode}}'    
+    {% else %}
+    action = '/niki/availability/{{project_id}}';
+    {% endif %}
 
-    $.getJSON('/niki/availability/{{project_id}}', function(data) {
+    $.getJSON(action, function(data) {
 
         // Build the chart
         $('#niki-availability-donut-chart').highcharts({

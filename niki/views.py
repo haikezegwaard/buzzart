@@ -33,7 +33,14 @@ def project_list(request):
 
 def availability(request, project_id):
     project = Project.objects.get(id=project_id)
-    av = nc.getLabeledAvailability(project.nikiProject)
+    return labeled_availability_as_json(project.nikiProject)
+
+def availability_by_resource(request):
+    resource = request.GET.get('resource')
+    return labeled_availability_as_json(resource)
+
+def labeled_availability_as_json(resource):
+    av = nc.getLabeledAvailability(resource)
     result = [(k,v) for k,v in av.iteritems()]
     return HttpResponse(json.dumps(result), content_type='application/json')
 
