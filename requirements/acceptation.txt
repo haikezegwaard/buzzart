@@ -1,2 +1,2 @@
 -r requirements.txt
-MySQL-python==1.2.4
+MySQL-python==1.2.5
