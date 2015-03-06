@@ -76,8 +76,6 @@ INSTALLED_APPS = (
     'south',
     'facebookAds',
     'bootstrap3',
-    'django_facebook'
-
 )
 
 MIDDLEWARE_CLASSES = (
@@ -93,8 +91,7 @@ MIDDLEWARE_CLASSES = (
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
-    'social.backends.facebook.Facebook2OAuth2',
-    'django_facebook.auth_backends.FacebookBackend',
+    'social.backends.facebook.Facebook2OAuth2',    
     'django.contrib.auth.backends.ModelBackend'
 )
 
@@ -102,8 +99,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'social.apps.django_app.context_processors.backends',
     'django.core.context_processors.request',
-    'social.apps.django_app.context_processors.login_redirect',
-    'django_facebook.context_processors.facebook',
+    'social.apps.django_app.context_processors.login_redirect',    
 )
 
 SOCIAL_AUTH_PIPELINE = (
@@ -137,8 +133,8 @@ FACEBOOK_ADS_APP_SECRET = 'd02596c23bd1d14519fab88aa6e67a1d'
 FACEBOOK_ADS_ACCESS_TOKEN = 'CAAExT9HfFEgBAEwlef64YbR3hXmEDhM0gm7krw4RPIlPQk6RE7CO3SVYJwoC2cicWXc6d2mUE8HAjqJczwgMrq9bxjXcEvMPbvKnfvJGkMYp3Biy3VD8pB92qfH0UuSSdSMqBwU8P5nFYy8vIoRbZC31cjZA231uqJ24OoyJn7fkoC7l8H4KwP943n2erF6XlerMI1Fr8cyP1oy8fol3AJS1txT9MZD'
 
 # django-facebook settings
-FACEBOOK_APP_ID = '333944963454152'
-FACEBOOK_APP_SECRET = '4139129df43a25df06654aa4aa2c0ee3'
+# FACEBOOK_APP_ID = '333944963454152'
+# FACEBOOK_APP_SECRET = '4139129df43a25df06654aa4aa2c0ee3'
 
 GOOGLE_MCC_DEVELOPER_TOKEN = 'lHPAtgysjHRyaPSsOWjZYg'
 
@@ -182,6 +178,8 @@ SITE_ID = 1
 LOGIN_URL = '/login/'
 
 ADMIN_MAIL = 'hz@fundament.nl'
+
+ADMIN_USER = 'haike'
 NOTIFIER_FROM_MAIL = 'info@fundament.nl'
 
 # Static files (CSS, JavaScript, Images)
