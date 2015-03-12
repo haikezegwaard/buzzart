@@ -82,13 +82,13 @@ def acceptation():
 def production():
     '''Configuration for production server'''
     env.project_name = 'buzzart'
-    env.hosts = ['django01.fun.famhosting.nl']
-    env.install_dir = '/opt/buzzart/'
-    env.install_user = 'buzzart'
-    env.django_media_root = '/opt/buzzart/media/'
-    env.requirements_file = join(env.project_root,
-                                 'requirements.txt')
-    env.virtualenv_dir = '/opt/virtualenvs/buzzart/'
+    env.hosts = ['app01.fun.famhosting.nl']
+    env.install_dir = '/data/www/buzzart/'
+    env.install_user = 'webdev'
+    env.django_media_root = '/data/www/buzzart/media/'
+    env.requirements = 'requirements/production.txt'
+    env.requirements_file = join(env.project_root, env.requirements)    
+    env.virtualenv_dir = '/data/www/virtualenvs/buzzart/'
     env.django_settings = 'settings.production'
     django_settings_to_env()
     env.django_developing = False
