@@ -17,6 +17,11 @@ def fanpage_impressions(request, project_id):
     result = fbmanager.get_page_impressions(project)
     return HttpResponse(json.dumps(result))
 
+def fanpage_impressions_by_city(request, project_id):
+    project = Project.objects.get(id = project_id)
+    result = fbmanager.get_page_impressions_by_city(project, True, True)
+    return HttpResponse(json.dumps(result))
+
 def fanpage_overview(request, project_id):
     project = Project.objects.get(id = project_id)
     result = fbmanager.get_page_overview(project, True, True)
