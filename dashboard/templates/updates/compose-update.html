@@ -1,0 +1,10 @@
+{% extends "base/base.html" %}
+
+{% block home %}
+{% load bootstrap3 %}
+<form method="POST" action="/dashboard/{{ project.id }}/compose-update" class="form">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+{% endblock %}

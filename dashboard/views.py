@@ -20,6 +20,9 @@ from mcapi import statsservice as mcstats
 import logging
 from django.contrib.sessions.backends.db import SessionStore
 from googleAnalytics import helper
+from forms import UpdateForm
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
 session = SessionStore()
 
@@ -132,7 +135,23 @@ def corporate_updates(request):
     return render_to_response('corporate/updates.html',
                               {},
                               context_instance=RequestContext(request))
-    
+
+def compose_update(request, project_id):
+    project = Project.objects.get(id=project_id)
+    if request.method == 'POST':
+        form =  UpdateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/dashboard/{}'.format(project_id))
+    else:
+        data = { 'project': project,
+                 'posted': datetime.datetime.now()
+               }
+        form = UpdateForm(initial= data)
+    return render(request, 'updates/compose-update.html',
+                  {'form': form,
+                   'project': project})
+
 def project_updates(request, project_id):
     project = Project.objects.get(id=project_id)
     return render_to_response('timeline.html',
@@ -173,7 +192,7 @@ def get_referrals(project_id):
 
 
 def get_google_stats(project_id):
-    project = Project.objects.get(id=project_id)    
+    project = Project.objects.get(id=project_id)
     try:
         return ga_stats.get_traffic_over_time(project, start, end)
     except:
@@ -187,7 +206,7 @@ def get_campaigns(project_id):
     mc_stats = mcstats.StatsService()
     result = mc_stats.get_campaigns_over_time(project, start, end)
     return result
-    
+
 
 
 def get_subscriptions(project_id):
