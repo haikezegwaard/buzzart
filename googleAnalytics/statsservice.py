@@ -50,9 +50,14 @@ class StatsService():
         settings = models.AnalyticsSettings.objects.get(project = project)       
         goals = self.ga_manager.get_goals_for_view(settings.ga_view)
         result = []
+        start_date = self.ga_manager.google_date(start)
+        end_date = self.ga_manager.google_date(end)
         for goal in goals.get('items'):
             goal_id = int(goal.get('id'))
-            count = self.ga_manager.get_total_conversion_count_for_goal(settings.ga_view, goal_id)
+            count = self.ga_manager.get_conversion_count_for_goal(settings.ga_view, 
+                                                                  goal_id, 
+                                                                  start_date, 
+                                                                  end_date)
             result.append({'name': goal.get('name'), 'count': count})
         return result
 

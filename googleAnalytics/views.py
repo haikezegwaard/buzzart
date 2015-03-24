@@ -10,6 +10,7 @@ import datetime
 import statsservice
 from django.shortcuts import redirect
 import helper
+from dateutil import parser
 
 
 ga_man = analyticsmanager.AnalyticsManager()
@@ -41,17 +42,24 @@ def conversions_daily(request, project_id):
 
 def channel_info(request, project_id):
     project = models.Project.objects.get(id = project_id)
-    end = dt.today()
-    start = end - datetime.timedelta(days = 31)
+    end = parser.parse(request.session.get('end'))
+    if not end:
+        end = dt.today()    
+    start = parser.parse(request.session.get('start'))    
+    if not start:
+        start = end - datetime.timedelta(days = 31)
 
     result = ga_stats.get_channels_for_sessions(project, start, end)
     return HttpResponse(json.dumps(result), content_type='application/json')
 
 def device_category(request, project_id):
     project = models.Project.objects.get(id = project_id)
-    end = dt.today()
-    start = end - datetime.timedelta(days = 31)
-
+    end = parser.parse(request.session.get('end'))
+    if not end:
+        end = dt.today()    
+    start = parser.parse(request.session.get('start'))    
+    if not start:
+        start = end - datetime.timedelta(days = 31)
     result = ga_stats.get_device_category_for_sessions(project, start, end)
     return HttpResponse(json.dumps(result), content_type='application/json')
 
@@ -87,8 +95,12 @@ def top_pages(request, project_id):
 
 def conversion_list(request, project_id):
     project = models.Project.objects.get(id=project_id)
-    end = dt.today()
-    start = end - datetime.timedelta(days = 31)
+    end = parser.parse(request.session.get('end'))
+    if not end:
+        end = dt.today()    
+    start = parser.parse(request.session.get('start'))    
+    if not start:
+        start = end - datetime.timedelta(days = 31)
     data = ga_stats.get_named_conversion_count(project, start, end)
     return HttpResponse(json.dumps(data), content_type='application/json')    
 

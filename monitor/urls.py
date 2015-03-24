@@ -27,7 +27,8 @@ urlpatterns = patterns('',
     url(r'^fbads', include('facebookAds.urls')),    
     url(r'^login/$', login, {'template_name':'login-form.html'}, name='login'),
     url(r'^logout/$', logout, name='logout'),
-    url(r'^$',views.index, name='index')
+    url(r'^$',views.index, name='index'),
+    url(r'^setdates/$', views.set_reporting_date, name='set_dates')
 )# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

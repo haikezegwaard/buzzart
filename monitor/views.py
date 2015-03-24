@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.core.urlresolvers import reverse
 from monitor.models import Project, Summary
@@ -18,6 +18,7 @@ from facebookAds.models import FacebookAdsSettings
 import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as djlogin, logout as djlogout
+from dateutil import parser
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,13 @@ def index(request):
                                'cyfeurls': cyfeurls.urlpatterns,
                                'fbads_settings': fbads_settings},
                               context_instance=RequestContext(request))
+
+@login_required()
+def set_reporting_date(request):    
+    request.session['start'] = request.POST.get('start')
+    request.session['end'] = request.POST.get('end')    
+    return redirect(request.POST.get('next'))
+    
 
 
 def facebook_tokens(request):

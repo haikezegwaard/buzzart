@@ -7,6 +7,7 @@ from social.apps.django_app.utils import load_strategy
 from django.contrib.auth.models import User
 import settings
 import time
+from dashboard import util
 
 
 class FacebookManager:
@@ -65,10 +66,13 @@ class FacebookManager:
                 self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
-        result = {}
+        result = []
         for item in data:
-            result[item.get('end_time')] = item.get('value')
+            ms = util.iso_string_to_milliseconds(item.get('end_time'))
+            result.append([ms, item.get('value')])             
         return result
+    
+    
     
     def get_page_engaged(self, project, date_start, date_end):
         """
@@ -79,9 +83,10 @@ class FacebookManager:
                 self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
-        result = {}
+        result = []
         for item in data:
-            result[item.get('end_time')] = item.get('value')
+            ms = util.iso_string_to_milliseconds(item.get('end_time'))
+            result.append([ms, item.get('value')])
         return result
     
     def get_page_fans(self, project, date_start, date_end):
@@ -92,9 +97,10 @@ class FacebookManager:
                 self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
-        result = {}
+        result = []
         for item in data:
-            result[item.get('end_time')] = item.get('value')
+            ms = util.iso_string_to_milliseconds(item.get('end_time'))            
+            result.append([ms, item.get('value')])
         return result
     
     def get_page_impressions_by_city(self, project, date_start, date_end):
@@ -103,26 +109,11 @@ class FacebookManager:
                 self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
-        result = {}
-        for item in data:
-            result[item.get('end_time')] = item.get('value')
-        return result
-    
-    def get_page_overview(self, project, date_start, date_end):
-        fans = self.get_page_fans(project, date_start, date_end)
-        impressions = self.get_page_impressions(project, date_start, date_end)
-        engaged = self.get_page_engaged(project, date_start, date_end)
         result = []
-        for key, value in impressions.items():
-            from dateutil import parser
-            from dashboard import util
-            date = parser.parse(key)
-            nozone = date.replace(tzinfo=None)
-            ms = util.unix_time_millis(nozone)            
-            result.append({'date': ms,'impressions': value,'fans':
-                           fans.get(key),'engaged': engaged.get(key)})
-        return result
-        
+        for item in data:
+            ms = util.iso_string_to_milliseconds(item.get('end_time'))
+            result.append([ms, item.get('value')])
+        return result       
         
 
     def get_access_token_token(self, page):

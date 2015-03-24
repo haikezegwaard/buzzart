@@ -85,6 +85,7 @@ def production():
     env.hosts = ['app01.fun.famhosting.nl']
     env.install_dir = '/data/www/buzzart/'
     env.install_user = 'webdev'
+    env.user = env.install_user 
     env.django_media_root = '/data/www/buzzart/media/'
     env.requirements = 'requirements/production.txt'
     env.requirements_file = join(env.project_root, env.requirements)    

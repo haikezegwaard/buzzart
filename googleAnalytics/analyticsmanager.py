@@ -78,9 +78,10 @@ class AnalyticsManager:
         Returns:
             int, number of goal completions
         """
-        action = 'goal{}Completions'.format(goalid)
+        action = 'goal{}Completions'.format(goalid)        
         obj = self.reporting_API_call(viewid, start, end, [action])
-        return int(obj['totalsForAllResults']['ga:'+action])
+        result = int(obj['totalsForAllResults']['ga:'+action])        
+        return result
     
     def get_total_conversion_count_for_goal(self, viewid, goalid):
         """

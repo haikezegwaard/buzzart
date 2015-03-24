@@ -9,3 +9,62 @@
     </div>
     <!-- /.panel-body -->
 </div>
+ <script>
+
+    $(function () {
+      $.getJSON('/facebook/overview/{{ project_id }}', function(data) {
+        $('#fanpage-overview').highcharts('StockChart', {
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: 'Fanpage overzicht'
+            },
+            subtitle: {
+                text: 'Vind de correlatie'
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                },
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: [{
+                    labels: {
+                        align: 'right',
+                        x: -3
+                    },
+                    title: {
+                        text: 'bla'
+                    },
+                    height: '60%',
+                    lineWidth: 2
+                }],
+            series: [
+            {
+                name: 'Impressies',
+                type: 'spline',
+                data: data[0].data
+    
+            },
+            {
+                name: 'Engagement',
+                type: 'spline',
+                id: 'traffic',
+                data: data[1].data
+            },
+           {
+                name: 'Fans',
+                type: 'spline',
+                data: data[2].data
+            }            
+            ]
+        });
+      });
+    });
+    
+    </script>
