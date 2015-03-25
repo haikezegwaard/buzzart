@@ -1,11 +1,22 @@
 <!-- /.panel -->
 <div class="panel panel-default">
     <div class="panel-heading">
-    <i class="fa fa-bar-chart-o fa-fw"></i> Fanpage overzicht
+    <i class="fa fa-bar-chart-o fa-fw"></i> Fanpage bereik impressies
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
-        <div id="fanpage-city-reach"></div>
-    </div>
+        <div id="fanpage-city-reach">
+            <table data-toggle="table" 
+               data-url="/facebook/impressions-by-city/{{project.id}}"
+               data-sort-name="count" data-sort-order="desc">
+                <thead>            
+                    <tr>
+                        <th data-field="city">Plaats</th>
+                        <th data-field="count">Aantal</th>            
+                    </tr>
+                 </thead>               
+             </table>            
+        </div>
+    </div>    
     <!-- /.panel-body -->
 </div>

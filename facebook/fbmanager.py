@@ -10,6 +10,7 @@ import time
 from dashboard import util
 
 
+
 class FacebookManager:
     """
     Interface for accessing the Facebook Insights api
@@ -63,7 +64,7 @@ class FacebookManager:
         Return impressions for fanpage
         """        
         url = '{}{}/{}/insights/page_impressions?period=day&since={}&limit=100'.format(
-                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
+                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, date_start)
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
         result = []
@@ -80,7 +81,7 @@ class FacebookManager:
         Engagement includes any click
         """
         url = '{}{}/{}/insights/page_engaged_users?period=day&since={}&limit=100'.format(
-                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
+                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, date_start)
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
         result = []
@@ -94,7 +95,7 @@ class FacebookManager:
         The number of likes of the fanpage
         """
         url = '{}{}/{}/insights/page_fans?period=lifetime&since={}&limit=100'.format(
-                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
+                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, date_start)
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
         result = []
@@ -103,16 +104,15 @@ class FacebookManager:
             result.append([ms, item.get('value')])
         return result
     
-    def get_page_impressions_by_city(self, project, date_start, date_end):
-        
-        url = '{}{}/{}/insights/page_impressions_by_city_unique?period=day&since={}&limit=1'.format(
-                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, '1418015467')
+    def get_page_impressions_by_city(self, project, date_start, date_end, period='days_28'):
+        url = '{}{}/{}/insights/page_impressions_by_city_unique?period={}&limit=1'.format(
+                self.GRAPH_URL, self.GRAPH_VERSION, project.fanpage_id, period)
         json = requests.get(url,params={'access_token':project.fanpage_token}).json()
         data = json.get('data').pop().get('values')
         result = []
         for item in data:
             ms = util.iso_string_to_milliseconds(item.get('end_time'))
-            result.append([ms, item.get('value')])
+            result.append([ms, item.get('value')])        
         return result       
         
 
@@ -137,3 +137,5 @@ class FacebookManager:
         strategy = load_strategy(backend='facebook')
         social.refresh_token(strategy)
         return social.extra_data['access_token']
+    
+        
