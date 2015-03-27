@@ -33,6 +33,11 @@ class StatsService():
         # sort the array of dicts by the value of x
         newlist = sorted(result, key=itemgetter('x'))
         return newlist
+    
+    def get_list_overview(self, project):
+        mc_man = MailchimpManager(project.mailchimp_api_token)
+        list_growth = mc_man.get_list_growth_data(project.mailchimp_list_id)
+        return list_growth
 
     def get_list_stats(self, project):
         """

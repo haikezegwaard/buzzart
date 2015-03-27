@@ -11,7 +11,7 @@
 <script>
 
 $(function () {
-  $.getJSON('/mailchimp/liststats/{{ project_id }}', function(data) {
+  $.getJSON('/mailchimp/listoverview/{{ project_id }}', function(data) {
     $('#mc_list_container').highcharts({
         chart: {
             type: 'column'
@@ -20,7 +20,7 @@ $(function () {
             text: 'Mailchimp lijst ontwikkeling'
         },
         xAxis: {
-            categories: data[3].data
+            categories: data[0].categories            
         },
         yAxis: {
             min: 0,
@@ -66,18 +66,18 @@ $(function () {
             }
         },
         series: [{
-            name : data[0].name,
-            data : data[0].data,
+            name : data[1].series[0].name,
+            data : data[1].series[0].data,
             type: 'column'
         },
         {
-            name : data[1].name,
-            data : data[1].data,
+            name : data[1].series[1].name,
+            data : data[1].series[1].data,
             type: 'column'
         },
         {
-            name : data[2].name,
-            data : data[2].data,
+            name : data[1].series[2].name,
+            data : data[1].series[2].data,
             type: 'column'
         }]
     });

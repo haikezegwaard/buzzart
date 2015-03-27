@@ -72,6 +72,44 @@ def chart_data_json(request):
     logger.debug(data)
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+def list_overview(request, project_id):
+    '''
+    Fetch list growth data of project's Mailchimp list.
+    Convert the data to Highchart stacked column chart format:
+    
+        [{
+            name: 'imports',
+            data: [5, 3, 4, 7, 2]
+        }, {
+            name: 'existing',
+            data: [2, 2, 3, 2, 1]
+        }, {
+            name: 'optins',
+            data: [3, 4, 4, 2, 5]
+        }]
+    Timerange (months) are returned as 'categories' dict.
+    '''
+    project = Project.objects.get(id=project_id)
+    manager = MailchimpManager(project.mailchimp_api_token)
+    data = manager.get_list_growth_data(project.mailchimp_list_id)
+    months = []
+    existing = []
+    optins = []
+    imports = []
+    result = []
+    for item in data:
+        months.append(item['month'])
+        existing.append(int(item['existing']))
+        imports.append(int(item['imports']))
+        optins.append(int(item['optins']))
+    result.append({'categories' : months})
+    series = []
+    series.append({'name': 'existing', 'data': existing})
+    series.append({'name': 'imports', 'data': imports})
+    series.append({'name': 'optins', 'data': optins})
+    result.append({'series': series})
+    return HttpResponse(json.dumps(result), content_type='application/json')
+
 
 def list_stats(request, project_id):
     project = Project.objects.get(id=project_id)

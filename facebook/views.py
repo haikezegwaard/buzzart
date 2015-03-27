@@ -48,8 +48,11 @@ def fanpage_impressions_by_city(request, project_id):
 
 def fanpage_overview(request, project_id):
     project = Project.objects.get(id = project_id)    
-    data = [{"name": "data1", "data": fbmanager.get_page_impressions(project, True, True)},
-            {"name": "data2", "data": fbmanager.get_page_engaged(project, True, True)},
-            {"name": "data3", "data": fbmanager.get_page_fans(project, True, True)}            
+    drange = dateranges(request)
+    start = drange.get('start')
+    end = drange.get('end')
+    data = [{"name": "impressions", "data": fbmanager.get_page_impressions(project, start, end)},
+            {"name": "engagement", "data": fbmanager.get_page_engaged(project, start, end)},
+            {"name": "fans", "data": fbmanager.get_page_fans(project, start, end)}            
             ]
     return HttpResponse(json.dumps(data), content_type='application/json')
