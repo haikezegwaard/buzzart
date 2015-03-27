@@ -8,12 +8,11 @@ class Project(models.Model):
     manager = models.CharField(max_length=400)
     email = models.EmailField()
     url = models.URLField()
-    nikiProject = models.CharField(max_length=1000)
-    # ga_view = models.CharField(max_length = 1000)
-    mailchimp_list_id = models.CharField(max_length=1000)
-    mailchimp_api_token = models.CharField(max_length=1000)
-    fanpage_id = models.CharField(max_length=1000)
-    fanpage_token = models.CharField(max_length=1000)
+    nikiProject = models.CharField(max_length=1000, null= True, blank=True)    
+    mailchimp_list_id = models.CharField(max_length=1000, null= True, blank=True)
+    mailchimp_api_token = models.CharField(max_length=1000, null= True, blank=True)
+    fanpage_id = models.CharField(max_length=1000, null= True, blank=True)
+    fanpage_token = models.CharField(max_length=1000, null= True, blank=True)
     surveygizmo_survey_id = models.CharField(max_length=1000, null= True, blank=True)
 
     def __unicode__(self):

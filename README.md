@@ -15,6 +15,7 @@ Buzzart currently supports the following datasources:
 6. Twitter API: providing access to Twitter API
 7. Facebook Ads API: providing campaign statistics
 8. Google Ads API: (work in progress) providing campaign statistics
+9. SurveyGizmo API: basic implementation of user/password authentication and resources  
 
 ## Supported views ##
 
