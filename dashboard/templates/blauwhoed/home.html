@@ -37,7 +37,7 @@ Blauwhoed projectanalyse {{ project.name }}
                     </div>
                     <div class="col-xs-9 text-right">
                         <div id="conversionCount" class="huge"></div>
-                        <div>Conversies totaal</div>
+                        <div>Ingevulde belangstellingsformulieren</div>
                     </div>
                 </div>
             </div>
@@ -101,7 +101,7 @@ Blauwhoed projectanalyse {{ project.name }}
  * total conversion count, visitors this week, total subscriber count
  */
 $(function () {
-  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}', function(data) {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=7', function(data) {
     $('#conversionCount').html(data['conversions'])
   });
 });

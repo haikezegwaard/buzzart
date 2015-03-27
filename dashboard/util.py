@@ -1,6 +1,7 @@
 import datetime
 from datetime import timedelta
 from dateutil import parser
+from django.contrib.sessions.backends.db import SessionStore
 
 def unix_time(dt):
     epoch = datetime.datetime.utcfromtimestamp(0)
@@ -23,6 +24,25 @@ def iso_string_to_milliseconds(isodate):
     date = parser.parse(isodate)
     nozone = date.replace(tzinfo=None)
     return unix_time_millis(nozone)
+
+
+def get_reporting_dates():
+    """
+    Date range for all reporting functions
+    """
+    session = SessionStore()
+    date_range = {}    
+    if not session.get('start') is None:
+        date_range['start'] = parser.parse(session.get('start'))
+    else:
+        date_range['start'] = datetime.datetime.today() - datetime.timedelta(days=128)
+
+    if not session.get('end') is None:
+        date_range['end'] = parser.parse(session.get('end'))
+    else:
+        date_range['end'] = datetime.datetime.today() - datetime.timedelta(days=1)
+    return date_range
+    
     
              
 

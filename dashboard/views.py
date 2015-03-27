@@ -182,8 +182,9 @@ def get_end():
     else:
         return datetime.datetime.today() - datetime.timedelta(days=1)
 
-start = get_start()
-end = get_end()
+date_range = util.get_reporting_dates()
+start = date_range['start']
+end = date_range['end']
 
 
 def get_referrals(project_id):

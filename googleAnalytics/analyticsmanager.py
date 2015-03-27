@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 import requests
 import logging
+from dateutil import parser
 import json
 from datetime import datetime
 from social.apps.django_app.utils import load_strategy
@@ -60,11 +61,12 @@ class AnalyticsManager:
         Returns:
             total of completed conversions for given configuration
         """
-        now = self.google_date(datetime.today())
+        end = datetime.today()
+        start = parser.parse(self.GA_NULL_DATE)
         viewid = analyticssettings.ga_view
         goalid = analyticssettings.goal_to_track
         return self.get_conversion_count_for_goal(viewid, goalid,
-                                                  self.GA_NULL_DATE, now)
+                                                  start, end)
 
     def get_conversion_count_for_goal(self, viewid, goalid, start, end):
         """
@@ -73,13 +75,15 @@ class AnalyticsManager:
         Args:
             viewid: string, id of specific property
             goalid: id of specific goal
-            start: string, startdate in format yyyy-mm-dd
-            end: string, enddate in format yyyy-mm-dd
+            start: date, startdate in format yyyy-mm-dd
+            end: date, enddate in format yyyy-mm-dd
         Returns:
             int, number of goal completions
         """
-        action = 'goal{}Completions'.format(goalid)        
-        obj = self.reporting_API_call(viewid, start, end, [action])
+        action = 'goal{}Completions'.format(goalid) 
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)    
+        obj = self.reporting_API_call(viewid, start_str, end_str, [action])
         result = int(obj['totalsForAllResults']['ga:'+action])        
         return result
     
@@ -88,9 +92,10 @@ class AnalyticsManager:
         Get total conversion count for specific view id and specific 
         goal number overall
         """
-        now = self.google_date(datetime.today())
+        end = self.google_date(datetime.today())
+        start = parser.parse(self.GA_NULL_DATE)
         return self.get_conversion_count_for_goal(viewid, goalid, 
-                                                  self.GA_NULL_DATE, now)
+                                                  start, end)
 
     def get_conversion_rate_for_goal(self, viewid, goalid, start, end):
         """

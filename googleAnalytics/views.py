@@ -11,6 +11,7 @@ import statsservice
 from django.shortcuts import redirect
 import helper
 from dateutil import parser
+from dashboard import util
 
 
 ga_man = analyticsmanager.AnalyticsManager()
@@ -30,36 +31,37 @@ def conversions_total(request, project_id):
     For AJAX-ing purpose
     """
     settings = helper.get_settings_by_project_id(project_id)
-    data = {'conversions' : ga_man.get_total_conversion_count(settings)}
+    if not request.GET.get('goalId'):
+        data = {'conversions' : ga_man.get_total_conversion_count(settings)}
+    else: 
+        goalid = request.GET.get('goalId')
+        drange = util.get_reporting_dates()
+        start = drange['start']
+        end = drange['end']        
+        data = {'conversions' : ga_man.get_conversion_count_for_goal(settings.ga_view, goalid, start, end)}   
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def conversions_daily(request, project_id):
-    end = dt.today()
-    start = end - datetime.timedelta(days = 31)
+    drange = util.get_reporting_dates()
+    start = drange['start']
+    end = drange['end']    
     settings = helper.get_settings_by_project_id(project_id)
     data = {'conversions' : ga_man.get_daily_conversions_for_goal(settings.ga_view, settings.goal_to_track, start, end)}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def channel_info(request, project_id):
     project = models.Project.objects.get(id = project_id)
-    end = parser.parse(request.session.get('end'))
-    if not end:
-        end = dt.today()    
-    start = parser.parse(request.session.get('start'))    
-    if not start:
-        start = end - datetime.timedelta(days = 31)
-
+    drange = util.get_reporting_dates()
+    start = drange['start']
+    end = drange['end']
     result = ga_stats.get_channels_for_sessions(project, start, end)
     return HttpResponse(json.dumps(result), content_type='application/json')
 
 def device_category(request, project_id):
     project = models.Project.objects.get(id = project_id)
-    end = parser.parse(request.session.get('end'))
-    if not end:
-        end = dt.today()    
-    start = parser.parse(request.session.get('start'))    
-    if not start:
-        start = end - datetime.timedelta(days = 31)
+    drange = util.get_reporting_dates()
+    start = drange['start']
+    end = drange['end']    
     result = ga_stats.get_device_category_for_sessions(project, start, end)
     return HttpResponse(json.dumps(result), content_type='application/json')
 
@@ -72,22 +74,18 @@ def traffic_this_week(request, project_id):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def traffic(request, project_id):
-    from django.contrib.sessions.backends.db import SessionStore
-    session = SessionStore()
-    start = session.get('start')
-    if start is None:
-        start = datetime.date.today() - datetime.timedelta(days=14)
-    end = session.get('end')
-    if end is None:
-        end = datetime.date.today() - datetime.timedelta(days=1)
+    drange = util.get_reporting_dates()
+    start = drange['start']
+    end = drange['end']
     settings = helper.get_settings_by_project_id(project_id)
     count = ga_man.get_session_count(settings.ga_view, ga_man.google_date(start), ga_man.google_date(end))
     data = {'traffic': count}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def top_pages(request, project_id):
-    end = dt.today()
-    start = end - datetime.timedelta(days = 7)
+    drange = util.get_reporting_dates()
+    start = drange['start']
+    end = drange['end']
     settings = helper.get_settings_by_project_id(project_id)
     response = ga_man.get_top_pages(settings.ga_view, start, end)
     data = {'pages': response}
@@ -95,12 +93,9 @@ def top_pages(request, project_id):
 
 def conversion_list(request, project_id):
     project = models.Project.objects.get(id=project_id)
-    end = parser.parse(request.session.get('end'))
-    if not end:
-        end = dt.today()    
-    start = parser.parse(request.session.get('start'))    
-    if not start:
-        start = end - datetime.timedelta(days = 31)
+    drange = util.get_reporting_dates()
+    start = drange['start']
+    end = drange['end']
     data = ga_stats.get_named_conversion_count(project, start, end)
     return HttpResponse(json.dumps(data), content_type='application/json')    
 
