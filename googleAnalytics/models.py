@@ -4,7 +4,7 @@ from monitor.models import Project
 
 # Create your models here.
 class AnalyticsSettings(models.Model):
-    project = models.ForeignKey(Project)
+    project = models.OneToOneField(Project, primary_key=True)
     sessions_target = models.IntegerField()
     pageviews_target = models.IntegerField()
     ga_view = models.CharField(max_length = 100)

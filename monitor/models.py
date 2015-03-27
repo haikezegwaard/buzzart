@@ -14,6 +14,7 @@ class Project(models.Model):
     mailchimp_api_token = models.CharField(max_length=1000)
     fanpage_id = models.CharField(max_length=1000)
     fanpage_token = models.CharField(max_length=1000)
+    surveygizmo_survey_id = models.CharField(max_length=1000, null= True, blank=True)
 
     def __unicode__(self):
         return self.name
