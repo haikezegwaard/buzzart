@@ -68,7 +68,7 @@ def index(request):
 @login_required()
 def set_reporting_date(request):    
     request.session['start'] = request.POST.get('start')
-    request.session['end'] = request.POST.get('end')    
+    request.session['end'] = request.POST.get('end')  
     return redirect(request.POST.get('next'))
     
 

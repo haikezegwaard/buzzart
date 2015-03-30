@@ -18,44 +18,43 @@ from nikiInterest import statsservice
 from googleAnalytics import statsservice as googlestats
 from mcapi import statsservice as mcstats
 import logging
-from django.contrib.sessions.backends.db import SessionStore
 from googleAnalytics import helper
 from forms import UpdateForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-session = SessionStore()
-
 logger = logging.getLogger(__name__)
+ga_stats = googlestats.StatsService()
 
 # Create your views here.
 def index(request, project_id):
     project = Project.objects.get(id=project_id)
-    if not request.GET.get('start') is None:
-        session['start'] = parser.parse(request.GET.get('start'))
-    if not request.GET.get('end') is None:
-        session['end'] = parser.parse(request.GET.get('end'))
-
     template = request.GET.get('template', '')
     account = ''
+    date_range = util.get_reporting_dates(request)
+    start = date_range['start']
+    end = date_range['end']
     if template:
         account = template + '/'
 
     return render_to_response(account+'home.html',
                               {'project_id': project_id,
                                'project': project,
-                               'campaigns': get_campaigns(project_id),
-                               'traffic': get_google_stats(project_id),
-                               'subscribers': get_subscriptions(project_id),
-                               'updates': get_updates(project_id),
-                               'start': datetime.date.strftime(get_start(),"%m/%d/%Y"),
-                               'end': datetime.date.strftime(get_end(),"%m/%d/%Y")
+                               'campaigns': get_campaigns(project_id, start, end),
+                               'traffic': get_google_stats(project_id, start, end),
+                               'subscribers': get_subscriptions(project_id, start, end),
+                               'updates': get_updates(project_id, start, end),
+                               'start': datetime.date.strftime(start,"%m/%d/%Y"),
+                               'end': datetime.date.strftime(end,"%m/%d/%Y")
                                },
                               context_instance=RequestContext(request))
 
 
 def origin(request, project_id):
     template = request.GET.get('template', '')
+    date_range = util.get_reporting_dates(request)
+    start = date_range['start']
+    end = date_range['end']
     account = ''
     if template:
         account = template + '/'
@@ -63,8 +62,8 @@ def origin(request, project_id):
     return render_to_response(account+'origin.html',
                               {'project_id': project_id,
                                'project': project,
-                               'updates': get_updates(project.id),
-                               'referrals':get_referrals(project_id)
+                               'updates': get_updates(project.id, start, end),
+                               'referrals':get_referrals(project_id, start, end)
                                },
                               context_instance=RequestContext(request))
 
@@ -154,45 +153,27 @@ def compose_update(request, project_id):
 
 def project_updates(request, project_id):
     project = Project.objects.get(id=project_id)
+    date_range = util.get_reporting_dates(request)
+    start = date_range['start']
+    end = date_range['end']
     return render_to_response('timeline.html',
                               {'project': project,
-                               'updates': get_updates(project.id)},
+                               'updates': get_updates(project.id, start, end)},
                               context_instance=RequestContext(request))
 
 
-def get_updates(project_id):
+def get_updates(project_id, start, end):
     project = Project.objects.get(id=project_id)
     updates = BuzzartUpdate.objects.filter(project=project)
     return updates
 
 
-ga_stats = googlestats.StatsService()
-
-
-def get_start():
-    if not session.get('start') is None:
-        return session.get('start')
-    else:
-        return datetime.datetime.today() - datetime.timedelta(days=128)
-
-
-def get_end():
-    if not session.get('end') is None:
-        return session.get('end')
-    else:
-        return datetime.datetime.today() - datetime.timedelta(days=1)
-
-date_range = util.get_reporting_dates()
-start = date_range['start']
-end = date_range['end']
-
-
-def get_referrals(project_id):
+def get_referrals(project_id, start, end):
     project = Project.objects.get(id=project_id)
     return ga_stats.get_referrals(project, start, end)
 
 
-def get_google_stats(project_id):
+def get_google_stats(project_id, start, end):
     project = Project.objects.get(id=project_id)
     try:
         return ga_stats.get_traffic_over_time(project, start, end)
@@ -201,7 +182,7 @@ def get_google_stats(project_id):
         return None
 
 
-def get_campaigns(project_id):
+def get_campaigns(project_id, start, end):
     project = Project.objects.get(id=project_id)
     if project.mailchimp_list_id == '0': return None
     mc_stats = mcstats.StatsService()
@@ -210,7 +191,7 @@ def get_campaigns(project_id):
 
 
 
-def get_subscriptions(project_id):
+def get_subscriptions(project_id, start, end):
     """
     Get Niki subcribers for given project, returns a list of
     tuples (stamp, count) for the use of plotting in a graph
@@ -221,12 +202,12 @@ def get_subscriptions(project_id):
     return stats_service.get_mock_subscriptions()
 
 
-def get_conversions(project_id):
+def get_conversions(project_id, start, end):
     project = Project.objects.get(id=project_id)
     return ga_stats.get_conversions_over_time(project, start, end)
 
 
-def plottingDataSeries(request, project_id):
+def plottingDataSeries(request, project_id, start, end):
     traffic = []
     subscriptions = []
     for single_date in util.daterange(start, end):

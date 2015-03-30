@@ -26,11 +26,11 @@ def iso_string_to_milliseconds(isodate):
     return unix_time_millis(nozone)
 
 
-def get_reporting_dates():
+def get_reporting_dates(request):
     """
     Date range for all reporting functions
     """
-    session = SessionStore()
+    session = request.session
     date_range = {}    
     if not session.get('start') is None:
         date_range['start'] = parser.parse(session.get('start'))

@@ -35,14 +35,14 @@ def conversions_total(request, project_id):
         data = {'conversions' : ga_man.get_total_conversion_count(settings)}
     else: 
         goalid = request.GET.get('goalId')
-        drange = util.get_reporting_dates()
+        drange = util.get_reporting_dates(request)
         start = drange['start']
         end = drange['end']        
         data = {'conversions' : ga_man.get_conversion_count_for_goal(settings.ga_view, goalid, start, end)}   
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def conversions_daily(request, project_id):
-    drange = util.get_reporting_dates()
+    drange = util.get_reporting_dates(request)
     start = drange['start']
     end = drange['end']    
     settings = helper.get_settings_by_project_id(project_id)
@@ -51,7 +51,7 @@ def conversions_daily(request, project_id):
 
 def channel_info(request, project_id):
     project = models.Project.objects.get(id = project_id)
-    drange = util.get_reporting_dates()
+    drange = util.get_reporting_dates(request)
     start = drange['start']
     end = drange['end']
     result = ga_stats.get_channels_for_sessions(project, start, end)
@@ -59,7 +59,7 @@ def channel_info(request, project_id):
 
 def device_category(request, project_id):
     project = models.Project.objects.get(id = project_id)
-    drange = util.get_reporting_dates()
+    drange = util.get_reporting_dates(request)
     start = drange['start']
     end = drange['end']    
     result = ga_stats.get_device_category_for_sessions(project, start, end)
@@ -74,7 +74,7 @@ def traffic_this_week(request, project_id):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def traffic(request, project_id):
-    drange = util.get_reporting_dates()
+    drange = util.get_reporting_dates(request)
     start = drange['start']
     end = drange['end']
     settings = helper.get_settings_by_project_id(project_id)
@@ -83,7 +83,7 @@ def traffic(request, project_id):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def top_pages(request, project_id):
-    drange = util.get_reporting_dates()
+    drange = util.get_reporting_dates(request)
     start = drange['start']
     end = drange['end']
     settings = helper.get_settings_by_project_id(project_id)
@@ -93,7 +93,7 @@ def top_pages(request, project_id):
 
 def conversion_list(request, project_id):
     project = models.Project.objects.get(id=project_id)
-    drange = util.get_reporting_dates()
+    drange = util.get_reporting_dates(request)
     start = drange['start']
     end = drange['end']
     data = ga_stats.get_named_conversion_count(project, start, end)

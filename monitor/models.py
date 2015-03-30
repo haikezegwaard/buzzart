@@ -1,6 +1,8 @@
 from django.db import models
 from nikiInterest.models import InterestAccount
 from django.contrib.auth.models import User
+import settings
+from south.tests.fakeapp.models import Recursive
 
 # Create your models here.
 class Project(models.Model):
@@ -14,6 +16,12 @@ class Project(models.Model):
     fanpage_id = models.CharField(max_length=1000, null= True, blank=True)
     fanpage_token = models.CharField(max_length=1000, null= True, blank=True)
     surveygizmo_survey_id = models.CharField(max_length=1000, null= True, blank=True)
+    
+    template_dir = '{}/dashboard/templates'.format(settings.PROJECT_ROOT)
+    template = models.FilePathField(path=template_dir, 
+                                    recursive=True, 
+                                    allow_files=False, 
+                                    allow_folders=True, blank=True, null=True)
 
     def __unicode__(self):
         return self.name
