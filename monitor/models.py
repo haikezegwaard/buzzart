@@ -3,6 +3,7 @@ from nikiInterest.models import InterestAccount
 from django.contrib.auth.models import User
 import settings
 from south.tests.fakeapp.models import Recursive
+from relativefilepathfield.fields import RelativeFilePathField
 
 # Create your models here.
 class Project(models.Model):
@@ -18,10 +19,11 @@ class Project(models.Model):
     surveygizmo_survey_id = models.CharField(max_length=1000, null= True, blank=True)
     
     template_dir = '{}/dashboard/templates'.format(settings.PROJECT_ROOT)
-    template = models.FilePathField(path=template_dir, 
+    template = RelativeFilePathField(path=template_dir, 
                                     recursive=True, 
                                     allow_files=False, 
-                                    allow_folders=True, blank=True, null=True)
+                                    allow_folders=True, blank=False, null=False,
+                                    default='')
 
     def __unicode__(self):
         return self.name

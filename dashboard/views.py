@@ -22,6 +22,7 @@ from googleAnalytics import helper
 from forms import UpdateForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+import settings
 
 logger = logging.getLogger(__name__)
 ga_stats = googlestats.StatsService()
@@ -29,7 +30,14 @@ ga_stats = googlestats.StatsService()
 # Create your views here.
 def index(request, project_id):
     project = Project.objects.get(id=project_id)
-    template = request.GET.get('template', '')
+    template = ''
+    # extract to helper
+    if project.template:
+        logger.debug('template in db: {}'.format(project.template))
+        template = project.template     
+    if request.GET.get('template'):
+        template = request.GET.get('template', '')
+    logger.debug('rendering to template: {}'.format(template))
     account = ''
     date_range = util.get_reporting_dates(request)
     start = date_range['start']
@@ -207,16 +215,19 @@ def get_conversions(project_id, start, end):
     return ga_stats.get_conversions_over_time(project, start, end)
 
 
-def plottingDataSeries(request, project_id, start, end):
+def plottingDataSeries(request, project_id):
     traffic = []
     subscriptions = []
+    date_range = util.get_reporting_dates(request)
+    start = date_range['start']
+    end = date_range['end']
     for single_date in util.daterange(start, end):
         traffic.append([util.unix_time_millis(single_date),random.randint(50, 150)])
         subscriptions.append([util.unix_time_millis(single_date),random.randint(0, 2)])
 
-    data = [{"name": "data1", "data": get_google_stats(project_id)},
-            {"name": "data2", "data": get_conversions(project_id)},
-            {"name": "data3", "data": get_campaigns(project_id)},
+    data = [{"name": "data1", "data": get_google_stats(project_id, start, end)},
+            {"name": "data2", "data": get_conversions(project_id, start, end)},
+            {"name": "data3", "data": get_campaigns(project_id, start, end)},
             # {"name": "data4", "data": get_subscriptions(project_id)}]
             {"name": "data4", "data": subscriptions}]
     return HttpResponse(json.dumps(data), content_type='application/json')

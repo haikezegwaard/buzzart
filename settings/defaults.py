@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'south',
     'facebookAds',
     'bootstrap3',
+    'relativefilepathfield'
 )
 
 MIDDLEWARE_CLASSES = (
