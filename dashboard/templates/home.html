@@ -198,7 +198,17 @@ Analyse {{project.name}}
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4 class="timeline-title">{{ update.title }}</h4>
+                            {% if request.user.is_staff %}    
+                                <div class="pull-right">                        
+                                {% if update.mail_sent %}
+                                    <span class="label label-success">Mail sent</span>
+                                {% else %}
+                                    <span class="label label-warning">Mail not sent</span>
+                                {% endif %}
+                                <a href="/emailUpdate/{{update.id}}" class="button">send mail</a>
+                                </div>
+                            {% endif %}
+                            <h4 class="timeline-title">{{ update.title }}</h4>                            
                             <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ update.posted }} </small>
                             </p>
                         </div>

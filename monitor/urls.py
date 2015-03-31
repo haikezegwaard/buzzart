@@ -29,7 +29,8 @@ urlpatterns = patterns('',
     url(r'^login/$', login, {'template_name':'login-form.html'}, name='login'),
     url(r'^logout/$', logout, name='logout'),
     url(r'^$',views.index, name='index'),
-    url(r'^setdates/$', views.set_reporting_date, name='set_dates')
+    url(r'^setdates/$', views.set_reporting_date, name='set_dates'),
+    url(r'^emailUpdate/(?P<update_id>\d+)/$', views.email_update, name='email_update'),
 )# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

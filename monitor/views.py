@@ -4,7 +4,7 @@ from django.template import RequestContext, loader
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.core.urlresolvers import reverse
-from monitor.models import Project, Summary
+from monitor.models import Project, Summary, BuzzartUpdate
 from datetime import date, timedelta, datetime
 from niki.nikiconverter import NikiConverter
 from nikiInterest import interestmanager
@@ -49,7 +49,7 @@ class ProfileView(generic.TemplateView):
         return context
 
 
-@login_required()
+@user_passes_test(lambda u:u.is_staff, login_url='/login')
 def index(request):
     """
     View for main entrance, listing various possible actions
@@ -71,6 +71,26 @@ def set_reporting_date(request):
     request.session['start'] = request.POST.get('start')
     request.session['end'] = request.POST.get('end')  
     return redirect(request.POST.get('next'))
+
+@user_passes_test(lambda u:u.is_staff, login_url='/')
+def email_update(request, update_id):
+    from django.core.mail import EmailMultiAlternatives
+    import json
+    update = BuzzartUpdate.objects.get(id=update_id)
+    project = update.project
+    subject, from_email, to = update.title, 'info@buzzart.nl', project.email
+    text_content = update.update
+    dashboard_url = 'http://127.0.0.1/dasboard/{}'.format(project.id)
+    html_content = '<p>{}</p><p>Bekijk je dashboard hier: <a href="{}">{}</a></p>'.format(update.update, dashboard_url, dashboard_url)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    data = msg.send()
+    if data:        
+        update.mail_sent = True
+        update.save()
+        return redirect('/dashboard/{}'.format(project.id))
+    else:
+        return HttpResponse(json.dumps('Sending mail failed'), content_type='application/json')
     
 
 @user_passes_test(lambda u:u.is_staff, login_url='/')

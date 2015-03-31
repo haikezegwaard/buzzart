@@ -77,6 +77,7 @@ class BuzzartUpdate(models.Model):
     title = models.CharField(max_length=1000, blank=True)
     posted = models.DateTimeField(blank=True)
     fa_class = models.TextField(max_length=1000, default='fa-check')
+    mail_sent = models.BooleanField(default=False)
 
     def __unicode__(self):
         return '{}: {} - {}'.format(self.project.name, self.title, self.posted)

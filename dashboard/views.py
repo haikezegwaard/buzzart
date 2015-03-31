@@ -60,7 +60,7 @@ def index(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
-
+@permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def origin(request, project_id):
     template = request.GET.get('template', '')
     date_range = util.get_reporting_dates(request)
@@ -78,7 +78,7 @@ def origin(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
-
+@permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def profiles(request, project_id):
     template = request.GET.get('template', '')
     account = ''
@@ -91,7 +91,7 @@ def profiles(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
-
+@permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def adwords(request, project_id):
     template = request.GET.get('template', '')
     account = ''
@@ -104,7 +104,7 @@ def adwords(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
-
+@permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def fbads(request, project_id):
     template = request.GET.get('template', '')
     account = ''
@@ -117,7 +117,7 @@ def fbads(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
-
+@permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def mailing(request, project_id):
     template = request.GET.get('template', '')
     account = ''
@@ -162,6 +162,7 @@ def compose_update(request, project_id):
                   {'form': form,
                    'project': project})
 
+@permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def project_updates(request, project_id):
     project = Project.objects.get(id=project_id)
     date_range = util.get_reporting_dates(request)
@@ -175,7 +176,7 @@ def project_updates(request, project_id):
 
 def get_updates(project_id, start, end):
     project = Project.objects.get(id=project_id)
-    updates = BuzzartUpdate.objects.filter(project=project)
+    updates = BuzzartUpdate.objects.filter(project=project).order_by('-posted')
     return updates
 
 

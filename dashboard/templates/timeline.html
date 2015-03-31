@@ -27,6 +27,13 @@ Advies / timeline {{project.name}}
                     <div class="timeline-panel">
                         <div class="timeline-heading">
                             <h4 class="timeline-title">{{ update.title }}</h4>
+                            {% if request.user.is_staff %}                            
+                                {% if update.email_sent %}
+                                    <span class="label label-success">Mail sent</span>
+                                {% else %}
+                                    <span class="label label-warning">Mail not sent</span>
+                                {% endif %}
+                            {% endif %}
                             <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ update.posted }} </small>
                             </p>
                         </div>
