@@ -27,6 +27,12 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    class Meta:
+        permissions = (
+            ('view_project', 'View Project'),
+        )
+        
 
 class Account(models.Model):
     name = models.CharField(max_length=512, blank=False, null=False)

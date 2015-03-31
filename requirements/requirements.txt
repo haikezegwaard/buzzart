@@ -8,6 +8,7 @@ dj-database-url==0.3.0
 django-bootstrap3==5.1.1
 django-debug-toolbar==1.2.1
 django-extensions==1.5.0
+django-guardian==1.2.5
 djrill==1.1.1
 docopt==0.4.0
 facebookads==2.2.3

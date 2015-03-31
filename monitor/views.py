@@ -19,6 +19,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as djlogin, logout as djlogout
 from dateutil import parser
+from django.contrib.auth.decorators import user_passes_test
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,7 @@ def set_reporting_date(request):
     return redirect(request.POST.get('next'))
     
 
-
+@user_passes_test(lambda u:u.is_staff, login_url='/')
 def facebook_tokens(request):
     """
     List projects and facebook ids / tokens

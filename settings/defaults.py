@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_extensions',
+    'guardian',
     'niki',
     'nikiInterest',
     'monitor',
@@ -94,7 +95,8 @@ MIDDLEWARE_CLASSES = (
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.facebook.Facebook2OAuth2',    
-    'django.contrib.auth.backends.ModelBackend'
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -161,6 +163,10 @@ DATABASES = {
         'PORT': '',                           # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+# Anonymous user for Guardian object permission system
+ANONYMOUS_USER_ID = -1
+GUARDIAN_RENDER_403 = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

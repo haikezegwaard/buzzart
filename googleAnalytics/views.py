@@ -41,6 +41,18 @@ def conversions_total(request, project_id):
         data = {'conversions' : ga_man.get_conversion_count_for_goal(settings.ga_view, goalid, start, end)}   
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+def bounce_rate(request, project_id):
+    """
+    Get bounce rate for analytics view in project
+    """
+    drange = util.get_reporting_dates(request)
+    start = drange['start']
+    end = drange['end']
+    project = models.Project.objects.get(id = project_id)
+    data = ga_stats.get_bounce_rate(project, start, end)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+    
+
 def conversions_daily(request, project_id):
     drange = util.get_reporting_dates(request)
     start = drange['start']

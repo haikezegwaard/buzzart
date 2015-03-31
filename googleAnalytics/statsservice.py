@@ -83,6 +83,18 @@ class StatsService():
         for item in categories.get('rows'):
             result.append([item[0], int(item[1])])
         return result
+    
+    def get_bounce_rate(self, project, start, end):
+        """
+        Get bounce rate for view in project
+        """
+        settings = models.AnalyticsSettings.objects.get(project = project)
+        response = self.ga_manager.get_bounce_rate(settings.ga_view, start, end)
+        rows = response.get('rows')
+        if not len(rows) is 1:
+            raise Exception('rows size was not 1 ({})'.format(len(rows)))        
+        return float(rows[0][0])
+             
 
     def get_referrals(self, project, start, end):
         """
