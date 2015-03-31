@@ -20,6 +20,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as djlogin, logout as djlogout
 from dateutil import parser
 from django.contrib.auth.decorators import user_passes_test
+from django.core.mail import EmailMultiAlternatives
+import json
+import settings
 
 logger = logging.getLogger(__name__)
 
@@ -72,15 +75,19 @@ def set_reporting_date(request):
     request.session['end'] = request.POST.get('end')  
     return redirect(request.POST.get('next'))
 
-@user_passes_test(lambda u:u.is_staff, login_url='/')
+@user_passes_test(lambda u:u.is_staff, login_url='/login')
 def email_update(request, update_id):
-    from django.core.mail import EmailMultiAlternatives
-    import json
+    """
+    Send the content of a specific Buzzart Update to
+    the project owner via email. The mail contains a link to the 
+    web version of the dashboard. Only staff members can send these mails.
+    After succesfully sending the mail, flag the update as mail_sent = True
+    """
     update = BuzzartUpdate.objects.get(id=update_id)
     project = update.project
-    subject, from_email, to = update.title, 'info@buzzart.nl', project.email
+    subject, from_email, to = update.title, settings.NOTIFIER_FROM_MAIL, project.email
     text_content = update.update
-    dashboard_url = 'http://127.0.0.1/dasboard/{}'.format(project.id)
+    dashboard_url = request.build_absolute_uri('/dashboard/{}'.format(project.id))    
     html_content = '<p>{}</p><p>Bekijk je dashboard hier: <a href="{}">{}</a></p>'.format(update.update, dashboard_url, dashboard_url)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
@@ -93,7 +100,7 @@ def email_update(request, update_id):
         return HttpResponse(json.dumps('Sending mail failed'), content_type='application/json')
     
 
-@user_passes_test(lambda u:u.is_staff, login_url='/')
+@user_passes_test(lambda u:u.is_staff, login_url='/login')
 def facebook_tokens(request):
     """
     List projects and facebook ids / tokens
