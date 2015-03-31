@@ -56,8 +56,8 @@ class StatsService():
             goal_id = int(goal.get('id'))
             count = self.ga_manager.get_conversion_count_for_goal(settings.ga_view, 
                                                                   goal_id, 
-                                                                  start_date, 
-                                                                  end_date)
+                                                                  start, 
+                                                                  end)
             result.append({'name': goal.get('name'), 'count': count})
         return result
 

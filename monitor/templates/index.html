@@ -82,12 +82,12 @@
               <div class="panel-body">
                   <!-- Table -->
                   <table class="table">
-                    <tr><th>Naam</th><th>Test</th><th>Preview</th></tr>
+                    <tr><th>Naam</th><th>Test</th><th>Dashboard</th></tr>
                     {% for project in projects %}
                         <tr>
                             <td>{{project.name}}</td>
                             <td><button data-id="{{project.id}}" class="projecttest btn btn-default">test</td>
-                            <td><a href="/digest/{{project.id}}/test">preview</a></td>
+                            <td><a href="/dashboard/{{project.id}}">dashboard</a></td>
                         </tr>
                     {% endfor %}
                   </table>

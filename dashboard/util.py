@@ -29,13 +29,14 @@ def iso_string_to_milliseconds(isodate):
 def get_reporting_dates(request):
     """
     Date range for all reporting functions
+    returns datetime objects
     """
     session = request.session
     date_range = {}    
     if not session.get('start') is None:
         date_range['start'] = parser.parse(session.get('start'))
     else:
-        date_range['start'] = datetime.datetime.today() - datetime.timedelta(days=128)
+        date_range['start'] = datetime.datetime.today() - datetime.timedelta(days=31)
 
     if not session.get('end') is None:
         date_range['end'] = parser.parse(session.get('end'))

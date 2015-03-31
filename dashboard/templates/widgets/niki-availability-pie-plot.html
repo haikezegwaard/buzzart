@@ -8,7 +8,7 @@
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
-        <div id="niki-availability-donut-chart-{{title}}"></div>
+        <div id="niki-availability-donut-chart-{{title|slugify}}"></div>
     </div>
     <!-- /.panel-body -->
 </div>
@@ -24,7 +24,7 @@ $(document).ready(function () {
     $.getJSON(action, function(data) {
 
         // Build the chart
-        $('#niki-availability-donut-chart-{{title}}').highcharts({
+        $('#niki-availability-donut-chart-{{title|slugify}}').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,

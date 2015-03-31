@@ -5,19 +5,14 @@ from django.http import HttpResponse
 import json
 from dateutil import parser
 from datetime import datetime
-
+from dashboard import util
 # Create your views here.
 fbmanager = FacebookManager()
 
 def dateranges(request):
-    end = parser.parse(request.session.get('end'))
-    if not end:
-        end = datetime.today()    
-    start = parser.parse(request.session.get('start'))    
-    if not start:
-        start = end - datetime.timedelta(days = 31)
-    s = datetime.strftime(start, "%Y-%m-%d")
-    e = datetime.strftime(end, "%Y-%m-%d")
+    date_range = util.get_reporting_dates(request)
+    s = datetime.strftime(date_range.get('start'), "%Y-%m-%d")
+    e = datetime.strftime(date_range.get('end'), "%Y-%m-%d")
     return {'start': s, 'end':  e}
 
 def fanpage_age_sex(request, project_id):
