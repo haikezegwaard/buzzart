@@ -88,7 +88,9 @@ def email_update(request, update_id):
     subject, from_email, to = update.title, settings.NOTIFIER_FROM_MAIL, project.email
     text_content = update.update
     dashboard_url = request.build_absolute_uri('/dashboard/{}'.format(project.id))    
-    html_content = '<p>{}</p><p>Bekijk je dashboard hier: <a href="{}">{}</a></p>'.format(update.update, dashboard_url, dashboard_url)
+    #html_content = '<p>{}</p><p>Bekijk je dashboard hier: <a href="{}">{}</a></p>'.format(update.update, dashboard_url, dashboard_url)
+    from django.template.loader import render_to_string
+    html_content = render_to_string('update-mailing.html', {'update': update, 'project': project,'dashboard_url': dashboard_url})
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     data = msg.send()

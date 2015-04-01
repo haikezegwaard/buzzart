@@ -127,7 +127,7 @@ class MailView(TemplateView):
                                          to=[settings.ADMIN_MAIL,context['project'].email], body=text_body)
         else:
             msg = EmailMultiAlternatives(subject=subject, from_email=settings.NOTIFIER_FROM_MAIL,
-                                         to=[settings.ADMIN_MAIL,'we@fundament.nl'], body=text_body)
+                                         to=[settings.ADMIN_MAIL], body=text_body)
             summary.mail_sent = True
             summary.save()
         msg.attach_alternative(html_body, "text/html")
