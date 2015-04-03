@@ -101,7 +101,7 @@ Blauwhoed projectanalyse {{ project.name }}
  * total conversion count, visitors this week, total subscriber count
  */
 $(function () {
-  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=7', function(data) {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=1', function(data) {
     $('#conversionCount').html(data['conversions'])
   });
 });
@@ -124,14 +124,17 @@ $(function () {
 
 {% block belowmainplot %}
 <div class="row">     
-    <div class="col-lg-3 col-md-3">
-        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/28/BLHDGEN_CB3053FF-96EA-4A35-A029-D21603D2899B' title='Leeuwenveld' %}
+    <div class="col-lg-3 col-md-3">        
+        {% include "widgets/niki-availability-pie-plot.html" %}
     </div>
     <div class="col-lg-3 col-md-3">
         {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>
     <div class="col-lg-3 col-md-3">
         {% include "widgets/mc_list_stats.html" %}
+    </div>
+    <div class="col-lg-3 col-md-3">
+        {% include "widgets/analytics-overview.html" %}
     </div>
 </div>
 {% endblock %}

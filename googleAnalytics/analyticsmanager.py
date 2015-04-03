@@ -143,6 +143,15 @@ class AnalyticsManager:
         """
         obj = self.reporting_API_call(viewid, start, end, ['sessions'])
         return int(obj['totalsForAllResults']['ga:sessions'])
+    
+    def get_avg_session_duration(self, viewid, start, end):
+        """
+        Get average session duration in seconds for all sessions in view
+        between start and end date
+        """
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)
+        return self.reporting_API_call(viewid, start_str, end_str, ['avgSessionDuration'])
 
     def get_referrals(self, viewid, start, end, max_results=30):
         """

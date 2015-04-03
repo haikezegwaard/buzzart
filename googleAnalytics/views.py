@@ -109,7 +109,19 @@ def conversion_list(request, project_id):
     start = drange['start']
     end = drange['end']
     data = ga_stats.get_named_conversion_count(project, start, end)
-    return HttpResponse(json.dumps(data), content_type='application/json')    
+    return HttpResponse(json.dumps(data), content_type='application/json')  
+
+def summary(request, project_id):
+    """
+    Summarize Analytics stats to render in a table for example
+    """
+    project = models.Project.objects.get(id=project_id)
+    drange = util.get_reporting_dates(request)
+    start = drange['start']
+    end = drange['end']
+    data = ga_stats.get_summary(project, start, end)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+     
 
 def list_accounts(request):
     """

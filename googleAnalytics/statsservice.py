@@ -3,6 +3,7 @@ import models
 from dashboard import util
 from dateutil import parser
 import logging
+from monitor.models import Project
 
 class StatsService():
     """
@@ -94,7 +95,33 @@ class StatsService():
         if not len(rows) is 1:
             raise Exception('rows size was not 1 ({})'.format(len(rows)))        
         return float(rows[0][0])
+    
+    def get_avg_session_duration(self, project, start, end):
+        """
+        Get bounce rate for view in project
+        """
+        settings = models.AnalyticsSettings.objects.get(project = project)
+        response = self.ga_manager.get_avg_session_duration(settings.ga_view, start, end)
+        rows = response.get('rows')
+        if not len(rows) is 1:
+            raise Exception('rows size was not 1 ({})'.format(len(rows)))        
+        return float(rows[0][0])
              
+    def get_summary(self, project, start, end):
+        """
+        Summarize bouncerate, session duration
+        """        
+        result = []
+        bouncerate = self.get_bounce_rate(project, start, end)
+        sessionduration = self.get_avg_session_duration(project, start, end)
+        overall_bounce = self.get_overall_avg_bounce_rate(start, end)
+        overall_session_duration = self.get_overall_avg_session_duration(start, end)
+        result.append({'name': 'bouncerate', 'value': bouncerate})
+        result.append({'name': 'overall bouncerate', 'value': overall_bounce})
+        result.append({'name': 'sessionduration', 'value': sessionduration})
+        result.append({'name': 'overall sessionduration', 'value': overall_session_duration})
+        
+        return result
 
     def get_referrals(self, project, start, end):
         """
@@ -107,5 +134,28 @@ class StatsService():
         for item in referrals.get('rows'):
             result.append([item[0], int(item[1])])
         return sorted(result, key=lambda tup: tup[1], reverse=True)
+    
+    def get_overall_avg_bounce_rate(self, start, end):
+        """
+        Get the overall average ('branche average') bouncerate 
+        between start and en date
+        """
+        projects = Project.objects.all()
+        avgs = []
+        for project in projects:
+            avgs.append(self.get_bounce_rate(project, start, end))
+        return sum(avgs) / len(avgs)
+    
+    def get_overall_avg_session_duration(self, start, end):
+        """
+        Get the overall average ('branche average') session duration 
+        between start and en date
+        """
+        projects = Project.objects.all()
+        avgs = []
+        for project in projects:
+            avgs.append(self.get_avg_session_duration(project, start, end))
+        return sum(avgs) / len(avgs)
+            
 
 

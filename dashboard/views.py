@@ -59,6 +59,7 @@ def index(request, project_id):
                                'end': datetime.date.strftime(end,"%m/%d/%Y")
                                },
                               context_instance=RequestContext(request))
+    
 
 @permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def origin(request, project_id):
@@ -196,7 +197,8 @@ def get_google_stats(project_id, start, end):
 
 def get_campaigns(project_id, start, end):
     project = Project.objects.get(id=project_id)
-    if project.mailchimp_list_id == '0': return None
+    listid = project.mailchimp_list_id
+    if not listid or listid == '0': return None
     mc_stats = mcstats.StatsService()
     result = mc_stats.get_campaigns_over_time(project, start, end)
     return result

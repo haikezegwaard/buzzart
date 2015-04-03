@@ -22,6 +22,7 @@ from dateutil import parser
 from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import EmailMultiAlternatives
 import json
+from guardian.shortcuts import get_objects_for_user
 import settings
 
 logger = logging.getLogger(__name__)
@@ -52,7 +53,7 @@ class ProfileView(generic.TemplateView):
         return context
 
 
-@user_passes_test(lambda u:u.is_staff, login_url='/login')
+@login_required()
 def index(request):
     """
     View for main entrance, listing various possible actions
@@ -60,7 +61,10 @@ def index(request):
     """    
     import cyfe.urls as cyfeurls
     summaries = models.Summary.objects.all()
-    projects = models.Project.objects.all()
+    
+    all_projects = models.Project.objects.all()
+    projects = get_objects_for_user(request.user, 'view_project', all_projects)
+    
     fbads_settings = FacebookAdsSettings.objects.first()
     return render_to_response('index.html',
                               {'summaries': summaries,
