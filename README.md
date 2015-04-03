@@ -37,6 +37,8 @@ For the plotting of data, initially the Google Visualisation API was used. In th
 
 git clone https://fundamentallmedia@bitbucket.org/fundamentallmedia/buzzart.git
 cd buzzart
+virtualenv ~/virtualenv/buzzart
+source ~/virtualenv/buzzart/bin activate
 pip install -r requirements.txt
 python manage syncdb
 python manage migrate
@@ -51,6 +53,25 @@ python manage runserver
 * Niki interesse: create niki interest object (if there is no nikiInterestAccount available, create a new one)
 * create Summary for project: koppelen aan project, fill in dates, texts (lorem ipsum) -> this is your report
 * you can access your report at: http://buzzartdomain/digest/ [^][summary_id
+
+### Dashboard templates ###
+
+A project has a 'template' property. The template is a subfolder under /dashboard/templates and determines the 
+way your dashboard is rendered. Select your template while configuring/adding a project in the admin.
+
+
+In your template, you can include widgets with predefined functionality. The titles of the widgets are
+pretty self explanatory. Exmample inclusion of a widget in your template:
+
+```
+#!python
+<div class="row">     
+    <div class="col-lg-3 col-md-3">        
+        {% include "widgets/niki-availability-pie-plot.html" %}
+    </div>
+</div>
+```
+
 
 ### Google Analytics API ###
 
