@@ -116,11 +116,8 @@ class StatsService():
         sessionduration = self.get_avg_session_duration(project, start, end)
         overall_bounce = self.get_overall_avg_bounce_rate(start, end)
         overall_session_duration = self.get_overall_avg_session_duration(start, end)
-        result.append({'name': 'bouncerate', 'value': bouncerate})
-        result.append({'name': 'overall bouncerate', 'value': overall_bounce})
-        result.append({'name': 'sessionduration', 'value': sessionduration})
-        result.append({'name': 'overall sessionduration', 'value': overall_session_duration})
-        
+        result.append({'name': 'bouncerate', 'value': round(bouncerate, 2),'average': round(overall_bounce, 2)})        
+        result.append({'name': 'time on site', 'value': round(sessionduration, 2), 'average': round(overall_session_duration, 2)})
         return result
 
     def get_referrals(self, project, start, end):
