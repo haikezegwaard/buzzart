@@ -24,6 +24,7 @@ from django.core.mail import EmailMultiAlternatives
 import json
 from guardian.shortcuts import get_objects_for_user
 import settings
+from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 
@@ -90,12 +91,12 @@ def email_update(request, update_id):
     update = BuzzartUpdate.objects.get(id=update_id)
     project = update.project
     subject, from_email, to = update.title, settings.NOTIFIER_FROM_MAIL, project.email
+    bcc = settings.NOTIFIER_BCC
     text_content = update.update
     dashboard_url = request.build_absolute_uri('/dashboard/{}'.format(project.id))    
-    #html_content = '<p>{}</p><p>Bekijk je dashboard hier: <a href="{}">{}</a></p>'.format(update.update, dashboard_url, dashboard_url)
-    from django.template.loader import render_to_string
+    #html_content = '<p>{}</p><p>Bekijk je dashboard hier: <a href="{}">{}</a></p>'.format(update.update, dashboard_url, dashboard_url)    
     html_content = render_to_string('update-mailing.html', {'update': update, 'project': project,'dashboard_url': dashboard_url})
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to], [bcc])
     msg.attach_alternative(html_content, "text/html")
     data = msg.send()
     if data:        

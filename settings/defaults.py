@@ -189,6 +189,7 @@ ADMIN_MAIL = 'hz@fundament.nl'
 
 ADMIN_USER = 'haike'
 NOTIFIER_FROM_MAIL = 'info@fundament.nl'
+NOTIFIER_BCC = 'hz@fundament.nl'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

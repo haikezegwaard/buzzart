@@ -13,3 +13,5 @@ DATABASES = {
         'PORT': '',                           # Set to empty string for default. Not used with sqlite3.
     },
 }
+
+NOTIFIER_BCC = 'dropbox@49216645.fundament.capsulecrm.com'
