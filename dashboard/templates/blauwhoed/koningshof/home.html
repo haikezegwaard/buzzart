@@ -9,13 +9,13 @@ Blauwhoed projectanalyse {{ project.name }}
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="row">
+                <div class="row">                    
                     <div class="col-xs-3">
-                        <i class="fa fa-sign-in fa-5x"></i>
+                        <i class="fa fa-group fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div id="mailinglist-count" class="huge"></div>
-                        <div>Nieuwsbrief inschrijvingen</div>
+                        <div id="traffic" class="huge"></div>
+                        <div>Website bezoekers</div>
                     </div>
                 </div>
             </div>
@@ -35,12 +35,12 @@ Blauwhoed projectanalyse {{ project.name }}
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-check-square-o fa-5x"></i>
+                        <i class="fa fa-sign-in fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div id="conversionCount" class="huge"></div>
-                        <div>Conversies</div>
-                    </div>
+                        <div id="mailinglist-count" class="huge"></div>
+                        <div>Nieuwsbrief inschrijvingen</div>
+                    </div>                    
                 </div>
             </div>
             <!--
@@ -59,11 +59,11 @@ Blauwhoed projectanalyse {{ project.name }}
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-group fa-5x"></i>
+                        <i class="fa fa-check-square-o fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div id="traffic" class="huge"></div>
-                        <div>Website bezoekers</div>
+                        <div id="conversionCount" class="huge"></div>
+                        <div>Conversies</div>
                     </div>
                 </div>
             </div>
@@ -133,16 +133,14 @@ $(function () {
   $.getJSON('/niki/availability/{{project_id}}', function(data) {
     verkocht = 0;
     total = 0;
-    for(i=0; i< data.length; i++){
-        console.log(data[i][0] + 'test');
+    for(i=0; i< data.length; i++){    
         if(data[i][0] == 'verkocht'){
             verkocht = data[i][1]; 
         }
         total += data[i][1]
     }
     perc = Math.round(verkocht/(total / 100) * 100) / 100 ;
-    $('#kpi-verkoopstand').html(perc + " %");
-    console.log(perc+" verkocht");
+    $('#kpi-verkoopstand').html(perc + " %");    
   });
 });
 
