@@ -19,6 +19,7 @@ Blauwhoed projectanalyse {{ project.name }}
                     </div>
                 </div>
             </div>
+            <!--
             <a href="">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
@@ -26,6 +27,7 @@ Blauwhoed projectanalyse {{ project.name }}
                     <div class="clearfix"></div>
                 </div>
             </a>
+            -->
         </div>
     </div>
     <div class="col-lg-3 col-md-6">
@@ -41,6 +43,7 @@ Blauwhoed projectanalyse {{ project.name }}
                     </div>
                 </div>
             </div>
+            <!--
             <a href="">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
@@ -48,6 +51,7 @@ Blauwhoed projectanalyse {{ project.name }}
                     <div class="clearfix"></div>
                 </div>
             </a>
+            -->
         </div>
     </div>
     <div class="col-lg-3 col-md-6">
@@ -63,6 +67,7 @@ Blauwhoed projectanalyse {{ project.name }}
                     </div>
                 </div>
             </div>
+            <!--
             <a href="">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
@@ -70,8 +75,10 @@ Blauwhoed projectanalyse {{ project.name }}
                     <div class="clearfix"></div>
                 </div>
             </a>
+            -->
         </div>
     </div>
+    {% block kpi4 %}
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-red">
             <div class="panel-heading">
@@ -80,11 +87,12 @@ Blauwhoed projectanalyse {{ project.name }}
                         <i class="fa fa-flask fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge" id="sg"></div>
-                        <div>Tweede fase interesse</div>
+                        <div class="huge" id="kpi-verkoopstand"></div>
+                        <div>Verkocht</div>
                     </div>
                 </div>
             </div>
+            <!--
             <a href="">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
@@ -92,8 +100,10 @@ Blauwhoed projectanalyse {{ project.name }}
                     <div class="clearfix"></div>
                 </div>
             </a>
+            -->
         </div>
     </div>
+    {% endblock %}
 </div>
 <script>
 /**
@@ -113,8 +123,19 @@ $(function () {
 });
 
 $(function () {
-  $.getJSON('/sg/survey/{{project_id}}', function(data) {
-    $('#sg').html(data['data']['statistics']['Complete']);    
+  $.getJSON('/niki/availability/{{project_id}}', function(data) {
+    verkocht = 0;
+    total = 0;
+    for(i=0; i< data.length; i++){
+        console.log(data[i][0] + 'test');
+        if(data[i][0] == 'verkocht'){
+            verkocht = data[i][1]; 
+        }
+        total += data[i][1]
+    }
+    perc = Math.round(verkocht/(total / 100) * 100) / 100 ;
+    $('#kpi-verkoopstand').html(perc + " %");
+    console.log(perc+" verkocht");
   });
 });
 
