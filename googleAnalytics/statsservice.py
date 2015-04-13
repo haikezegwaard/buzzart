@@ -124,10 +124,10 @@ class StatsService():
         result = []
         bouncerate = self.get_bounce_rate(project, start, end)
         sessionduration = self.get_avg_session_duration(project, start, end)
-        overall_bounce = self.get_overall_avg_bounce_rate(start, end)
-        overall_session_duration = self.get_overall_avg_session_duration(start, end)
-        result.append({'name': 'bouncerate', 'value': round(bouncerate, 2),'average': round(overall_bounce, 2)})        
-        result.append({'name': 'time on site', 'value': round(sessionduration, 2), 'average': round(overall_session_duration, 2)})
+        overall_bounce = None #self.get_overall_avg_bounce_rate(start, end)
+        overall_session_duration = None #self.get_overall_avg_session_duration(start, end)
+        result.append({'name': 'bouncerate', 'value': round(bouncerate, 2),'average': overall_bounce})        
+        result.append({'name': 'time on site', 'value': round(sessionduration, 2), 'average': overall_session_duration})
         return result
 
     def get_referrals(self, project, start, end):
@@ -153,13 +153,13 @@ class StatsService():
             try:
                 br = self.get_bounce_rate(project, start, end)
             except:
-                br = False
-            if br is not False:
+                br = None
+            if br is not None:
                 avgs.append(br)
         if len(avgs) > 0:
-            return sum(avgs) / len(avgs)
+            return round(sum(avgs) / len(avgs), 2)
         else:
-            return 0
+            return None
     
     def get_overall_avg_session_duration(self, start, end):
         """
@@ -172,11 +172,11 @@ class StatsService():
             try:
                 sd = self.get_avg_session_duration(project, start, end)
             except:
-                sd = False
-            if sd is not False:
+                sd = None
+            if sd is not None:
                 avgs.append(sd)
         if len(avgs) > 0:
-            return sum(avgs) / len(avgs)
+            return round(sum(avgs) / len(avgs), 2)
         else:
-            return 0
+            return None
 

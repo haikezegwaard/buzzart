@@ -65,7 +65,7 @@ def acceptation():
     env.use_ssh_config = False
     env.django_developing = True # do not restart apache
     env.project_name = 'buzzart'
-    env.hosts = ['django-dev.fundament.nl']
+    env.hosts = ['acc.app.fun.famhosting.nl']
     env.install_dir = '/data/www/buzzart/'
     env.install_user = 'webdev'
     env.user = env.install_user
