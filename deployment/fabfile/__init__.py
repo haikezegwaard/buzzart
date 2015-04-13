@@ -81,10 +81,10 @@ def upgrade():
     if env.deploy_docs:
         deploy_sphinx_docs()
 
-    if env.using_apache and not env.django_developing:
-        sudo('service apache2 restart')
-    if env.using_supervisor:
-        sudo('supervisorctl reload')
+    #if env.using_apache and not env.django_developing:
+    #    sudo('service apache2 restart')
+    #if env.using_supervisor:
+    #    sudo('supervisorctl reload')
 
 
 @task

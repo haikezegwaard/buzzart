@@ -124,8 +124,8 @@ class StatsService():
         result = []
         bouncerate = self.get_bounce_rate(project, start, end)
         sessionduration = self.get_avg_session_duration(project, start, end)
-        overall_bounce = None #self.get_overall_avg_bounce_rate(start, end)
-        overall_session_duration = None #self.get_overall_avg_session_duration(start, end)
+        overall_bounce = self.get_overall_avg_bounce_rate(start, end)
+        overall_session_duration = self.get_overall_avg_session_duration(start, end)
         result.append({'name': 'bouncerate', 'value': round(bouncerate, 2),'average': overall_bounce})        
         result.append({'name': 'time on site', 'value': round(sessionduration, 2), 'average': overall_session_duration})
         return result
