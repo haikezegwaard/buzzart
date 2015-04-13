@@ -110,7 +110,11 @@ Blauwhoed projectanalyse {{ project.name }}
  * Fill the 'huge' labels on top of the page with some relevant actual info:
  * total conversion count, visitors this week, total subscriber count
  */
-
+$(function () {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=2', function(data) {
+    $('#mailinglist-count').html(data['conversions'])
+  });
+});
  
  
 $(function () {

@@ -21,5 +21,5 @@ urlpatterns = patterns('',
     url(r'^goals/(?P<profile_id>.*)$', views.list_goals, name='goals'),
     url(r'^bouncerate/(?P<project_id>[0-9]*)$', views.bounce_rate, name='bouncerate'),
     url(r'^conversionList/(?P<project_id>[0-9]*)$', views.conversion_list, name='conversion_list' ),
-    url(r'^summary/(?P<project_id>[0-9]*)$', views.summary, name='summary'),
+    url(r'^summary/(?P<project_id>[0-9]*)$', views.summary, name='summary'),    
 )
