@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'guardian',
     'niki',
     'nikiInterest',
+    'surveygizmo',
     'monitor',
     'notifier',
     'cyfe',
@@ -71,7 +72,7 @@ INSTALLED_APPS = (
     'dashboard',
     'googleAnalytics',
     'social.apps.django_app.default',
-    'surveygizmo',
+    
     'debug_toolbar',
     'djrill',
     'twitterAnalytics',
