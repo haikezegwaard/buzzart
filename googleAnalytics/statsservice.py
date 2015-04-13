@@ -4,6 +4,7 @@ from dashboard import util
 from dateutil import parser
 import logging
 from monitor.models import Project
+from django.core.exceptions import ObjectDoesNotExist
 
 class StatsService():
     """
@@ -20,7 +21,7 @@ class StatsService():
         Get traffic per day over given interval, format traffic as list of
         tuples (timestamp, traffic-count)
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)
+        settings = self.getSettingsByProject(project)
         traffic = self.ga_manager.get_daily_visits(settings.ga_view, start, end)
         result = []
         for item in traffic.get('rows'):
@@ -34,7 +35,7 @@ class StatsService():
         Get conversion count per day over given interval, format traffic as list of
         tuples (timestamp, traffic-count)
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)
+        settings = self.getSettingsByProject(project)
         conversion = self.ga_manager.get_daily_conversions_for_goal(settings.ga_view, settings.goal_to_track, start, end)
         self.logger.debug(conversion)
         result = []
@@ -48,11 +49,9 @@ class StatsService():
         """
         Get list of tuples (goalname, count) for project over time
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)       
+        settings = self.getSettingsByProject(project)       
         goals = self.ga_manager.get_goals_for_view(settings.ga_view)
         result = []
-        start_date = self.ga_manager.google_date(start)
-        end_date = self.ga_manager.google_date(end)
         for goal in goals.get('items'):
             goal_id = int(goal.get('id'))
             count = self.ga_manager.get_conversion_count_for_goal(settings.ga_view, 
@@ -67,7 +66,7 @@ class StatsService():
         Get sessions per channel (Direct, Social, Email, Organic, Referral)
         for the use of plotting in a pie chart
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)
+        settings = self.getSettingsByProject(project)
         channels = self.ga_manager.get_channels_for_sessions(settings.ga_view, start, end)
         result = []
         for item in channels.get('rows'):
@@ -78,29 +77,40 @@ class StatsService():
         """
         Get the device for sessions (tablet, mobile, desktop)
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)
+        settings = self.getSettingsByProject(project)
         categories = self.ga_manager.get_device_categories_for_sessions(settings.ga_view, start, end)
         result = []
         for item in categories.get('rows'):
             result.append([item[0], int(item[1])])
         return result
     
+
+    def getSettingsByProject(self, project):
+        settings = False
+        try:
+            settings = models.AnalyticsSettings.objects.get(project=project)                    
+        except ObjectDoesNotExist:
+            self.logger.warn('Analytics settings not found for project: {}'.format(project.name))
+        return settings
+        
+            
+
     def get_bounce_rate(self, project, start, end):
         """
         Get bounce rate for view in project
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)
+        settings = self.getSettingsByProject(project)
         response = self.ga_manager.get_bounce_rate(settings.ga_view, start, end)
         rows = response.get('rows')
         if not len(rows) is 1:
-            raise Exception('rows size was not 1 ({})'.format(len(rows)))        
+            raise Exception('rows size was not 1 ({})'.format(len(rows)))
         return float(rows[0][0])
     
     def get_avg_session_duration(self, project, start, end):
         """
         Get bounce rate for view in project
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)
+        settings = self.getSettingsByProject(project)
         response = self.ga_manager.get_avg_session_duration(settings.ga_view, start, end)
         rows = response.get('rows')
         if not len(rows) is 1:
@@ -125,7 +135,7 @@ class StatsService():
         Get ordered list of tuples (referral, sessioncount) for given project
         between dates
         """
-        settings = models.AnalyticsSettings.objects.get(project = project)
+        settings = self.getSettingsByProject(project)
         referrals = self.ga_manager.get_referrals(settings.ga_view, start, end)
         result = []
         for item in referrals.get('rows'):
@@ -140,8 +150,16 @@ class StatsService():
         projects = Project.objects.all()
         avgs = []
         for project in projects:
-            avgs.append(self.get_bounce_rate(project, start, end))
-        return sum(avgs) / len(avgs)
+            try:
+                br = self.get_bounce_rate(project, start, end)
+            except:
+                br = False
+            if br is not False:
+                avgs.append(br)
+        if len(avgs) > 0:
+            return sum(avgs) / len(avgs)
+        else:
+            return 0
     
     def get_overall_avg_session_duration(self, start, end):
         """
@@ -151,8 +169,14 @@ class StatsService():
         projects = Project.objects.all()
         avgs = []
         for project in projects:
-            avgs.append(self.get_avg_session_duration(project, start, end))
-        return sum(avgs) / len(avgs)
-            
-
+            try:
+                sd = self.get_avg_session_duration(project, start, end)
+            except:
+                sd = False
+            if sd is not False:
+                avgs.append(sd)
+        if len(avgs) > 0:
+            return sum(avgs) / len(avgs)
+        else:
+            return 0
 
