@@ -6,7 +6,7 @@ Blauwhoed projectanalyse {{ project.name }}
 {% block intro %}
 <!-- /.row -->
 <div class="row">
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">                    
@@ -30,7 +30,7 @@ Blauwhoed projectanalyse {{ project.name }}
             -->
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-green">
             <div class="panel-heading">
                 <div class="row">
@@ -54,7 +54,7 @@ Blauwhoed projectanalyse {{ project.name }}
             -->
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
@@ -79,7 +79,7 @@ Blauwhoed projectanalyse {{ project.name }}
         </div>
     </div>
     {% block kpi4 %}
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-red">
             <div class="panel-heading">
                 <div class="row">
@@ -150,16 +150,16 @@ $(function () {
 
 {% block belowmainplot %}
 <div class="row">     
-    <div class="col-lg-3 col-md-3">        
+    <div class="col-lg-3 col-md-6 col-sm-6">        
         {% include "widgets/niki-availability-pie-plot.html" %}
     </div>
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         {% include "widgets/mc_list_stats.html" %}
     </div>
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         {% include "widgets/analytics-overview.html" %}
     </div>
 </div>
