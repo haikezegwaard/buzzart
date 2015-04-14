@@ -1,6 +1,7 @@
 from settings.defaults import *
 
 STATIC_ROOT = '/data/www/buzzart/static'
+MEDIA_ROOT = '/data/www/buzzart/media'
 DEBUG = False
 
 DATABASES = {

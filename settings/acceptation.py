@@ -5,6 +5,7 @@ from settings.defaults import *
 DEBUG_TOOLBAR_PATCH_SETTINGS = False  # explicit setup
 
 STATIC_ROOT = '/data/www/buzzart/static'
+MEDIA_ROOT = '/data/www/buzzart/media'
 
 def _show_toolbar(request):
     # avoid executing in tests (which sets DEBUG to False)
