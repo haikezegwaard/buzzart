@@ -24,11 +24,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 import settings
 from guardian.decorators import permission_required_or_403
+from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
 ga_stats = googlestats.StatsService()
 
 # Create your views here.
+@login_required
 @permission_required_or_403('view_project', (Project, 'id', 'project_id'))
 def index(request, project_id):
     project = Project.objects.get(id=project_id)
