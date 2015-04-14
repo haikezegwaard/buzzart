@@ -8,12 +8,14 @@
 <body>
 <div class="container">
     <div id="login">
+      
       <form class="form-signin" name="LoginForm" action="/login/" method="post">
         {% csrf_token %}
         {% if next %}
             <input type="hidden" name="next" value="{{ REDIRECT_FIELD_VALUE }}" />
         {% endif %}
-        <h2 class="form-signin-heading">BuzzArt login</h2>
+        <!--<h2 class="form-signin-heading">BuzzArt login</h2>-->
+        <img src="{% static 'img/login.jpg' %}" alt="Buzzart Login" />
         <div class="control-group">
             <label class="control-label sr-only" for="username">Gebruikersnaam</label>
             <div class="controls">
