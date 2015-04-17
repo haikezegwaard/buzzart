@@ -12,6 +12,18 @@ Advies / timeline {{project.name}}
 <div class="panel panel-default">
     <div class="panel-heading">
         <i class="fa fa-clock-o fa-fw"></i>Buzzart advies overzicht
+        <div class="pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                Actions
+                <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a href="/dashboard/{{ project.id }}/compose-update">Compose update</a>
+                    </li>                    
+                </ul>
+            </div>
+        </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
