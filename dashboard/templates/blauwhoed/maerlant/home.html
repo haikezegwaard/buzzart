@@ -6,16 +6,16 @@ Blauwhoed projectanalyse {{ project.name }}
 {% block intro %}
 <!-- /.row -->
 <div class="row">
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="row">
+                <div class="row">                    
                     <div class="col-xs-3">
-                        <i class="fa fa-sign-in fa-5x"></i>
+                        <i class="fa fa-group fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div id="mailinglist-count" class="huge"></div>
-                        <div>Nieuwsbrief inschrijvingen</div>
+                        <div id="traffic" class="huge"></div>
+                        <div>Website bezoekers</div>
                     </div>
                 </div>
             </div>
@@ -30,8 +30,32 @@ Blauwhoed projectanalyse {{ project.name }}
             -->
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-sign-in fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="mailinglist-count" class="huge"></div>
+                        <div>Nieuwsbrief inschrijvingen</div>
+                    </div>                    
+                </div>
+            </div>
+            <!--
+            <a href="">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            -->
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
@@ -54,32 +78,8 @@ Blauwhoed projectanalyse {{ project.name }}
             -->
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-group fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div id="traffic" class="huge"></div>
-                        <div>Website bezoekers</div>
-                    </div>
-                </div>
-            </div>
-            <!--
-            <a href="">
-                <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-            -->
-        </div>
-    </div>
     {% block kpi4 %}
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-red">
             <div class="panel-heading">
                 <div class="row">
@@ -110,11 +110,15 @@ Blauwhoed projectanalyse {{ project.name }}
  * Fill the 'huge' labels on top of the page with some relevant actual info:
  * total conversion count, visitors this week, total subscriber count
  */
-
+$(function () {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=5', function(data) {
+    $('#mailinglist-count').html(data['conversions'])
+  });
+});
  
  
 $(function () {
-  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=1', function(data) {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=2', function(data) {
     $('#conversionCount').html(data['conversions'])
   });
 });
@@ -129,16 +133,14 @@ $(function () {
   $.getJSON('/niki/availability/{{project_id}}', function(data) {
     verkocht = 0;
     total = 0;
-    for(i=0; i< data.length; i++){
-        console.log(data[i][0] + 'test');
+    for(i=0; i< data.length; i++){    
         if(data[i][0] == 'verkocht'){
             verkocht = data[i][1]; 
         }
         total += data[i][1]
     }
-    perc = Math.round(verkocht/(total / 100) );
-    $('#kpi-verkoopstand').html(perc + " %");
-    console.log(perc+" verkocht");
+    perc = Math.round(verkocht/(total / 100) ) ;
+    $('#kpi-verkoopstand').html(perc + " %");    
   });
 });
 
@@ -148,16 +150,16 @@ $(function () {
 
 {% block belowmainplot %}
 <div class="row">     
-    <div class="col-lg-3 col-md-3">        
+    <div class="col-lg-3 col-md-6 col-sm-6">        
         {% include "widgets/niki-availability-pie-plot.html" %}
     </div>
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         {% include "widgets/mc_list_stats.html" %}
     </div>
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-6 col-sm-6">
         {% include "widgets/analytics-overview.html" %}
     </div>
 </div>

@@ -139,7 +139,7 @@ $(function () {
         }
         total += data[i][1]
     }
-    perc = Math.round(verkocht/(total / 100) * 100) / 100 ;
+    perc = Math.round(verkocht/(total / 100)) ;
     $('#kpi-verkoopstand').html(perc + " %");    
   });
 });
