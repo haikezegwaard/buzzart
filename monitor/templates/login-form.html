@@ -7,33 +7,36 @@
 </head>
 <body>
 <div class="container">
-    <div id="login">
-      
-      <form class="form-signin" name="LoginForm" action="/login/" method="post">
-        {% csrf_token %}
-        {% if next %}
-            <input type="hidden" name="next" value="{{ REDIRECT_FIELD_VALUE }}" />
-        {% endif %}
-        <!--<h2 class="form-signin-heading">BuzzArt login</h2>-->
-        <img src="{% static 'img/login.jpg' %}" alt="Buzzart Login" />
-        <div class="control-group">
-            <label class="control-label sr-only" for="username">Gebruikersnaam</label>
-            <div class="controls">
-                <input type="text" id="username" class="form-control" name="username"  placeholder="Username">
+    <div id="login" class="row">  
+        <div class="col-lg-4 col-md-4 col-sm-1 col-xs-1" ></div>
+        <div class="col-lg-4 col-md-4 col-sm-10 col-xs-10">
+          <form class="form-signin" name="LoginForm" action="/login/" method="post">
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ REDIRECT_FIELD_VALUE }}" />
+            {% endif %}
+            <!--<h2 class="form-signin-heading">BuzzArt login</h2>-->
+            <img id="login-logo" src="{% static 'img/login.jpg' %}" alt="Buzzart Login" />
+            <div class="control-group">
+                <label class="control-label sr-only" for="username">Gebruikersnaam</label>
+                <div class="controls">
+                    <input type="text" id="username" class="form-control" name="username"  placeholder="Username">
+                </div>
             </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label sr-only" for="password">Wachtwoord</label>
-            <div class="controls">
-                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <div class="control-group">
+                <label class="control-label sr-only" for="password">Wachtwoord</label>
+                <div class="controls">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                </div>
             </div>
-        </div>
-        <div class="control-group">
-            <div class="controls">
-                <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+                </div>
             </div>
+            </form>
         </div>
-        </form>
+        <div class="col-lg-4 col-md-4 col-sm-1 col-xs-1" ></div>
     </div>
 </div>
 </body>

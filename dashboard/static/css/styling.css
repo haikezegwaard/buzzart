@@ -12,8 +12,59 @@ body.signin {
   background-color: #eee;
 }
 
+body .panel-primary .panel-heading,
+body .panel-primary{
+    border-color: #4c59a2;    
+}
+
+body .panel-primary .panel-heading{
+    background: #4c59a2;
+}
+
+body .panel-green .panel-heading,
+body .panel-green{
+    border-color: #10a3b6;
+}
+
+body .panel-green .panel-heading{
+    background: #10a3b6;
+}
+
+body .panel-yellow .panel-heading,
+body .panel-yellow{
+    border-color: #f49730;
+}
+
+body .panel-yellow .panel-heading{
+    background: #f49730;
+}
+
+body .panel-red .panel-heading,
+body .panel-red{
+    border-color: #ba2e7f;
+}
+
+body .panel-red .panel-heading{
+    background: #ba2e7f;
+}
+
+body .btn-primary {
+  color: #fff;
+  background-color: #10a3b6;
+  border-color: #10a3b6;
+}
+
+body .btn-primary:hover{
+    background-color: #1A8B99;
+      border-color: #1A8B99;
+}
+
+#login .form-control{
+    margin-bottom: 10px;
+    
+}
+
 .form-signin {
-  max-width: 330px;
   padding: 15px;
   margin: 0 auto;
 }
@@ -36,13 +87,10 @@ body.signin {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  margin-bottom: 10px;  
+}
+
+#login-logo{
+    max-width: 100%;
 }
