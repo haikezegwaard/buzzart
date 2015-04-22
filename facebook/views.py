@@ -38,8 +38,8 @@ def fanpage_impressions_by_city(request, project_id):
     transformed = []
     for key, value in result[0][1].items():
         
-        transformed.append({'city': key, 'count': value})
-    return HttpResponse(json.dumps(transformed), content_type='application/json')
+        transformed.append({'city': key, 'count': value})    
+    return HttpResponse(json.dumps(transformed[:9]), content_type='application/json')
 
 def fanpage_overview(request, project_id):
     project = Project.objects.get(id = project_id)    

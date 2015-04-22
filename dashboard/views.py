@@ -203,6 +203,10 @@ def get_campaigns(project_id, start, end):
     if not listid or listid == '0': return None
     mc_stats = mcstats.StatsService()
     result = mc_stats.get_campaigns_over_time(project, start, end)
+    from monitor.managers import BuzzartManager
+    buzzartmanager = BuzzartManager()
+    updates = buzzartmanager.get_updates_over_time(project, start, end)     
+    result.extend(updates)
     return result
 
 
