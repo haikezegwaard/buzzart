@@ -3,6 +3,9 @@
 <head>
 {% include "bootstrap.html" %}
 {% load staticfiles  %}
+{% if GOOGLE_ANALYTICS_PROPERTY_ID %}
+    {% include "base/ga.html" %}
+{% endif %}
 <link rel="stylesheet" href="{% static 'css/styling.css'%}">
 </head>
 <body>

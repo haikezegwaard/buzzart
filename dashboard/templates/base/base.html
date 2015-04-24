@@ -15,6 +15,9 @@
         {% endif %}
         {% endblock %}
         </title>
+        {% if GOOGLE_ANALYTICS_PROPERTY_ID %}
+            {% include "base/ga.html" %}
+        {% endif %}
     </head>
     <body>
         {% load staticfiles  %}

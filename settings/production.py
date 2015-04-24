@@ -6,6 +6,10 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = ['mijn.buzzart.nl']
 
+GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-55846562-2'
+GOOGLE_ANALYTICS_DOMAIN = 'mijn.buzzart.nl'
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

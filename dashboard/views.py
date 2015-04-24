@@ -200,9 +200,11 @@ def get_google_stats(project_id, start, end):
 def get_campaigns(project_id, start, end):
     project = Project.objects.get(id=project_id)
     listid = project.mailchimp_list_id
-    if not listid or listid == '0': return None
-    mc_stats = mcstats.StatsService()
-    result = mc_stats.get_campaigns_over_time(project, start, end)
+    if not listid or listid == '0':
+        result = []
+    else:
+        mc_stats = mcstats.StatsService()
+        result = mc_stats.get_campaigns_over_time(project, start, end)    
     from monitor.managers import BuzzartManager
     buzzartmanager = BuzzartManager()
     updates = buzzartmanager.get_updates_over_time(project, start, end)     
