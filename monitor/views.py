@@ -58,19 +58,15 @@ class ProfileView(generic.TemplateView):
 def index(request):
     """
     View for main entrance, listing various possible actions
-    in the buzzart application. For convenience only
+    in the buzzart application. 
     """    
-    import cyfe.urls as cyfeurls
-    summaries = models.Summary.objects.all()
     
     all_projects = models.Project.objects.all()
     projects = get_objects_for_user(request.user, 'view_project', all_projects)
     
     fbads_settings = FacebookAdsSettings.objects.first()
-    return render_to_response('index.html',
-                              {'summaries': summaries,
-                               'projects': projects,
-                               'cyfeurls': cyfeurls.urlpatterns,
+    return render_to_response('index.html',{
+                               'projects': projects,                               
                                'fbads_settings': fbads_settings},
                               context_instance=RequestContext(request))
 

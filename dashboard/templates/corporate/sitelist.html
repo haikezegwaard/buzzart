@@ -21,15 +21,16 @@ Overzicht websites
                             <tr>
                                 <th>Project</th>
                                 <th>Status</th>
-                                <th>Leegstand</th>
+                                <th>Verkoopstand</th>
                                 <th>Inschrijvingen</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="danger">
+                            {% for project in projects %}
+                            <tr >
 
-                                <td><a href="/dashboard/1">Ankelaarseveld</a></td>
+                                <td><a href="/dashboard/{{project.id}}">{{project.name}}</a></td>
                                 <td><span class="label label-success">In verhuur</span></td>
                                 <td>
                                 <div class="progress">
@@ -39,50 +40,9 @@ Overzicht websites
                                 </div>
                                 </td>
                                 <td>36</td>
-                                <td><i class="fa fa-desktop"></i></td>
+                                <td><a href="{{ project.url }} " target="_blank"><i class="fa fa-desktop"></i></a></td>
                             </tr>
-                            <tr>
-
-                                <td><a href="/dashboard/1">Hof van Zuidbroek</a></td>
-                                <td><span class="label label-success">In verhuur</span></td>
-                                <td>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                                    60%
-                                    </div>
-                                </div>
-                                </td>
-                                <td>128</td>
-                                <td><i class="fa fa-desktop"></i></td>
-                            </tr>
-                            <tr>
-
-                                <td><a href="/dashboard/1">Westerhoek</a></td>
-                                <td><span class="label label-default">Verhuurd</span></td>
-                                <td>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20px;">
-                                    0%
-                                    </div>
-                                </div>
-                                </td>
-                                <td>540</td>
-                                <td><i class="fa fa-desktop"></i></td>
-                            </tr>
-                            <tr>
-
-                                <td><a href="/dashboard/1">Project X</a></td>
-                                <td><span class="label label-warning">Pre-Rent</span></td>
-                                <td>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                                    100%
-                                    </div>
-                                </div>
-                                </td>
-                                <td>45</td>
-                                <td><i class="fa fa-desktop"></i></td>
-                            </tr>
+                            {% endfor %}                           
                         </tbody>
                     </table>
                 </div>

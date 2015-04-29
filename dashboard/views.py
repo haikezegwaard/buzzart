@@ -25,6 +25,7 @@ from django.shortcuts import render
 import settings
 from guardian.decorators import permission_required_or_403
 from django.contrib.auth.decorators import login_required
+from guardian.shortcuts import get_objects_for_user
 
 logger = logging.getLogger(__name__)
 ga_stats = googlestats.StatsService()
@@ -133,14 +134,15 @@ def mailing(request, project_id):
                                },
                               context_instance=RequestContext(request))
 
-
+@login_required
 def site_list(request):
     template = request.GET.get('template', '')
+    projects = get_objects_for_user(request.user, 'view_project', Project)
     account = ''
     if template:
         account = template + '/'
     return render_to_response(account+'corporate/sitelist.html',
-                              {},
+                              {'projects': projects },
                               context_instance=RequestContext(request))
 
 
