@@ -1,0 +1,47 @@
+<!doctype HTML>
+<html>
+<head>
+
+
+    
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" media="all" rel="stylesheet">
+<script src="//code.jquery.com/jquery.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<link href="/static/css/bs-callouts.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/static/css/styling.css">
+</head>
+<body>
+<div class="container">
+    <div id="login">
+      
+      <form class="form-signin" name="LoginForm" action="/login/" method="post">
+        <input type='hidden' name='csrfmiddlewaretoken' value='NxTOaCt9Dkv8zhVXD6E57Ecytvjb79vr' />
+        
+            <input type="hidden" name="next" value="/" />
+        
+        <!--<h2 class="form-signin-heading">BuzzArt login</h2>-->
+        <img src="/static/img/login.jpg" alt="Buzzart Login" />
+        <div class="control-group">
+            <label class="control-label sr-only" for="username">Gebruikersnaam</label>
+            <div class="controls">
+                <input type="text" id="username" class="form-control" name="username"  placeholder="Username">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label sr-only" for="password">Wachtwoord</label>
+            <div class="controls">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

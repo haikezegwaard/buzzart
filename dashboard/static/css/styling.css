@@ -2,6 +2,11 @@
     font-weight: bold;
 }
 
+body .panel-red a, body .panel-red a:visited, body .panel-red a:link, body .panel-red a:active, body .panel-red a:hover{
+    color: white;
+    text-decoration: none;
+}
+
 div.input-group {
     margin-bottom: 5px;
 }

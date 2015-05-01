@@ -1,0 +1,89 @@
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-group fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="traffic" class="huge"></div>
+                        <div>Website bezoekers!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-check-square-o fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="conversionCount" class="huge"></div>
+                        <div>Conversies totaal!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-sign-in fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="subscription-count" class="huge"></div>
+                        <div>{% block label1 %}Inschrijvingen!{% endblock %}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-flask fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><a class="kpi" href="{% url 'project_updates' project.id %}">Advies</a></div>
+                        <div>Advies!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * Fill the 'huge' labels on top of the page with some relevant actual info:
+ * total conversion count, visitors this week, total subscriber count
+ */
+$(function () {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}', function(data) {
+    $('#conversionCount').html(data['conversions'])
+  });
+});
+
+$(function () {
+  $.getJSON('/googleAnalytics/traffic/{{project_id}}', function(data) {
+    $('#traffic').html(data['traffic'])
+  });
+});
+
+$(function () {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=1', function(data) {
+    $('#subscription-count').html(data['conversions'])
+  });
+});
+</script>
+<!-- /.row -->

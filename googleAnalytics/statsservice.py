@@ -147,6 +147,9 @@ class StatsService():
         Get the overall average ('branche average') bouncerate 
         between start and en date
         """
+        # first check for 'cache' hit
+        
+        # no hit, calculate new value
         projects = Project.objects.all()
         avgs = []
         for project in projects:
@@ -157,9 +160,10 @@ class StatsService():
             if br is not None:
                 avgs.append(br)
         if len(avgs) > 0:
-            return round(sum(avgs) / len(avgs), 2)
+            avg_bounce_rate = round(sum(avgs) / len(avgs), 2)
+            # store value in db
         else:
-            return None
+            return 0
     
     def get_overall_avg_session_duration(self, start, end):
         """
