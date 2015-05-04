@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 import settings
 from south.tests.fakeapp.models import Recursive
 from relativefilepathfield.fields import RelativeFilePathField
-from managers import BuzzCacheManager
+#from managers import BuzzCacheManager
 
 # Create your models here.
 class Project(models.Model):
@@ -89,7 +89,7 @@ class BuzzCache(models.Model):
     modified = models.DateTimeField(auto_now=True)
     key = models.CharField(max_length=300, blank=False, null=False)
     value = models.TextField(blank=False, null=False)
-    objects = BuzzCacheManager()
+    #objects = BuzzCacheManager()
     
     def __unicode__(self):
         return '{} : {}'.format(self.key, self.value)

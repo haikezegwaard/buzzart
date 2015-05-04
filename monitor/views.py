@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
@@ -88,10 +89,16 @@ def email_update(request, update_id):
     project = update.project
     subject, from_email, to = update.title, settings.NOTIFIER_FROM_MAIL, project.email
     bcc = settings.NOTIFIER_BCC
-    text_content = update.update
+    text_content = update.update    
+    static_full_url = request.build_absolute_uri(settings.STATIC_URL)
     dashboard_url = request.build_absolute_uri('/dashboard/{}'.format(project.id))    
     #html_content = '<p>{}</p><p>Bekijk je dashboard hier: <a href="{}">{}</a></p>'.format(update.update, dashboard_url, dashboard_url)    
-    html_content = render_to_string('update-mailing.html', {'update': update, 'project': project,'dashboard_url': dashboard_url})
+    html_content = render_to_string('update-mailing.html', 
+                                    {'update': update, 
+                                     'project': project,
+                                     'dashboard_url': dashboard_url,
+                                     'static_full_url' : static_full_url}, 
+                                    context_instance=RequestContext(request))        
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to], [bcc])
     msg.attach_alternative(html_content, "text/html")
     data = msg.send()
@@ -101,6 +108,26 @@ def email_update(request, update_id):
         return redirect('/dashboard/{}'.format(project.id))
     else:
         return HttpResponse(json.dumps('Sending mail failed'), content_type='application/json')
+    
+    
+@user_passes_test(lambda u:u.is_staff, login_url='/login')
+def preview_update(request, update_id):
+    """
+    Render the content of a buzzart update in the Buzzart update mail template
+    as a method of previewing the contents.
+    """
+    update = BuzzartUpdate.objects.get(id=update_id)
+    project = update.project
+    static_full_url = request.build_absolute_uri(settings.STATIC_URL)
+    dashboard_url = request.build_absolute_uri('/dashboard/{}'.format(project.id))
+    return render_to_response('update-mailing.html', 
+                              {'update': update, 
+                               'project': project,
+                               'dashboard_url': dashboard_url,
+                               'static_full_url' : static_full_url  },
+                               context_instance=RequestContext(request)
+                              )
+    
     
 
 @user_passes_test(lambda u:u.is_staff, login_url='/login')

@@ -39,6 +39,7 @@ class StatsService():
         conversion = self.ga_manager.get_daily_conversions_for_goal(settings.ga_view, settings.goal_to_track, start, end)
         self.logger.debug(conversion)
         result = []
+        if not conversion.get('rows'): return result
         for item in conversion.get('rows'):
             ms = util.unix_time_millis(parser.parse(item[0]))
             count = int(item[1])

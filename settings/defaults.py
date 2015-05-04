@@ -106,6 +106,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'social.apps.django_app.context_processors.login_redirect',  
     'monitor.context_processors.google_analytics',  
+    'django.core.context_processors.static',
 )
 
 SOCIAL_AUTH_PIPELINE = (
