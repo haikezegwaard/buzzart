@@ -121,6 +121,26 @@ def summary(request, project_id):
     end = drange['end']
     data = ga_stats.get_summary(project, start, end)
     return HttpResponse(json.dumps(data), content_type='application/json')
+
+def traffic_range(request):
+    """
+    Return min and max traffic over multiple projects between given dates
+    """
+    drange = util.get_reporting_dates(request)
+    start = drange['start']
+    end = drange['end']
+    data = ga_stats.get_traffic_range(start, end)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+def bounce_rate_stats(request):
+    """
+    Return min and max traffic over multiple projects between given dates
+    """
+    drange = util.get_reporting_dates(request)
+    start = drange['start']
+    end = drange['end']
+    data = ga_stats.get_overall_bounce_rate_stats_segmented(start, end)
+    return HttpResponse(json.dumps(data), content_type='application/json')
      
 
 def list_accounts(request):

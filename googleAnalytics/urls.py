@@ -22,4 +22,6 @@ urlpatterns = patterns('',
     url(r'^bouncerate/(?P<project_id>[0-9]*)$', views.bounce_rate, name='bouncerate'),
     url(r'^conversionList/(?P<project_id>[0-9]*)$', views.conversion_list, name='conversion_list' ),
     url(r'^summary/(?P<project_id>[0-9]*)$', views.summary, name='summary'),    
+    url(r'^trafficRange$', views.traffic_range, name='traffic_range'),
+    url(r'^bouncerateStats$', views.bounce_rate_stats, name='bouncerate_stats')
 )

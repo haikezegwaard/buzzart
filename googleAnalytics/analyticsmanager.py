@@ -161,13 +161,17 @@ class AnalyticsManager:
         end_str = self.google_date(end)
         return self.reporting_API_call(viewid, start_str, end_str, ['sessions'], '&dimensions=ga:fullReferrer&max-results={}&sort=-ga:sessions'.format(max_results))
     
-    def get_bounce_rate(self, viewid, start, end):
+    def get_bounce_rate(self, viewid, start, end, segment=None):
         """
         Get bounce percentage for sessions in interval
         """
         start_str = self.google_date(start)
         end_str = self.google_date(end)
-        return self.reporting_API_call(viewid, start_str, end_str, ['bounceRate'])
+        if segment is None:
+            response = self.reporting_API_call(viewid, start_str, end_str, ['bounceRate'])
+        else:
+            response = self.reporting_API_call(viewid, start_str, end_str, ['bounceRate'], '&segment={}'.format(segment))
+        return float(response.get('rows')[0][0])
 
     def get_channels_for_sessions(self, viewid, start, end):
         """

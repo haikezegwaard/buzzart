@@ -28,6 +28,28 @@
             </p>
         </div>
     </div>
+    <div class="bs-docs-section">
+        <div class="bs-callout bs-callout-info">
+            <h4>Meta analyse</h4>
+            <p>traffic: <div id="traffic"></div></p>
+            <p>bouncerate: <div id="bouncerate"></div></p>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $(function () {
+              $.getJSON('/googleAnalytics/trafficRange', function(data) {
+                $('#traffic').html(JSON.stringify(data));                
+              });
+              $.getJSON('/googleAnalytics/bouncerateStats', function(data) {
+                $('#bouncerate').html(JSON.stringify(data));
+                
+              });
+            });
+        });
+        
+    </script>
+    
     {% endif %}
     <div class="row">
         

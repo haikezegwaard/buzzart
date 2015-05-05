@@ -5,6 +5,8 @@ from dateutil import parser
 import logging
 from monitor.models import Project
 from django.core.exceptions import ObjectDoesNotExist
+import numpy
+#from googleAnalytics.views import traffic
 
 class StatsService():
     """
@@ -152,16 +154,16 @@ class StatsService():
         
         # no hit, calculate new value
         projects = Project.objects.all()
-        avgs = []
+        bouncerates = []
         for project in projects:
             try:
                 br = self.get_bounce_rate(project, start, end)
             except:
                 br = None
             if br is not None:
-                avgs.append(br)
-        if len(avgs) > 0:
-            avg_bounce_rate = round(sum(avgs) / len(avgs), 2)
+                bouncerates.append(br)
+        if len(bouncerates) > 0:            
+            return round(numpy.average(bouncerates), 2)
             # store value in db
         else:
             return 0
@@ -172,16 +174,60 @@ class StatsService():
         between start and en date
         """
         projects = Project.objects.all()
-        avgs = []
+        durations = []
         for project in projects:
             try:
                 sd = self.get_avg_session_duration(project, start, end)
             except:
                 sd = None
             if sd is not None:
-                avgs.append(sd)
-        if len(avgs) > 0:
-            return round(sum(avgs) / len(avgs), 2)
+                durations.append(sd)
+        if len(durations) > 0:
+            return round(numpy.average(durations), 2)
         else:
             return None
+        
+    def get_traffic_range(self, start, end):
+        """
+        Get range of site traffic over all projects between start and end dates
+        """
+        projects = Project.objects.all()
+        ga_man = self.ga_manager
+        import sys
+        min = sys.maxint
+        max = 0
+        for project in projects:
+            settings = self.getSettingsByProject(project)
+            try:
+                #calculate traffic min and max values
+                traffic = ga_man.get_session_count(settings.ga_view, ga_man.google_date(start), ga_man.google_date(end))                
+                if traffic < min: min = traffic
+                if traffic > max: max = traffic
+            except:
+                self.logger.warn('could not fetch traffic for project: {}'.format(project.name))
+        return {'min': min, 'max': max}
+    
+    def get_overall_bounce_rate_stats_segmented(self, start, end):
+        """
+        Get average bounce rate for all visits and for paid visits
+        """
+        projects = Project.objects.all()
+        paid_bouncerates = []
+        bouncerates = []
+        for project in projects:
+            settings = self.getSettingsByProject(project)
+            br = self.ga_manager.get_bounce_rate(settings.ga_view, start, end)
+            bouncerates.append(br)
+            br_paid = self.ga_manager.get_bounce_rate(settings.ga_view, start, end, 'gaid::-4')
+            paid_bouncerates.append(br_paid)
+        result = {'bouncerate_avg': numpy.average(bouncerates),
+                  'bouncerate_std': numpy.std(bouncerates),
+                  'bouncerate_paid_avg' : numpy.average(paid_bouncerates),
+                  'bouncerate_paid_std' : numpy.std(paid_bouncerates)}
+        return result
+
+            
+        
+        
+        
 

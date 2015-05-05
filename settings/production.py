@@ -21,7 +21,9 @@ DATABASES = {
     },
 }
 
-NOTIFIER_BCC = 'dropbox@49216645.fundament.capsulecrm.com'
+NOTIFIER_FROM_MAIL = 'boostfeed@buzzart.nl'
+NOTIFIER_BCC = ['hz@fundament.nl','dropbox@49216645.fundament.capsulecrm.com']
+ 
 
 LOGGING = {
     'version': 1,

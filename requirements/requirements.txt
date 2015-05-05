@@ -16,6 +16,7 @@ facebookads==2.2.3
 googleads==2.2.0
 mailchimp==2.0.9
 mock==1.0.1
+numpy==1.9.2
 oauthlib==0.7.2
 python-dateutil==2.4.0
 python-openid==2.2.5

@@ -24,7 +24,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import EmailMultiAlternatives
 import json
 from guardian.shortcuts import get_objects_for_user
-import settings
+from django.conf import settings
 from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
@@ -99,7 +99,7 @@ def email_update(request, update_id):
                                      'dashboard_url': dashboard_url,
                                      'static_full_url' : static_full_url}, 
                                     context_instance=RequestContext(request))        
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to], [bcc])
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to], bcc)
     msg.attach_alternative(html_content, "text/html")
     data = msg.send()
     if data:        
