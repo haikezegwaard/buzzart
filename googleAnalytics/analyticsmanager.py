@@ -172,6 +172,19 @@ class AnalyticsManager:
         else:
             response = self.reporting_API_call(viewid, start_str, end_str, ['bounceRate'], '&segment={}'.format(segment))
         return float(response.get('rows')[0][0])
+    
+    def get_summary(self, viewid, start, end, segment=None):
+        """
+        Get bouncerate, sessioncount and average time on site for view
+        """
+        start_str = self.google_date(start)
+        end_str = self.google_date(end)
+        if segment is None:
+            response = self.reporting_API_call(viewid, start_str, end_str, ['bounceRate','sessions','avgSessionDuration'],'&segment={}'.format(segment))
+        else:
+            response = self.reporting_API_call(viewid, start_str, end_str, ['bounceRate','sessions','avgSessionDuration'])
+        return response
+        
 
     def get_channels_for_sessions(self, viewid, start, end):
         """

@@ -1,9 +1,10 @@
+from __future__ import unicode_literals
 import analyticsmanager
 import models
 from dashboard import util
 from dateutil import parser
 import logging
-from monitor.models import Project
+from monitor.models import Project, BuzzCache
 from django.core.exceptions import ObjectDoesNotExist
 import numpy
 #from googleAnalytics.views import traffic
@@ -103,11 +104,8 @@ class StatsService():
         Get bounce rate for view in project
         """
         settings = self.getSettingsByProject(project)
-        response = self.ga_manager.get_bounce_rate(settings.ga_view, start, end)
-        rows = response.get('rows')
-        if not len(rows) is 1:
-            raise Exception('rows size was not 1 ({})'.format(len(rows)))
-        return float(rows[0][0])
+        bouncerate = self.ga_manager.get_bounce_rate(settings.ga_view, start, end)
+        return bouncerate
     
     def get_avg_session_duration(self, project, start, end):
         """
@@ -151,7 +149,10 @@ class StatsService():
         between start and en date
         """
         # first check for 'cache' hit
-        
+        try:
+            cached = BuzzCache.objects.get(key='bounce_rate_avg')
+        except:
+            cached = False            
         # no hit, calculate new value
         projects = Project.objects.all()
         bouncerates = []
@@ -216,15 +217,21 @@ class StatsService():
         bouncerates = []
         for project in projects:
             settings = self.getSettingsByProject(project)
+            if settings == False: continue 
             br = self.ga_manager.get_bounce_rate(settings.ga_view, start, end)
             bouncerates.append(br)
             br_paid = self.ga_manager.get_bounce_rate(settings.ga_view, start, end, 'gaid::-4')
-            paid_bouncerates.append(br_paid)
-        result = {'bouncerate_avg': numpy.average(bouncerates),
+            if br_paid != 0.0:
+                paid_bouncerates.append(br_paid)
+        result = {'bouncerates' : bouncerates,
+                  'bouncerates_paid' : paid_bouncerates,
+                  'bouncerate_avg': numpy.average(bouncerates),
                   'bouncerate_std': numpy.std(bouncerates),
                   'bouncerate_paid_avg' : numpy.average(paid_bouncerates),
                   'bouncerate_paid_std' : numpy.std(paid_bouncerates)}
         return result
+    
+    
 
             
         
