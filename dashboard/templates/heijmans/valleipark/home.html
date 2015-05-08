@@ -1,6 +1,6 @@
 {% extends "home.html" %}
 {% block pagetitle %}
-Blauwhoed projectanalyse {{ project.name }}
+Projectanalyse {{ project.name }}
 {% endblock %}
 
 {% block intro %}
@@ -38,8 +38,8 @@ Blauwhoed projectanalyse {{ project.name }}
                         <i class="fa fa-sign-in fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div id="mailinglist-count" class="huge"></div>
-                        <div>Nieuwsbrief inschrijvingen</div>
+                        <div id="interesse" class="huge"></div>
+                        <div>Interesse</div>
                     </div>                    
                 </div>
             </div>
@@ -63,7 +63,7 @@ Blauwhoed projectanalyse {{ project.name }}
                     </div>
                     <div class="col-xs-9 text-right">
                         <div id="conversionCount" class="huge"></div>
-                        <div>Conversies</div>
+                        <div>nvt</div>
                     </div>
                 </div>
             </div>
@@ -111,18 +111,18 @@ Blauwhoed projectanalyse {{ project.name }}
  * total conversion count, visitors this week, total subscriber count
  */
 $(function () {
-  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=5', function(data) {
-    $('#mailinglist-count').html(data['conversions'])
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=4', function(data) {
+    $('#interesse').html(data['conversions'])
   });
 });
  
- 
+/* 
 $(function () {
-  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=4  ', function(data) {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=3', function(data) {
     $('#conversionCount').html(data['conversions'])
   });
 });
-
+*/
 $(function () {
   $.getJSON('/googleAnalytics/traffic/{{project_id}}', function(data) {
     $('#traffic').html(data['traffic'])
@@ -150,16 +150,13 @@ $(function () {
 
 {% block belowmainplot %}
 <div class="row">     
-    <div class="col-lg-3 col-md-6 col-sm-6">        
+    <div class="col-lg-4 col-md-4 col-sm-4">        
         {% include "widgets/niki-availability-pie-plot.html" %}
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-4">
         {% include "widgets/analytics-mobile-pie-plot.html" %}
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
-        {% include "widgets/mc_list_stats.html" %}
-    </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-4">
         {% include "widgets/analytics-overview.html" %}
     </div>
 </div>
