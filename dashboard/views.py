@@ -144,6 +144,12 @@ def site_list(request):
     return render_to_response(account+'corporate/sitelist.html',
                               {'projects': projects },
                               context_instance=RequestContext(request))
+    
+@login_required
+def campaigns(request):    
+    return render_to_response('corporate/campaigns.html',
+                              {'foo': 'bar' },
+                              context_instance=RequestContext(request))
 
 
 def corporate_updates(request):

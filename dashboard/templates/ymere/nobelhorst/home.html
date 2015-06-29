@@ -1,0 +1,147 @@
+{% extends "home.html" %}
+{% block pagetitle %}
+Ymere projectanalyse {{ project.name }}
+{% endblock %}
+
+{% block intro %}
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-sign-in fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="traffic" class="huge"></div>
+                        <div>Webverkeer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-check-square-o fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="conversionCount" class="huge"></div>
+                        <div>Conversies</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-group fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="overig" class="huge"></div>
+                        <div>nvt</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block kpi4 %}
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-flask fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge" id="kpi-verkoopstand"></div>
+                        <div>nvt</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</div>
+<script>
+/**
+ * Fill the 'huge' labels on top of the page with some relevant actual info:
+ * total conversion count, visitors this week, total subscriber count
+ */
+
+ 
+ 
+$(function () {
+  $.getJSON('/googleAnalytics/conversionsTotal/{{project_id}}?goalId=1', function(data) {
+    $('#conversionCount').html(data['conversions'])
+  });
+});
+
+$(function () {
+  $.getJSON('/googleAnalytics/traffic/{{project_id}}', function(data) {
+    $('#traffic').html(data['traffic'])
+  });
+});
+/*
+$(function () {
+  $.getJSON('/niki/availability/{{project_id}}', function(data) {
+    verkocht = 0;
+    total = 0;
+    for(i=0; i< data.length; i++){
+        console.log(data[i][0] + 'test');
+        if(data[i][0] == 'verkocht'){
+            verkocht = data[i][1]; 
+        }
+        total += data[i][1]
+    }
+    perc = Math.round(verkocht/(total / 100) );
+    $('#kpi-verkoopstand').html(perc + " %");
+    console.log(perc+" verkocht");
+  });
+});
+*/
+</script>
+<!-- /.row -->
+{% endblock %}
+
+{% block belowmainplot %}
+<div class="row">     
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_5816EDED-E324-4B00-8AB2-31D33C0A8CA3' title='De Houtzagerij (kavels)' %}
+    </div>
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_CF788EC7-22EA-47CE-B866-B6EF35934B2E' title='Reinwaterbuurt, veld 1 (kavels)' %}
+    </div>
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_5816EDED-E324-4B00-8AB2-31D33C0A8CA3' title='Bosrandbuurt, veld 2' %}
+    </div>    
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_D8DC241D-B6E3-4ED4-9F94-6549D77707A9' title='Bosrandbuurt, veld 2 (kavels)' %}
+    </div>
+    
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_4E8FF68C-0DA2-4C57-B5D8-BECF9D276598' title='Langehoutbuurt, veld 3' %}
+    </div>  
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_427CD8D6-8348-4B00-9B49-18BA71B27B22' title='Langehoutbuurt, veld 3 (kavels)' %}
+    </div>
+       
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_25A9D4A5-2CC0-42FC-8C81-F3933B9AF575' title='Bosrandbuurt, veld 5 (kavels)' %}
+    </div>
+    <div class="col-lg-3 col-md-6">
+        {% include "widgets/niki-availability-pie-plot.html" with project_resource='/projects/231/YMROWGEN_61CD9C0B-D35D-40C6-B361-95DE63CEC0BB' title='Bosrandbuurt, veld 9 (kavels)' %}
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block updates %} {% endblock %}
