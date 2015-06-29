@@ -231,6 +231,19 @@ class StatsService():
                   'bouncerate_paid_std' : numpy.std(paid_bouncerates)}
         return result
     
+    def get_global_summary(self, start, end):
+        """
+        Get summary over all projects of sessions, bouncerate and sessiontime
+        """
+        projects = Project.objects.filter(id > 38).all()
+        result = []
+        for project in projects:
+            settings = self.getSettingsByProject(project)
+            if settings == False: continue
+            summary = self.get_summary(project, start, end)
+            result.append(summary)
+        return result
+    
     
 
             

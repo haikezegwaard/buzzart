@@ -141,6 +141,13 @@ def bounce_rate_stats(request):
     end = drange['end']
     data = ga_stats.get_overall_bounce_rate_stats_segmented(start, end)
     return HttpResponse(json.dumps(data), content_type='application/json')
+
+def global_summary(request):
+    drange = util.get_reporting_dates(request)
+    start = drange['start']
+    end = drange['end']
+    data = ga_stats.get_global_summary(start, end)
+    return HttpResponse(json.dumps(data), content_type='application/json')
      
 
 def list_accounts(request):
