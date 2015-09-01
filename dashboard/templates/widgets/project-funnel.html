@@ -1,0 +1,56 @@
+<!-- /.panel -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+    <i class="fa fa-bar-chart-o fa-fw"></i> Project funnel
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div id="project-funnel"></div>
+    </div>
+    <!-- /.panel-body -->
+</div>
+<script src="http://code.highcharts.com/modules/funnel.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(document).ready(function () {
+    $('#project-funnel').highcharts({
+        chart: {
+            type: 'funnel',
+            marginRight: 100
+        },
+        title: {
+            text: 'Sales funnel',
+            x: -50
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                    softConnector: true
+                },
+                neckWidth: '30%',
+                neckHeight: '25%'
+
+                //-- Other available options
+                // height: pixels or percent
+                // width: pixels or percent
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        series: [{
+            name: 'Project funnel',
+            data: [
+                ['Website visits',   400],
+                ['Leads',       231],
+                ['Inschrijvers', 1987],
+                ['Opties',    90],
+                ['Verhuurd',    56]
+            ]
+        }]
+    });
+});
+</script>
