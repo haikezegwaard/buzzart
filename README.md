@@ -54,6 +54,23 @@ python manage runserver
 * create Summary for project: koppelen aan project, fill in dates, texts (lorem ipsum) -> this is your report
 * you can access your report at: http://buzzartdomain/digest/ [^][summary_id
 
+### Managing users and restrictions
+
+Buzzart uses object based permissions to enable project specific access for users.
+To manage this permissions follow these steps:
+
+* login to http://buzzartdomain/admin
+* Users->add new user
+* go to 'projects' and select the project you want to give the user access to
+* click 'Object permissions'
+* enter the username of the newly created user, click 'manage user'
+* select 'view project' permission and click 'save'
+* repeat the object permission steps for any other project the user has access to
+
+That's it. Now when the user logs in to mijn.buzzart.nl, he will see a list of 
+projects under his permission.
+
+
 ### Dashboard templates ###
 
 A project has a 'template' property. The template is a subfolder under /dashboard/templates and determines the 
