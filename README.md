@@ -45,6 +45,21 @@ python manage migrate
 python manage runserver
 ```
 
+### Upgrading current installation ###
+
+Using Fabric, you can automatically update a remote installation (acceptation or production).
+Updating acceptation (make sure you committed your changes):
+```
+cd [PROJECT_DIR]/deployment
+fab config.acc upgrade
+```
+
+Updating production:
+```
+cd [PROJECT_DIR]/deployment
+fab config.production upgrade
+```
+
 ### Creating your first project ###
 
 * login to http://buzzartdomain/admin
