@@ -48,7 +48,7 @@ def project_manage_upgrade(exec_cmd=sudo, manage_cmd='python ./manage.py'):
 
 def get_settings():
     from fabric.contrib.django import settings_module
-
+     
     settings_module(env.django_settings)
     # mimic Django's dual path :/ 
     if env.project_root not in sys.path:
@@ -56,5 +56,4 @@ def get_settings():
     if env.project_django_root not in sys.path:
         sys.path.append(os.path.join(env.project_django_root))
     from django.conf import settings
-
     return settings

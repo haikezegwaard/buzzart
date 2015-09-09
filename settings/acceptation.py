@@ -33,7 +33,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': '/data/www/buzzart/buzzart.log',
+            'filename': 'buzzart.log',
             'formatter': 'verbose'
         }
     },
