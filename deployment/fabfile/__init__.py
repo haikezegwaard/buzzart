@@ -63,6 +63,8 @@ def upgrade():
     with cd(tmp_install_dir):
         run('tar -xf {}'.format(env.uploaded_packed_file))
         run('rm {}'.format(env.uploaded_packed_file))        
+        run('touch buzzart.log') #create logfile if not existing  
+        run('chmod 775 buzzart.log') #make sure webserver can write log file     
 
     # move/rename dirs
     install_backup_dir = '{}_old/'.format(env.install_dir[:-1])  # strip '/'
