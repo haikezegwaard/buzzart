@@ -5,3 +5,5 @@ db.sqlite3
 .settings
 *.log
 local_settings.py
+static
+media

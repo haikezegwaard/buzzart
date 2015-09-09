@@ -80,6 +80,7 @@ class BuzzartUpdate(models.Model):
     posted = models.DateTimeField(blank=True)
     fa_class = models.TextField(max_length=1000, default='fa-check')
     mail_sent = models.BooleanField(default=False)
+    attachment = models.FileField(upload_to='%Y/%m/%d', blank= True, null= True) #append date to MEDIA_ROOT
 
     def __unicode__(self):
         return '{}: {} - {}'.format(self.project.name, self.title, self.posted)

@@ -8,16 +8,43 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'BuzzCache'
+        db.create_table(u'monitor_buzzcache', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('key', self.gf('django.db.models.fields.CharField')(max_length=300)),
+            ('value', self.gf('django.db.models.fields.TextField')()),
+        ))
+        db.send_create_signal(u'monitor', ['BuzzCache'])
+
         # Adding field 'BuzzartUpdate.mail_sent'
         db.add_column(u'monitor_buzzartupdate', 'mail_sent',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
+        # Adding field 'BuzzartUpdate.attachment'
+        db.add_column(u'monitor_buzzartupdate', 'attachment',
+                      self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True),
+                      keep_default=False)
+
+
+        # Changing field 'Project.template'
+        db.alter_column(u'monitor_project', 'template', self.gf('relativefilepathfield.fields.RelativeFilePathField')(path=u'/home/hz/projects/buzzart/dashboard/templates', max_length=100, recursive=True))
 
     def backwards(self, orm):
+        # Deleting model 'BuzzCache'
+        db.delete_table(u'monitor_buzzcache')
+
         # Deleting field 'BuzzartUpdate.mail_sent'
         db.delete_column(u'monitor_buzzartupdate', 'mail_sent')
 
+        # Deleting field 'BuzzartUpdate.attachment'
+        db.delete_column(u'monitor_buzzartupdate', 'attachment')
+
+
+        # Changing field 'Project.template'
+        db.alter_column(u'monitor_project', 'template', self.gf('relativefilepathfield.fields.RelativeFilePathField')(path='/home/hz/projects/buzzart/dashboard/templates', max_length=100, recursive=True))
 
     models = {
         u'auth.group': {
@@ -60,17 +87,26 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Account'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '512'}),
-            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'accounts'", 'blank': 'True', 'to': u"orm['auth.User']"})
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'accounts'", 'blank': 'True', 'to': u"orm['auth.User']"})
         },
         u'monitor.buzzartupdate': {
             'Meta': {'object_name': 'BuzzartUpdate'},
-            'fa_class': ('django.db.models.fields.TextField', [], {'default': "'fa-check'", 'max_length': '1000'}),
+            'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'fa_class': ('django.db.models.fields.TextField', [], {'default': "u'fa-check'", 'max_length': '1000'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mail_sent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'posted': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['monitor.Project']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'blank': 'True'}),
             'update': ('django.db.models.fields.TextField', [], {'blank': 'True'})
+        },
+        u'monitor.buzzcache': {
+            'Meta': {'object_name': 'BuzzCache'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'value': ('django.db.models.fields.TextField', [], {})
         },
         u'monitor.interestproject': {
             'Meta': {'object_name': 'InterestProject'},
@@ -91,7 +127,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
             'nikiProject': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
             'surveygizmo_survey_id': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
-            'template': ('relativefilepathfield.fields.RelativeFilePathField', [], {'default': "''", 'path': "'/home/hz/projects/buzzart/dashboard/templates'", 'max_length': '100', 'recursive': 'True'}),
+            'template': ('relativefilepathfield.fields.RelativeFilePathField', [], {'default': "u''", 'path': "u'/home/hz/projects/buzzart/dashboard/templates'", 'max_length': '100', 'recursive': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         },
         u'monitor.summary': {

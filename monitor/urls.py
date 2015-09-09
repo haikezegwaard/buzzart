@@ -32,10 +32,14 @@ urlpatterns = patterns('',
     url(r'^setdates/$', views.set_reporting_date, name='set_dates'),
     url(r'^emailUpdate/(?P<update_id>\d+)/$', views.email_update, name='email_update'),
     url(r'^previewUpdate/(?P<update_id>\d+)/$', views.preview_update, name='preview_update'),
-)# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += patterns('',
         url(r'^__debug__/', include(debug_toolbar.urls)),
     )
+    # static files (images, css, javascript, etc.)
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT}))
