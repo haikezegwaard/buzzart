@@ -62,11 +62,7 @@ def upgrade():
 
     with cd(tmp_install_dir):
         run('tar -xf {}'.format(env.uploaded_packed_file))
-        run('rm {}'.format(env.uploaded_packed_file))
-        pip.install_reqs()
-        with virtualenv.context(env.virtualenv_dir):
-            #sudo_as = functools.partial(run, user=env.install_user)
-            django.project_manage_upgrade(exec_cmd=run)
+        run('rm {}'.format(env.uploaded_packed_file))        
 
     # move/rename dirs
     install_backup_dir = '{}_old/'.format(env.install_dir[:-1])  # strip '/'
@@ -80,6 +76,12 @@ def upgrade():
 
     if env.deploy_docs:
         deploy_sphinx_docs()
+    
+    with cd(env.install_dir):
+        pip.install_reqs()
+        with virtualenv.context(env.virtualenv_dir):
+            #sudo_as = functools.partial(run, user=env.install_user)
+            django.project_manage_upgrade(exec_cmd=run)
 
     #if env.using_apache and not env.django_developing:
     #    sudo('service apache2 restart')

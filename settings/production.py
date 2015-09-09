@@ -1,7 +1,7 @@
 from settings.defaults import *
 
 STATIC_ROOT = '/data/www/buzzart/static'
-MEDIA_ROOT = '/data/www/buzzart/media'
+MEDIA_ROOT = '/data/www/buzzart_media'
 DEBUG = False
 TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = ['mijn.buzzart.nl']
@@ -38,7 +38,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': '/data/www/buzzart/buzzart.log',
+            'filename': os.path.join(PROJECT_ROOT,'buzzart.log'),
             'formatter': 'verbose'
         }
     },

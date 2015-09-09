@@ -7,7 +7,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 STATIC_ROOT = '/data/www/buzzart/static'
-MEDIA_ROOT = '/data/www/buzzart/media'
+MEDIA_ROOT = '/data/www/buzzart_media'
 
 DATABASES = {
     'default': {
@@ -33,7 +33,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': 'buzzart.log',
+            'filename': os.path.join(PROJECT_ROOT,'buzzart.log'),
             'formatter': 'verbose'
         }
     },
